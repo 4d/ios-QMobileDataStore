@@ -13,6 +13,8 @@
 		485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */; };
 		485CCDA71E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */; };
 		485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */; };
+		486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */; };
+		486A7C8D1E8BF8F700F646AF /* RecordBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486A7C8C1E8BF8F700F646AF /* RecordBase.swift */; };
 		48D5842F1E782F6C006F56B5 /* QMobileDataStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48D584251E782F6C006F56B5 /* QMobileDataStore.framework */; };
 		48D584361E782F6C006F56B5 /* QMobileDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 48D584281E782F6C006F56B5 /* QMobileDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		48D584471E783025006F56B5 /* CoreDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584421E783025006F56B5 /* CoreDataStore.swift */; };
@@ -53,6 +55,8 @@
 		485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSSortDescriptorConvertible.swift; sourceTree = "<group>"; };
 		485CCDAE1E7940DC00CDB2B3 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreContext.swift; sourceTree = "<group>"; };
+		486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStore+Transient.swift"; sourceTree = "<group>"; };
+		486A7C8C1E8BF8F700F646AF /* RecordBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordBase.swift; sourceTree = "<group>"; };
 		48D584251E782F6C006F56B5 /* QMobileDataStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QMobileDataStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48D584281E782F6C006F56B5 /* QMobileDataStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QMobileDataStore.h; sourceTree = "<group>"; };
 		48D584291E782F6C006F56B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -138,6 +142,7 @@
 			children = (
 				485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */,
 				485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */,
+				486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -217,6 +222,7 @@
 				48D584421E783025006F56B5 /* CoreDataStore.swift */,
 				485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */,
 				48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */,
+				486A7C8C1E8BF8F700F646AF /* RecordBase.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -462,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48D584891E784921006F56B5 /* FetchRequest.swift in Sources */,
+				486A7C8D1E8BF8F700F646AF /* RecordBase.swift in Sources */,
 				48D584481E783025006F56B5 /* Log.swift in Sources */,
 				48D584471E783025006F56B5 /* CoreDataStore.swift in Sources */,
 				482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */,
@@ -470,6 +477,7 @@
 				48D5844B1E783025006F56B5 /* Temp.swift in Sources */,
 				48D5844A1E783025006F56B5 /* Record.swift in Sources */,
 				483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */,
+				486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */,
 				485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */,
 				485CCDA71E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift in Sources */,
 				48D584491E783025006F56B5 /* DataStore.swift in Sources */,

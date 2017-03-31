@@ -79,7 +79,8 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     init(dataStore: CoreDataStore, sectionNameKeyPath: String?, fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
         coreDataStore = dataStore
 
-        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataStore.viewContext, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
+        let context = dataStore.viewContext // XXX check the context, or allow to customize
+        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
 
         super.init()
 

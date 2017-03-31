@@ -1,0 +1,25 @@
+PODS:
+  - Prephirences (3.0.1):
+    - Prephirences/Core (= 3.0.1)
+    - Prephirences/Keys (= 3.0.1)
+  - Prephirences/Core (3.0.1)
+  - Prephirences/Keys (3.0.1):
+    - Prephirences/Core
+  - Result (3.2.1)
+  - XCGLogger (4.0.0):
+    - XCGLogger/Core (= 4.0.0)
+  - XCGLogger/Core (4.0.0)
+
+DEPENDENCIES:
+  - Prephirences
+  - Result
+  - XCGLogger (~> 4.0.0)
+
+SPEC CHECKSUMS:
+  Prephirences: d0ec0bd6047edb3370364345857a769aaf3db312
+  Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
+  XCGLogger: 38063ea89b4c8b23232d18efd2e12eb0005f3ea4
+
+PODFILE CHECKSUM: cab2a6cbc42b0e771026b9bda33bb2963eb556f3
+
+COCOAPODS: 1.2.0

@@ -12,9 +12,11 @@ import CoreData
 // some extension for NSManagedObjectContext
 extension NSManagedObjectContext: DataStoreContext {
 
-    public func newRecord(table: String) -> Record {
+    public func newRecord(table: String) -> Record? {
+        
+        
         //swiftlint:disable force_cast
-        let record = NSEntityDescription.insertNewObject(forEntityName: table, into: self) as! Record
+        let record = NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
 
         // ASK update default field of created record??
 
@@ -23,15 +25,6 @@ extension NSManagedObjectContext: DataStoreContext {
 
     public func delete(record: Record) {
         self.delete(record as NSManagedObject)
-    }
-
-    public func count(for request: FetchRequest) throws -> Int {
-        guard let request = request as? NSFetchRequest<NSFetchRequestResult> else {
-            logger.warning("")
-            return 0
-        }
-
-        return try self.count(for: request)
     }
 
     // TODO batch request

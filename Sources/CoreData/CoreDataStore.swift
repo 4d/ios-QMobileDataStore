@@ -46,7 +46,7 @@ extension DataStore {
     /// The model store type
     open let storeType: StoreType
 
-    // private not documented
+    // private not documented, see persistence store description fields
     var isReadOnly = false
     var shouldAddStoreAsynchronously = true
     var shouldMigrateStoreAutomatically = true
@@ -55,7 +55,7 @@ extension DataStore {
     private var observers: [Any] = [Any]()
 
     /// The bundle which contains the model
-    internal var modelBundle: Bundle = Bundle.main
+    internal var modelBundle: Bundle = Bundle.dataStore
 
     open weak var delegate: DataStoreDelegate?
 
@@ -69,10 +69,12 @@ extension DataStore {
     /// - parameter storeType: the store type (default: sql).
     ///
     /// - returns: The new `QMobileCoreDataStore` instance.
-    internal convenience init?(preferences: PreferencesType = Bundle.main, key: String  = "CFBundleName", storeType: StoreType = .sql) {
+    internal convenience init?(preferences: PreferencesType = Bundle.dataStore, key: String  = Bundle.dataStoreKey, storeType: StoreType = .sql) {
         if let modelName = preferences[key] as? String {
             self.init(modelName: modelName, storeType: storeType)
         } else {
+            let dico = preferences.dictionary()
+            print("No model to load in bundle '\(dico)' with key \(key)")
             return nil
         }
     }
@@ -152,8 +154,17 @@ extension DataStore {
         return self.persistentContainer.viewContext
     }
 
+    internal func newBackgroundContext() -> NSManagedObjectContext {
+        return self.persistentContainer.newBackgroundContext()
+    }
+
     fileprivate func storeDescription(with url: URL?) -> NSPersistentStoreDescription {
-        let description: NSPersistentStoreDescription = /*(url == nil) ? */NSPersistentStoreDescription()/*: NSPersistentStoreDescription(url: url!)*/
+        let description: NSPersistentStoreDescription
+        if let url = url {
+            description = NSPersistentStoreDescription(url: url)
+        } else {
+            description = NSPersistentStoreDescription() // transient
+        }
         description.type = self.storeType.type
         description.isReadOnly = self.isReadOnly
         description.shouldAddStoreAsynchronously = self.shouldAddStoreAsynchronously
@@ -162,14 +173,28 @@ extension DataStore {
 
         return description
     }
-
-    fileprivate var storeURL: URL? {
+    
+    fileprivate var storeDirectoryURL: URL? {
         switch self.storeType {
         case .inMemory:
             return nil
         case .sql:
             return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
         }
+    }
+
+    fileprivate var storeURL: URL? {
+        var storeURL = self.storeDirectoryURL
+        
+        
+        if let storeDirectoryURL = storeURL {
+           try? FileManager.default.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
+        }
+
+        storeURL?.appendPathComponent(modelName)
+        storeURL?.appendPathExtension("sqlite")
+
+        return storeURL
     }
 
     fileprivate var storeURLExists: Bool {
@@ -196,6 +221,16 @@ extension CoreDataStore: DataStore {
     public func load(completionHandler: CompletionHandler? = nil) {
         persistentContainer.loadPersistentStores { [unowned self] (storeDescription, error) in
             if let error = error {
+
+                if error._domain == "NSCocoaErrorDomain" {
+
+                    let code = error._code
+
+                    if code == NSFileReadUnknownError /*256*/{
+
+                    }
+                }
+
                 completionHandler?(.failure(DataStoreError(error)))
             } else {
                 self.isLoaded = true
@@ -236,10 +271,16 @@ extension CoreDataStore: DataStore {
                     // OR failure, there is no store to drops
                     return
                 }
-                guard let storeURL = store.url else {
+                if store.isTransient {
                     completionHandler?(.success())
                     return
                 }
+
+                guard let storeURL = store.url, storeURL.isFileURL else {
+                    completionHandler?(.success())
+                    return
+                }
+
                 do {
                     // self.persistentStoreCoordinator.remove(store)
                     try self.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: self.storeType.type, options: store.options)

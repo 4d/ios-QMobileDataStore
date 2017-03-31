@@ -1,4 +1,3 @@
-
 //
 //  Log.swift
 //  QMobileDataStore
@@ -26,5 +25,3 @@ extension Logger {
     }
 
 }
-
-

@@ -13,13 +13,10 @@ import Result
 public protocol DataStoreContext: class {
 
     /// Create a new record and add it to data store.
-    func newRecord(table: String) -> Record
+    func newRecord(table: String) -> Record?
 
     /// Delete a specific record.
     func delete(record: Record)
-
-    // Count element for request
-    func count(for request: FetchRequest) throws -> Int
 
 }
 

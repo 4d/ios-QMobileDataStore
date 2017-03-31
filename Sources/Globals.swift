@@ -14,29 +14,19 @@ import CoreData
 public let dataStore: DataStore = CoreDataStore.default
 
 public typealias RecordBase = NSManagedObject
-extension RecordBase {
 
-    /// Access record attribute value using string key
-    open subscript(key: String) -> Any? {
-        get {
-            return self.value(forKey: key)
-        }
-        set {
-            if hasKey(key) {
-                self.setValue(newValue, forKey: key)
-            } /*else {
-             // not key value coding-compliant for the key
-             }*/
-        }
-    }
+// Configuration
+import Prephirences
 
-    open func hasKey(_ key: String) -> Bool {
-        return self.entity.propertiesByName[key] != nil // CLEAN optimize how to known if record KVC compliant to key
-    }
+extension Bundle {
 
-    open override func value(forUndefinedKey key: String) -> Any? {
-        assertionFailure("Undefined key for '\(key) for record \(self)")
-        return nil
+    /// Bundle used to load data store data. By default main bundle
+    @nonobjc public static var dataStore: Bundle = .main
+    /// Key used to get data store file name. By default 'CFBundleName'
+    @nonobjc public static var  dataStoreKey: String = "CFBundleName"
+
+    @nonobjc public static var  dataStoreModelName: String? {
+        return Bundle.dataStore[Bundle.dataStoreKey] as? String
     }
 
 }

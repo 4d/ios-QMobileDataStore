@@ -9,6 +9,6 @@
 import Foundation
 
 /// A Record, parent class of all business object.
-open class Record: RecordBase {
+public typealias Record = RecordBase
 
-}
+// XXX Record could be a class if core data model class generation allow a root class
