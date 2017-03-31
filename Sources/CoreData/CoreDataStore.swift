@@ -223,6 +223,9 @@ extension CoreDataStore: DataStore {
     // MARK: Main
 
     public func load(completionHandler: CompletionHandler? = nil) {
+        // CLEAN: bug, could be called two times during migration fail. could extract function or add a isLoading boolean with didSet
+        self.delegate?.dataStoreWillLoad(self)
+        
         persistentContainer.loadPersistentStores { [unowned self] (storeDescription, error) in
             if let error = error {
 
@@ -269,6 +272,7 @@ extension CoreDataStore: DataStore {
             } else {
                 // Normal case
                 self.isLoaded = true
+                self.delegate?.dataStoreDidLoad(dataStore)
                 logger.verbose("store loaded: \(storeDescription)")
                 completionHandler?(.success())
             }

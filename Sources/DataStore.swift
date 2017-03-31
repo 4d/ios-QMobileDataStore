@@ -12,6 +12,9 @@ public protocol DataStoreDelegate: class {
     func dataStoreWillSave(_ dataStore: DataStore)
     func dataStoreDidSave(_ dataStore: DataStore)
     func objectsDidChange(dataStore: DataStore)
+
+    func dataStoreWillLoad(_ dataStore: DataStore)
+    func dataStoreDidLoad(_ dataStore: DataStore)
 }
 
 /// A store responsible to store record
