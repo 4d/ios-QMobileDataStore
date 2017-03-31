@@ -9,10 +9,9 @@
 /// A delegate for `DataStore`
 public protocol DataStoreDelegate: class {
 
-    // TODO add to delegate functions some parameters(context)
-    func willSave()
-    func didSave()
-    func objectsDidChange()
+    func dataStoreWillSave(_ dataStore: DataStore)
+    func dataStoreDidSave(_ dataStore: DataStore)
+    func objectsDidChange(dataStore: DataStore)
 }
 
 /// A store responsible to store record

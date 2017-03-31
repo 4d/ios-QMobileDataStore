@@ -11,6 +11,8 @@ import CoreData
 
 import Result
 
+public typealias RecordBase = NSManagedObject
+
 public extension NSManagedObjectContext {
 
     public static var `default`: NSManagedObjectContext {

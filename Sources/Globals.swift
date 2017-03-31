@@ -13,7 +13,6 @@ import CoreData
 
 public let dataStore: DataStore = CoreDataStore.default
 
-public typealias RecordBase = NSManagedObject
 
 // Configuration
 import Prephirences

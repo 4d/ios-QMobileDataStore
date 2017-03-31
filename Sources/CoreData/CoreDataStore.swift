@@ -51,6 +51,9 @@ extension DataStore {
     var shouldAddStoreAsynchronously = true
     var shouldMigrateStoreAutomatically = true
     var shouldInferMappingModelAutomatically = true
+    
+    
+    var dropIfMigrationFailed: Bool = true
 
     private var observers: [Any] = [Any]()
 
@@ -107,13 +110,13 @@ extension DataStore {
                     }
                 }
             }
-            self.delegate?.didSave()
+            self.delegate?.dataStoreDidSave(self)
         })
         observers.append(center.addObserver(forName: .NSManagedObjectContextWillSave, object: nil, queue: .main) { [unowned self] _ in
-            self.delegate?.willSave()
+            self.delegate?.dataStoreWillSave(self)
         })
         observers.append(center.addObserver(forName: .NSManagedObjectContextObjectsDidChange, object: nil, queue: .main) { [unowned self] _ in
-            self.delegate?.objectsDidChange()
+            self.delegate?.objectsDidChange(dataStore: self)
         })
     }
 
@@ -218,28 +221,77 @@ extension CoreDataStore: DataStore {
     }
 
     // MARK: Main
+
     public func load(completionHandler: CompletionHandler? = nil) {
         persistentContainer.loadPersistentStores { [unowned self] (storeDescription, error) in
             if let error = error {
 
-                if error._domain == "NSCocoaErrorDomain" {
-
+                if error._domain == NSCocoaErrorDomain {
                     let code = error._code
-
                     if code == NSFileReadUnknownError /*256*/{
-
+                        // We can do anything... file system issue, or file path issue
+                        logger.error("Could not load datastore \(error)")
+                        completionHandler?(.failure(DataStoreError(error)))
                     }
+                    else {
+                        // https://developer.apple.com/reference/coredata/1535452-validation_error_codes?language=swift
+                        if let message = CoreDataStore.message(for: code) {
+                            logger.error(message)
+                        }
+                        
+                        if self.dropIfMigrationFailed {
+                            logger.warning("Data will be erased from local datastore. Get data from remote source will be necessary")
+                            
+                            if let url = storeDescription.url {
+                                do {
+                                    try self.drop(storeURL: url)
+                                    self.dropIfMigrationFailed = false // try only one time
+                                    self.load(completionHandler: completionHandler)
+                                } catch let dropError {
+                                    logger.error("Failed to drop data store files \(dropError).")
+                                    completionHandler?(.failure(DataStoreError(error)))
+                                }
+                            } else {
+                                completionHandler?(.failure(DataStoreError(error)))
+                            }
+                        } else {
+                            completionHandler?(.failure(DataStoreError(error)))
+                        }
+                    }
+                    
+                    
+                } else {
+                    // Unknown error
+                    logger.error("Unknown error \(error)")
+                    completionHandler?(.failure(DataStoreError(error)))
                 }
 
-                completionHandler?(.failure(DataStoreError(error)))
             } else {
+                // Normal case
                 self.isLoaded = true
                 logger.verbose("store loaded: \(storeDescription)")
                 completionHandler?(.success())
             }
         }
     }
+    
+    static func message(for code: Int) -> String? {
+        switch code {
+        case NSMigrationMissingMappingModelError: return "migration failed due to missing mapping model."
+        case NSMigrationConstraintViolationError: return "migration failed due to a violated uniqueness constraint"
+        case NSMigrationCancelledError: return "migration failed due to manual cancellation"
+        case NSMigrationMissingSourceModelError: return "migration failed due to missing source data model"
+        case NSMigrationMissingMappingModelError: return "migration failed due to missing mapping model"
+        case NSMigrationManagerSourceStoreError: return "migration failed due to a problem with the source data store"
+        case NSMigrationManagerDestinationStoreError: return "migration failed due to a problem with the destination data store"
+            
+        case NSManagedObjectContextLockingError: return "can't acquire a lock in a managed object context"
+        case NSPersistentStoreCoordinatorLockingError: return "can't acquire a lock in a persistent store coordinator"
 
+        default: return nil
+        }
+    }
+    
     /*
      public var entityInfo: [(String, [String])] {
         return self.managedObjectModel.entities.map { ($0.name ?? "", Array($0.attributesByName.keys)) }
@@ -266,6 +318,7 @@ extension CoreDataStore: DataStore {
             self.viewContext.reset()
 
             self.persistentStoreCoordinator.performAndWait {
+                self.isLoaded = false
                 guard let store = self.persistentStore else {
                     completionHandler?(.success())
                     // OR failure, there is no store to drops
@@ -284,26 +337,46 @@ extension CoreDataStore: DataStore {
                 do {
                     // self.persistentStoreCoordinator.remove(store)
                     try self.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: self.storeType.type, options: store.options)
-                    // self.persistentStoreCoordinator.add(store)
-
-                    try FileManager.default.removeItem(at: storeURL)
-                    _ = try? FileManager.default.removeItem(atPath: "\(storeURL.absoluteString)-shm")
-                    _ = try? FileManager.default.removeItem(atPath: "\(storeURL.absoluteString)-wal")
-
-                    self.persistentContainer.loadPersistentStores { storeDescription, error in
-                        if let error = error {
-                            completionHandler?(.failure(DataStoreError(error)))
-                        } else {
-                            logger.verbose("store loaded: \(storeDescription)")
-                            completionHandler?(.success())
-                        }
-                    }
-
+       
+                    try self.drop(storeURL: storeURL)
+ 
+                    completionHandler?(.success())
                 } catch {
                     completionHandler?(.failure(DataStoreError(error)))
                 }
             }
         }
+    }
+    
+    // remove sqlite files
+    func drop(storeURL: URL) throws {
+        let fileManager = FileManager.default
+        try fileManager.removeItemIfExists(at: storeURL)
+        try fileManager.removeItemIfExists(atPath: "\(storeURL.absoluteString)-shm")
+        try fileManager.removeItemIfExists(atPath: "\(storeURL.absoluteString)-wal")
+    }
+
+}
+
+fileprivate extension FileManager {
+
+    func removeItemIfExists(atPath path: String) throws{
+        if self.fileExists(atPath: path) {
+            try self.removeItem(atPath: path)
+        }
+    }
+    
+    func removeItemIfExists(at url: URL) throws {
+        if self.fileExists(at: url) {
+            try self.removeItem(at: url)
+        }
+    }
+    
+    func fileExists(at url: URL) -> Bool {
+        if url.isFileURL {
+            return fileExists(atPath: url.path)
+        }
+        return false
     }
 
 }
