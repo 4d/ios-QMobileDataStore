@@ -65,7 +65,7 @@ extension RecordBase {
         assertionFailure("Undefined key for '\(key) for record \(self)")
         return nil
     }
-    
+
     /*open func willSave() {
          // can set here timestamps to know objec =t with modification since last SyNCHRO
     }*/
@@ -109,7 +109,7 @@ public extension RecordBase {
             let resultValue = [Double]()
             // TODO functions on fetch request for mapping
             do {
-                let _ = try context.fetch(fetchRequest) as? [[String: AnyObject]]
+                _ = try context.fetch(fetchRequest) as? [[String: AnyObject]]
                 /*
                  for result in results ?? [] {
                  for field in fieldName {

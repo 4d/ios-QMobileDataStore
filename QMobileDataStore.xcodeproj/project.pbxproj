@@ -7,9 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2CDAC84232A77ECE2C501801 /* Pods_QMobileDataStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF0A44B8B374F267FC79535 /* Pods_QMobileDataStore.framework */; };
 		482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482485101E7A7C5400DA5390 /* DataStoreContext.swift */; };
 		483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483867AF1E8A4D2E00E44F49 /* Globals.swift */; };
+		485271971E93810600BABB16 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */; };
+		485271981E93810600BABB16 /* Prephirences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271931E9380F000BABB16 /* Prephirences.framework */; };
+		485271991E93810600BABB16 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271951E9380F000BABB16 /* Result.framework */; };
+		4852719A1E93810600BABB16 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271961E9380F000BABB16 /* XCGLogger.framework */; };
+		4852719B1E9381A200BABB16 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */; };
+		4852719C1E9381A200BABB16 /* Prephirences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271931E9380F000BABB16 /* Prephirences.framework */; };
+		4852719D1E9381A200BABB16 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271941E9380F000BABB16 /* Quick.framework */; };
+		4852719E1E9381A200BABB16 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271951E9380F000BABB16 /* Result.framework */; };
+		4852719F1E9381A200BABB16 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271961E9380F000BABB16 /* XCGLogger.framework */; };
 		485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */; };
 		485CCDA71E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */; };
 		485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */; };
@@ -26,17 +34,9 @@
 		48D584531E78304C006F56B5 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */; };
 		48D584891E784921006F56B5 /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584881E784921006F56B5 /* FetchRequest.swift */; };
 		48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */; };
-		C03CAFAE54F467CE6A53F7F3 /* Pods_QMobileDataStoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2FCBB6DA6CECFD912E35421 /* Pods_QMobileDataStoreTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		485F01401E7C28C9007D5FEE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 48D5841C1E782F6C006F56B5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 485CCDA91E793F5400CDB2B3;
-			remoteInfo = swiftLint;
-		};
 		48D584301E782F6C006F56B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 48D5841C1E782F6C006F56B5 /* Project object */;
@@ -47,10 +47,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		229EA6B46F19C921BFE30F1A /* Pods-QMobileDataStore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QMobileDataStore.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QMobileDataStore/Pods-QMobileDataStore.debug.xcconfig"; sourceTree = "<group>"; };
-		47B98DA065ED83C660AB86DD /* Pods-QMobileDataStore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QMobileDataStore.release.xcconfig"; path = "Pods/Target Support Files/Pods-QMobileDataStore/Pods-QMobileDataStore.release.xcconfig"; sourceTree = "<group>"; };
 		482485101E7A7C5400DA5390 /* DataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreContext.swift; sourceTree = "<group>"; };
 		483867AF1E8A4D2E00E44F49 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
+		485271931E9380F000BABB16 /* Prephirences.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Prephirences.framework; path = Carthage/Build/iOS/Prephirences.framework; sourceTree = "<group>"; };
+		485271941E9380F000BABB16 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		485271951E9380F000BABB16 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		485271961E9380F000BABB16 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSPredicateConvertible.swift; sourceTree = "<group>"; };
 		485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSSortDescriptorConvertible.swift; sourceTree = "<group>"; };
 		485CCDAE1E7940DC00CDB2B3 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -71,10 +74,6 @@
 		48D5844E1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
 		48D584881E784921006F56B5 /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchRequest.swift; sourceTree = "<group>"; };
 		48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataFetchRequest.swift; sourceTree = "<group>"; };
-		5B1CFE9A6C49B31122AF1987 /* Pods-QMobileDataStoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QMobileDataStoreTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-QMobileDataStoreTests/Pods-QMobileDataStoreTests.release.xcconfig"; sourceTree = "<group>"; };
-		6AF0A44B8B374F267FC79535 /* Pods_QMobileDataStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QMobileDataStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2FCBB6DA6CECFD912E35421 /* Pods_QMobileDataStoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QMobileDataStoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7206AB0F975DAA941EECE74 /* Pods-QMobileDataStoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QMobileDataStoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QMobileDataStoreTests/Pods-QMobileDataStoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +81,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CDAC84232A77ECE2C501801 /* Pods_QMobileDataStore.framework in Frameworks */,
+				485271971E93810600BABB16 /* ObjcExceptionBridging.framework in Frameworks */,
+				485271981E93810600BABB16 /* Prephirences.framework in Frameworks */,
+				485271991E93810600BABB16 /* Result.framework in Frameworks */,
+				4852719A1E93810600BABB16 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,7 +93,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				48D5842F1E782F6C006F56B5 /* QMobileDataStore.framework in Frameworks */,
-				C03CAFAE54F467CE6A53F7F3 /* Pods_QMobileDataStoreTests.framework in Frameworks */,
+				4852719B1E9381A200BABB16 /* ObjcExceptionBridging.framework in Frameworks */,
+				4852719C1E9381A200BABB16 /* Prephirences.framework in Frameworks */,
+				4852719D1E9381A200BABB16 /* Quick.framework in Frameworks */,
+				4852719E1E9381A200BABB16 /* Result.framework in Frameworks */,
+				4852719F1E9381A200BABB16 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,21 +107,13 @@
 		0FBCD3429775D68ED98A6852 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6AF0A44B8B374F267FC79535 /* Pods_QMobileDataStore.framework */,
-				C2FCBB6DA6CECFD912E35421 /* Pods_QMobileDataStoreTests.framework */,
+				485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */,
+				485271931E9380F000BABB16 /* Prephirences.framework */,
+				485271941E9380F000BABB16 /* Quick.framework */,
+				485271951E9380F000BABB16 /* Result.framework */,
+				485271961E9380F000BABB16 /* XCGLogger.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		3EF820B947DFDFE888C2055E /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				229EA6B46F19C921BFE30F1A /* Pods-QMobileDataStore.debug.xcconfig */,
-				47B98DA065ED83C660AB86DD /* Pods-QMobileDataStore.release.xcconfig */,
-				D7206AB0F975DAA941EECE74 /* Pods-QMobileDataStoreTests.debug.xcconfig */,
-				5B1CFE9A6C49B31122AF1987 /* Pods-QMobileDataStoreTests.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		483867B11E8A4D7F00E44F49 /* DataStore */ = {
@@ -137,12 +135,19 @@
 			name = Dev;
 			sourceTree = "<group>";
 		};
+		485271911E937EF900BABB16 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */,
+			);
+			name = Extension;
+			sourceTree = "<group>";
+		};
 		485CCDA31E78562A00CDB2B3 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
 				485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */,
 				485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */,
-				486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -163,7 +168,6 @@
 				48D5843F1E782F79006F56B5 /* Xcode */,
 				485CCDAD1E7940C700CDB2B3 /* Quality */,
 				48D584261E782F6C006F56B5 /* Products */,
-				3EF820B947DFDFE888C2055E /* Pods */,
 				0FBCD3429775D68ED98A6852 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -207,10 +211,10 @@
 			isa = PBXGroup;
 			children = (
 				48D584451E783025006F56B5 /* Record.swift */,
-				483867B11E8A4D7F00E44F49 /* DataStore */,
-				485CCDA31E78562A00CDB2B3 /* Extension */,
 				483867AF1E8A4D2E00E44F49 /* Globals.swift */,
 				48D584431E783025006F56B5 /* Log.swift */,
+				483867B11E8A4D7F00E44F49 /* DataStore */,
+				485CCDA31E78562A00CDB2B3 /* Extension */,
 				483867B21E8A4EAD00E44F49 /* Dev */,
 			);
 			path = Sources;
@@ -219,6 +223,7 @@
 		48D584411E783025006F56B5 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				485271911E937EF900BABB16 /* Extension */,
 				48D584421E783025006F56B5 /* CoreDataStore.swift */,
 				485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */,
 				48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */,
@@ -271,18 +276,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 48D584391E782F6C006F56B5 /* Build configuration list for PBXNativeTarget "QMobileDataStore" */;
 			buildPhases = (
-				CADE8E9DF210890C80CC954B /* [CP] Check Pods Manifest.lock */,
 				48D584201E782F6C006F56B5 /* Sources */,
 				48D584211E782F6C006F56B5 /* Frameworks */,
 				48D584221E782F6C006F56B5 /* Headers */,
 				48D584231E782F6C006F56B5 /* Resources */,
-				35990F1C57CE96DB01309E86 /* [CP] Copy Pods Resources */,
 				485CCDA81E793EDD00CDB2B3 /* swiftlint */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				485F01411E7C28C9007D5FEE /* PBXTargetDependency */,
 			);
 			name = QMobileDataStore;
 			productName = QMobileDataStore;
@@ -293,12 +295,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 48D5843C1E782F6C006F56B5 /* Build configuration list for PBXNativeTarget "QMobileDataStoreTests" */;
 			buildPhases = (
-				5F51A4F66A8869178DADD4FB /* [CP] Check Pods Manifest.lock */,
 				48D5842A1E782F6C006F56B5 /* Sources */,
 				48D5842B1E782F6C006F56B5 /* Frameworks */,
 				48D5842C1E782F6C006F56B5 /* Resources */,
-				CA3E929E4C28E531BE901F1D /* [CP] Embed Pods Frameworks */,
-				982B3F494459C5B584897E12 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -326,10 +325,12 @@
 					};
 					48D584241E782F6C006F56B5 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 58P9JF46LX;
 						ProvisioningStyle = Automatic;
 					};
 					48D5842D1E782F6C006F56B5 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 58P9JF46LX;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -371,21 +372,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		35990F1C57CE96DB01309E86 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QMobileDataStore/Pods-QMobileDataStore-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		485CCDA81E793EDD00CDB2B3 /* swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -399,66 +385,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
-		};
-		5F51A4F66A8869178DADD4FB /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		982B3F494459C5B584897E12 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QMobileDataStoreTests/Pods-QMobileDataStoreTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CA3E929E4C28E531BE901F1D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QMobileDataStoreTests/Pods-QMobileDataStoreTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CADE8E9DF210890C80CC954B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -496,11 +422,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		485F01411E7C28C9007D5FEE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 485CCDA91E793F5400CDB2B3 /* swiftLint */;
-			targetProxy = 485F01401E7C28C9007D5FEE /* PBXContainerItemProxy */;
-		};
 		48D584311E782F6C006F56B5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 48D584241E782F6C006F56B5 /* QMobileDataStore */;
@@ -633,13 +554,18 @@
 		};
 		48D5843A1E782F6C006F56B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 229EA6B46F19C921BFE30F1A /* Pods-QMobileDataStore.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 58P9JF46LX;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Xcode/iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -652,13 +578,17 @@
 		};
 		48D5843B1E782F6C006F56B5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 47B98DA065ED83C660AB86DD /* Pods-QMobileDataStore.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 58P9JF46LX;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Xcode/iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -671,9 +601,13 @@
 		};
 		48D5843D1E782F6C006F56B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7206AB0F975DAA941EECE74 /* Pods-QMobileDataStoreTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 58P9JF46LX;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.4d.QMobileDataStoreTests;
@@ -684,9 +618,13 @@
 		};
 		48D5843E1E782F6C006F56B5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B1CFE9A6C49B31122AF1987 /* Pods-QMobileDataStoreTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = 58P9JF46LX;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.4d.QMobileDataStoreTests;

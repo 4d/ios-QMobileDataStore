@@ -147,10 +147,8 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
         if sections.isEmpty {
             return true
         } else {
-            for section in sections {
-                if section.numberOfObjects > 0 {
-                    return false
-                }
+            for section in sections where section.numberOfObjects > 0 {
+                return false
             }
         }
         return true

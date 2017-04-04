@@ -13,8 +13,7 @@ import CoreData
 extension NSManagedObjectContext: DataStoreContext {
 
     public func newRecord(table: String) -> Record? {
-        
-        
+
         //swiftlint:disable force_cast
         let record = NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
 

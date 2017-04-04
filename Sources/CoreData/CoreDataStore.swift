@@ -51,8 +51,7 @@ extension DataStore {
     var shouldAddStoreAsynchronously = true
     var shouldMigrateStoreAutomatically = true
     var shouldInferMappingModelAutomatically = true
-    
-    
+
     var dropIfMigrationFailed: Bool = true
 
     private var observers: [Any] = [Any]()
@@ -176,7 +175,7 @@ extension DataStore {
 
         return description
     }
-    
+
     fileprivate var storeDirectoryURL: URL? {
         switch self.storeType {
         case .inMemory:
@@ -188,8 +187,7 @@ extension DataStore {
 
     fileprivate var storeURL: URL? {
         var storeURL = self.storeDirectoryURL
-        
-        
+
         if let storeDirectoryURL = storeURL {
            try? FileManager.default.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
         }
@@ -225,7 +223,7 @@ extension CoreDataStore: DataStore {
     public func load(completionHandler: CompletionHandler? = nil) {
         // CLEAN: bug, could be called two times during migration fail. could extract function or add a isLoading boolean with didSet
         self.delegate?.dataStoreWillLoad(self)
-        
+
         persistentContainer.loadPersistentStores { [unowned self] (storeDescription, error) in
             if let error = error {
 
@@ -235,16 +233,15 @@ extension CoreDataStore: DataStore {
                         // We can do anything... file system issue, or file path issue
                         logger.error("Could not load datastore \(error)")
                         completionHandler?(.failure(DataStoreError(error)))
-                    }
-                    else {
+                    } else {
                         // https://developer.apple.com/reference/coredata/1535452-validation_error_codes?language=swift
                         if let message = CoreDataStore.message(for: code) {
                             logger.error(message)
                         }
-                        
+
                         if self.dropIfMigrationFailed {
                             logger.warning("Data will be erased from local datastore. Get data from remote source will be necessary")
-                            
+
                             if let url = storeDescription.url {
                                 do {
                                     try self.drop(storeURL: url)
@@ -261,8 +258,7 @@ extension CoreDataStore: DataStore {
                             completionHandler?(.failure(DataStoreError(error)))
                         }
                     }
-                    
-                    
+
                 } else {
                     // Unknown error
                     logger.error("Unknown error \(error)")
@@ -278,7 +274,7 @@ extension CoreDataStore: DataStore {
             }
         }
     }
-    
+
     static func message(for code: Int) -> String? {
         switch code {
         case NSMigrationMissingMappingModelError: return "migration failed due to missing mapping model."
@@ -288,14 +284,14 @@ extension CoreDataStore: DataStore {
         case NSMigrationMissingMappingModelError: return "migration failed due to missing mapping model"
         case NSMigrationManagerSourceStoreError: return "migration failed due to a problem with the source data store"
         case NSMigrationManagerDestinationStoreError: return "migration failed due to a problem with the destination data store"
-            
+
         case NSManagedObjectContextLockingError: return "can't acquire a lock in a managed object context"
         case NSPersistentStoreCoordinatorLockingError: return "can't acquire a lock in a persistent store coordinator"
 
         default: return nil
         }
     }
-    
+
     /*
      public var entityInfo: [(String, [String])] {
         return self.managedObjectModel.entities.map { ($0.name ?? "", Array($0.attributesByName.keys)) }
@@ -322,17 +318,27 @@ extension CoreDataStore: DataStore {
             self.viewContext.reset()
 
             self.persistentStoreCoordinator.performAndWait {
+                let isLoaded = self.isLoaded
                 self.isLoaded = false
                 guard let store = self.persistentStore else {
-                    completionHandler?(.success())
-                    // OR failure, there is no store to drops
+                    do {
+                        // Not loaded yet, try to remove store url files
+                        if !isLoaded, let url = self.storeURL, url != NSPersistentStore.defaultURL {
+                            try self.drop(storeURL: url)
+                        }
+                        completionHandler?(.success())
+                    } catch {
+                        completionHandler?(.failure(DataStoreError(error)))
+                    }
                     return
                 }
+                // Do not try to remove /dev/null files
                 if store.isTransient {
                     completionHandler?(.success())
                     return
                 }
 
+                // get the store url
                 guard let storeURL = store.url, storeURL.isFileURL else {
                     completionHandler?(.success())
                     return
@@ -341,9 +347,9 @@ extension CoreDataStore: DataStore {
                 do {
                     // self.persistentStoreCoordinator.remove(store)
                     try self.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: self.storeType.type, options: store.options)
-       
+                    // remove the files
                     try self.drop(storeURL: storeURL)
- 
+
                     completionHandler?(.success())
                 } catch {
                     completionHandler?(.failure(DataStoreError(error)))
@@ -351,7 +357,7 @@ extension CoreDataStore: DataStore {
             }
         }
     }
-    
+
     // remove sqlite files
     func drop(storeURL: URL) throws {
         let fileManager = FileManager.default
@@ -364,18 +370,18 @@ extension CoreDataStore: DataStore {
 
 fileprivate extension FileManager {
 
-    func removeItemIfExists(atPath path: String) throws{
+    func removeItemIfExists(atPath path: String) throws {
         if self.fileExists(atPath: path) {
             try self.removeItem(atPath: path)
         }
     }
-    
+
     func removeItemIfExists(at url: URL) throws {
         if self.fileExists(at: url) {
             try self.removeItem(at: url)
         }
     }
-    
+
     func fileExists(at url: URL) -> Bool {
         if url.isFileURL {
             return fileExists(atPath: url.path)

@@ -78,8 +78,6 @@ public protocol DataStore {
     /// Access to store metadata
     var metadata: Metadata? {get set}
 
-    // TODO func collectChange()
-
 }
 
 // MARK: Error
