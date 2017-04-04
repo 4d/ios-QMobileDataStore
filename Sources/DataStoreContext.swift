@@ -13,10 +13,28 @@ import Result
 public protocol DataStoreContext: class {
 
     /// Create a new record and add it to data store.
-    func newRecord(table: String) -> Record?
+    func create(in table: String) -> Record?
+
+    /// Create a new record if there is no record that match the predicate, otherwise return the 
+    /// first one that match.
+    func getOrCreate(in table: String, matching predicate: NSPredicate) throws -> Record?
+
+    /// Create and updates values
+    func insert(in table: String, values: [String: Any]) -> Record?
+    /// Get records that match the predicate.
+    func get(in table: String, matching predicate: NSPredicate) throws -> [Record]?
+
+    /// Update the records that match the predicate with the given `values`
+    func update(in table: String, matching predicate: NSPredicate, values: [String: Any]) throws -> Bool
+
+    /// Check if there is records that match the predicate.
+    func has(in table: String, matching predicate: NSPredicate) throws -> Bool
 
     /// Delete a specific record.
     func delete(record: Record)
+
+    /// Delete records, which match the predicate.
+    func delete(in table: String, matching predicate: NSPredicate) throws -> Bool
 
 }
 

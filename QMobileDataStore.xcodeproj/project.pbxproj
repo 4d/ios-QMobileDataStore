@@ -34,6 +34,7 @@
 		48D584531E78304C006F56B5 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */; };
 		48D584891E784921006F56B5 /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584881E784921006F56B5 /* FetchRequest.swift */; };
 		48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */; };
+		48FB2CF91E93E0F600F4F685 /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		48D5844E1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
 		48D584881E784921006F56B5 /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchRequest.swift; sourceTree = "<group>"; };
 		48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataFetchRequest.swift; sourceTree = "<group>"; };
+		48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +227,7 @@
 			children = (
 				485271911E937EF900BABB16 /* Extension */,
 				48D584421E783025006F56B5 /* CoreDataStore.swift */,
+				48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */,
 				485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */,
 				48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */,
 				486A7C8C1E8BF8F700F646AF /* RecordBase.swift */,
@@ -396,6 +399,7 @@
 				48D584891E784921006F56B5 /* FetchRequest.swift in Sources */,
 				486A7C8D1E8BF8F700F646AF /* RecordBase.swift in Sources */,
 				48D584481E783025006F56B5 /* Log.swift in Sources */,
+				48FB2CF91E93E0F600F4F685 /* CoreDataModel.swift in Sources */,
 				48D584471E783025006F56B5 /* CoreDataStore.swift in Sources */,
 				482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */,
 				48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */,

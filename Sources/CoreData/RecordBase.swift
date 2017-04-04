@@ -71,7 +71,7 @@ extension RecordBase {
     }*/
 
 }
-
+/*
 fileprivate func uniqueToStdHandler(_ uniqueHandler: @escaping RecordBase.FunctionUniqueCompletionHandler) -> RecordBase.FunctionCompletionHandler {
     let handler: RecordBase.FunctionCompletionHandler = { result in
         switch result {
@@ -83,7 +83,8 @@ fileprivate func uniqueToStdHandler(_ uniqueHandler: @escaping RecordBase.Functi
     }
     return handler
 }
-
+ */
+/*
 public extension RecordBase {
 
     public typealias FunctionCompletionHandler = (Result<[Double], DataStoreError>) -> Void
@@ -107,7 +108,7 @@ public extension RecordBase {
 
         context.perform { _ in
             let resultValue = [Double]()
-            // TODO functions on fetch request for mapping
+            // XXX functions on fetch request for mapping
             do {
                 _ = try context.fetch(fetchRequest) as? [[String: AnyObject]]
                 /*
@@ -157,3 +158,4 @@ public extension RecordBase {
     }
 
 }
+*/

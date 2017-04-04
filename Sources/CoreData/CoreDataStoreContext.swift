@@ -12,53 +12,84 @@ import CoreData
 // some extension for NSManagedObjectContext
 extension NSManagedObjectContext: DataStoreContext {
 
-    public func newRecord(table: String) -> Record? {
+    public func create(in table: String) -> Record? {
+        return NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
+    }
 
-        //swiftlint:disable force_cast
-        let record = NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
+    public func getOrCreate(in table: String, matching predicate: NSPredicate) throws -> Record? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: table)
+        request.predicate = predicate
+        request.resultType = .managedObjectResultType
+        request.fetchLimit = 1
 
-        // ASK update default field of created record??
+        guard let fetchedObjects = try self.fetch(request) as? [Record] else {
+            return create(in: table)
+        }
+        guard let first = fetchedObjects.first else {
+            return create(in: table)
+        }
+        assert(fetchedObjects.count == 1, "There is more thant one records in table \(table) matching predicate \(predicate)")
 
-        return record
+        return first
+    }
+
+    public func has(in table: String, matching predicate: NSPredicate) throws -> Bool {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: table)
+        request.predicate = predicate
+        request.resultType = .countResultType
+
+        let result = try self.count(for: request)
+        return result != 0
+    }
+
+    public func get(in table: String, matching predicate: NSPredicate) throws -> [Record]? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: table)
+        request.predicate = predicate
+        request.resultType = .managedObjectResultType
+
+        guard let fetchedObjects = try self.fetch(request) as? [Record] else {
+            return nil
+        }
+        return fetchedObjects
+    }
+
+    public func insert(in table: String, values: [String: Any]) -> Record? {
+        if let newRecord = create(in: table) {
+            for (key, value) in values {
+                newRecord.setValue(value, forKey: key)
+            }
+            return newRecord
+        }
+        return nil
+    }
+
+    public func update(in table: String, matching predicate: NSPredicate, values: [String: Any]) throws -> Bool {
+        let request = NSBatchUpdateRequest(entityName: table)
+        request.predicate = predicate
+        request.propertiesToUpdate = values
+        request.resultType = .updatedObjectsCountResultType
+
+        guard let batchResult = try self.execute(request) as? NSBatchUpdateResult, let result = batchResult.result as? Int else {
+            return false
+        }
+        return result != 0 // something has been updated
+    }
+
+    public func delete(in table: String, matching predicate: NSPredicate) throws -> Bool {
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: table)
+        fetch.predicate = predicate
+        let request = NSBatchDeleteRequest(fetchRequest: fetch)
+        request.resultType = .resultTypeCount
+
+        guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? Int else {
+            return false
+        }
+        return result != 0 // something has been deleted
     }
 
     public func delete(record: Record) {
+        // CLEAN will fald is not good table, use predicate?
         self.delete(record as NSManagedObject)
     }
 
-    // TODO batch request
-    /*public func execute(request: PersistentStoreRequest) throws {
-        guard let request = request as? NSPersistentStoreRequest else {
-            logger.warning("")
-            return
-        }
-
-       try self.execute(request)
-    }*/
-
 }
-
-/*
- public protocol PersistentStoreRequest {
- 
- var type: PersistentStoreRequestType { get }
- }
- 
- public enum PersistentStoreRequestType: UInt {
- case fetch
- case save
- case batchUpdate
- case batchDelete
- }
- 
- extension NSPersistentStoreRequest: PersistentStoreRequest {
- 
- open var type: PersistentStoreRequestType {
- switch self.requestType {
- case .fetchRequestType: return .fetch
- case .saveRequestType: return .save
- case .batchUpdateRequestType: return .batchUpdate
- case .batchDeleteRequestType: return .batchDelete
- }
- }
- }*/

@@ -39,10 +39,10 @@ extension DataStore {
     }
 
     /// a default core data store
-    static var `default` = CoreDataStore()!
+    static var `default` = CoreDataStore()
 
     /// The model name
-    open let modelName: String
+    open let model: CoreDataObjectModel
     /// The model store type
     open let storeType: StoreType
 
@@ -64,31 +64,14 @@ extension DataStore {
     /// A read-only flag indicating if the persistent store is loaded.
     public fileprivate (set) var isLoaded = false
 
-    /// Initializes using a model name from a `preference` associated to `key`
+    /// Initializes using a model and store type.
     ///
-    /// - parameter preference: The preferences that store model name (default main bundle).
-    /// - parameter key: he key used to read information (default bundle name ie. CFBundleName).
+    /// - parameter model: The model.
     /// - parameter storeType: the store type (default: sql).
     ///
     /// - returns: The new `QMobileCoreDataStore` instance.
-    internal convenience init?(preferences: PreferencesType = Bundle.dataStore, key: String  = Bundle.dataStoreKey, storeType: StoreType = .sql) {
-        if let modelName = preferences[key] as? String {
-            self.init(modelName: modelName, storeType: storeType)
-        } else {
-            let dico = preferences.dictionary()
-            print("No model to load in bundle '\(dico)' with key \(key)")
-            return nil
-        }
-    }
-
-    /// Initializes using a model name and store type.
-    ///
-    /// - parameter model name: The model name.
-    /// - parameter storeType: the store type (default: sql).
-    ///
-    /// - returns: The new `QMobileCoreDataStore` instance.
-    internal init(modelName: String, storeType: StoreType = .sql) {
-        self.modelName = modelName
+    internal init(model: CoreDataObjectModel = CoreDataObjectModel.named(Bundle.dataStoreKey, Bundle.dataStore), storeType: StoreType = .sql) {
+        self.model = model
         self.storeType = storeType
 
         super.init()
@@ -131,12 +114,13 @@ extension DataStore {
 
     // MARK: computed variables
     fileprivate lazy var persistentContainer: NSPersistentContainer = {
-        guard let url = self.modelBundle.url(forResource: self.modelName, withExtension: "momd"), let managedObjectModel = NSManagedObjectModel(contentsOf: url) else {
-            return NSPersistentContainer(name: self.modelName)
+        let modelName = self.model.name()
+        guard let managedObjectModel = self.model.model() else {
+            return NSPersistentContainer(name: modelName)
         }
 
-        let container = NSPersistentContainer(name: self.modelName, managedObjectModel: managedObjectModel)
-        let description = self.storeDescription(with: self.storeURL)
+        let container = NSPersistentContainer(name: modelName, managedObjectModel: managedObjectModel)
+        let description = self.storeDescription(with: self.storeURL) // XXX
 
         container.persistentStoreDescriptions = [description]
         logger.verbose("\(container.persistentStoreDescriptions)")
@@ -192,7 +176,7 @@ extension DataStore {
            try? FileManager.default.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
         }
 
-        storeURL?.appendPathComponent(modelName)
+        storeURL?.appendPathComponent(self.model.name())
         storeURL?.appendPathExtension("sqlite")
 
         return storeURL
