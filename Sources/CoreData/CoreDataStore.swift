@@ -70,7 +70,8 @@ extension DataStore {
     /// - parameter storeType: the store type (default: sql).
     ///
     /// - returns: The new `QMobileCoreDataStore` instance.
-    internal init(model: CoreDataObjectModel = CoreDataObjectModel.named(Bundle.dataStoreKey, Bundle.dataStore), storeType: StoreType = .sql) {
+    //swiftlint:disable force_cast
+    internal init(model: CoreDataObjectModel = CoreDataObjectModel.named(Bundle.dataStore[Bundle.dataStoreKey] as! String, Bundle.dataStore), storeType: StoreType = .sql) {
         self.model = model
         self.storeType = storeType
 
@@ -141,6 +142,8 @@ extension DataStore {
     }
 
     internal func newBackgroundContext() -> NSManagedObjectContext {
+        // let backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        // backgroundContext.parent = viewContext
         return self.persistentContainer.newBackgroundContext()
     }
 
@@ -417,6 +420,9 @@ extension CoreDataStore {
     }
 
     func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        /*self.newBackgroundContext().perform {
+            block(self.viewContext)
+        }*/
         self.persistentContainer.performBackgroundTask(block)
     }
 
