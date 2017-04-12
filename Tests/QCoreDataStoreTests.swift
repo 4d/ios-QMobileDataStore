@@ -28,7 +28,9 @@ class CoreDataStoreTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
-        self.dataStore = CoreDataStore(preferences: bundle, storeType: .inMemory)
+        let modelName = bundle[Bundle.dataStoreKey] as! String
+        let model = CoreDataObjectModel.named(modelName , bundle)
+        self.dataStore = CoreDataStore(model: model, storeType: .inMemory)
         self.dataStore.modelBundle = bundle
 
         guard let dataStore = self.dataStore else {
@@ -36,7 +38,7 @@ class CoreDataStoreTests: XCTestCase {
             return
         }
         print("\(dataStore)")
-        
+
         let expectation = self.expectation(description: #function)
         dataStore.load { result in
             switch result {

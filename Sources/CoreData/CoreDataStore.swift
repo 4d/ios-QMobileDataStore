@@ -83,6 +83,8 @@ extension DataStore {
     }
 
     fileprivate func initObservers(center: NotificationCenter = NotificationCenter.default) {
+        // here false positive for discarded_notification_center_observer
+        //swiftlint:disable discarded_notification_center_observer
         observers.append(center.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: .main) { [unowned self] note in
 
             if let moc = note.object as? NSManagedObjectContext {
