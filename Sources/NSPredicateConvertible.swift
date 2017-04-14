@@ -11,9 +11,15 @@ import Foundation
 /// An object that could be converted to a NSPredicate.
 public protocol NSPredicateConvertible {
 
-    init(predicate: NSPredicate)
     var predicate: NSPredicate? { get }
 
+}
+
+extension NSPredicate: NSPredicateConvertible {
+
+    public var predicate: NSPredicate? {
+        return self
+    }
 }
 
 extension String: NSPredicateConvertible {
