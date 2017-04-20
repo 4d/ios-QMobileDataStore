@@ -11,12 +11,15 @@ import XCTest
 
 import Prephirences
 import Result
+import CoreData
 
 class CoreDataStoreTests: XCTestCase {
     
     let bundle = Bundle(for: CoreDataStoreTests.self)
-    var dataStore: CoreDataStore!
-    let timeout: TimeInterval = 50
+  
+    let timeout: TimeInterval = 10
+    
+    let table = "Entity"
 
     let waitHandler: XCWaitCompletionHandler = { error in
         if let error = error {
@@ -26,17 +29,22 @@ class CoreDataStoreTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+   
+        //let modelName = bundle[Bundle.dataStoreKey] as! String
+        //let model = CoreDataObjectModel.named(modelName , bundle)
+        Bundle.dataStore = bundle
         
-        let modelName = bundle[Bundle.dataStoreKey] as! String
-        let model = CoreDataObjectModel.named(modelName , bundle)
-        self.dataStore = CoreDataStore(model: model, storeType: .inMemory)
+        
+        /*self.dataStore = CoreDataStore(model: model, storeType: .inMemory) // memory do not allow batch update and delete
         self.dataStore.modelBundle = bundle
+        CoreDataStore.default = self.dataStore*/
+        
+        XCTAssertNotNil(Bundle.dataStoreModelName)
 
-        guard let dataStore = self.dataStore else {
+        /*guard let dataStore = self.dataStore else {
             XCTFail("No data store to test")
             return
-        }
+        }*/
         print("\(dataStore)")
 
         let expectation = self.expectation(description: #function)
@@ -54,7 +62,7 @@ class CoreDataStoreTests: XCTestCase {
     override func tearDown() {
         let expectation = self.expectation(description: #function)
 
-        self.dataStore?.drop { result in
+        dataStore.drop { result in
             switch result {
             case .success:
                 expectation.fulfill()
@@ -68,11 +76,11 @@ class CoreDataStoreTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: test
-    func testSave() {
+    // MARK: DataStore
+    func testDataStoreSave() {
         let expectation = self.expectation(description: #function)
 
-        self.dataStore.save { result in
+        dataStore.save { result in
             switch result {
             case .success:
                 expectation.fulfill()
@@ -84,6 +92,235 @@ class CoreDataStoreTests: XCTestCase {
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
+    // MARK: NSManagedObjectContext
+    func testGetAndCreateContext() {
+        let _ = NSManagedObjectContext.default
+        let _ = NSManagedObjectContext.newBackgroundContext()
+    }
+    
+    
+    // MARK: Entity
+    func testEntityCreate() {
+        let expectation = self.expectation(description: #function)
+   
+        let _ = dataStore.perform(.background, { (context, save) in
+      
+            if let record = context.create(in: self.table) {
+                do {
+                    try record.validateForInsert()
+                } catch {
+                    XCTFail("Entity not valid to insert \(error) in data store")
+                }
+                let _ = record["attribute"]
+                
+                record["attribute"] = 10
+                XCTAssertEqual(record["attribute"] as? Int, 10)
+                
+                
+                XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
+                
+                // unknown attribute will throw assert
+                // let _ = record["attribute \(UUID().uuidString)"]
+                
+            } else {
+                XCTFail("Cannot create entity")
+            }
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
+    func testEntityCreateFalseTable() {
+        let expectation = self.expectation(description: #function)
+        
+        let _ = dataStore.perform(.background, { (context, save) in
+            let record = context.create(in: "Entity \(UUID().uuidString)")
+            XCTAssertNil(record)
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
+    func testEntityDelete() {
+        let expectation = self.expectation(description: #function)
+        
+        let _ = dataStore.perform(.background, { (context, save) in
+            
+            if let record = context.create(in: self.table) {
+                
+                XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
+                
+                context.delete(records: [record])
+                
+                // check no more in context
+                XCTAssertFalse(try! context.has(in: self.table, matching : record.predicate))
+            } else {
+                XCTFail("Cannot create entity")
+            }
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+
+    func testEntityUpdate() {
+        let expectation = self.expectation(description: #function)
+        
+        let _ = dataStore.perform(.background, { (context, save) in
+
+            if let record = context.create(in: self.table) {
+                XCTAssertTrue(try! context.has(in: self.table, matching: record.predicate))
+                
+               // try? save()
+                let _ = try? context.update(in: self.table, matching: record.predicate, values: ["attribute": 11])
+
+            } else {
+                XCTFail("Cannot create entity")
+            }
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+
+    
+    func testEntityDeleteUsingPredicate() {
+        let expectation = self.expectation(description: #function)
+        
+        let _ = dataStore.perform(.background, { (context, save) in
+            
+            if let record = context.create(in: self.table) {
+                
+                XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
+                
+                try? save()
+                
+                let result  = try! context.delete(in: self.table, matching: record.predicate)
+                XCTAssertTrue(result, "not deleted")
+                
+                // check no more in context
+                XCTAssertFalse(try! context.has(in: self.table, matching : record.predicate))
+            } else {
+                XCTFail("Cannot create entity")
+            }
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
+    // MARK: Fetch
+    func testFetch() {
+        let expectation = self.expectation(description: #function)
+        
+        let fetchRequest = dataStore.fetchRequest(tableName: self.table)
+        
+        let _ = dataStore.perform(.background, { (context, save) in
+            
+            let count: Int = try! fetchRequest.count(context: context)
+            if let _ = context.create(in: self.table) {
+
+                XCTAssertEqual(try? fetchRequest.count(context: context), count + 1)
+                
+                
+            } else {
+                XCTFail("Cannot create entity")
+            }
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
+    func testFetchWithPredicate() {
+        let expectation = self.expectation(description: #function)
+        
+        var fetchRequest = dataStore.fetchRequest(tableName: self.table)
+        
+        let _ = dataStore.perform(.background, { (context, save) in
+            
+            if let record = context.create(in: self.table) {
+                
+                fetchRequest.predicate = NSPredicate(format: "objectID = %@", record.objectID) // not working with SELF...
+                
+                let exist = fetchRequest.evaluate(record: record)
+                
+                XCTAssertTrue(exist)
+                
+                XCTAssertEqual(try? fetchRequest.count(context: context), 1)
+                
+                
+            } else {
+                XCTFail("Cannot create entity")
+            }
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+
+    
+    // MARK: FetchController
+    func testFetchController() {
+        let expectation = self.expectation(description: #function)
+        
+        let controller = dataStore.fetchedResultsController(tableName: self.table)
+        XCTAssertEqual(controller.tableName, self.table)
+        XCTAssertNil(controller.sectionNameKeyPath)
+        
+        try? controller.performFetch()
+
+        let numberOfRecords = controller.numberOfRecords
+        XCTAssertEqual(controller.isEmpty, numberOfRecords == 0)
+        
+        let records = controller.fetchedRecords
+        XCTAssertNotNil(records)
+        XCTAssertEqual(numberOfRecords, records!.count)
+        
+        for record in records! {
+            let indexPath = controller.indexPath(for: record)
+            XCTAssertNotNil(indexPath)
+            let r = controller.record(at: indexPath!)
+            XCTAssertNotNil(r)
+            
+            XCTAssertTrue(controller.inBounds(indexPath: indexPath!))
+        }
+
+        let _ = dataStore.perform(.background, { (context, save) in
+            
+            if let record = context.create(in: self.table) {
+                try? save()
  
+                try? controller.performFetch()
+                
+                record["attribute"] = 10
+                
+                let numberOfRecords = controller.numberOfRecords
+                XCTAssertEqual(controller.isEmpty, numberOfRecords == 0)
+                
+                let records = controller.fetchedRecords
+                XCTAssertNotNil(records)
+                XCTAssertEqual(numberOfRecords, records!.count)
+                
+                for record in records! {
+                    let indexPath = controller.indexPath(for: record)
+                    XCTAssertNotNil(indexPath)
+                    let r = controller.record(at: indexPath!)
+                    XCTAssertNotNil(r)
+                    
+                    XCTAssertTrue(controller.inBounds(indexPath: indexPath!))
+                }
+                
+                
+                let numberOfSections = controller.numberOfSections
+                for section in 0..<numberOfSections {
+                    let number = controller.numberOfRecords(in: section)
+                    
+                    XCTAssertTrue(number > 0) // because of save
+                }
+            } else {
+                XCTFail("Cannot create entity to test fetch controller")
+            }
+
+            expectation.fulfill()
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
 
 }

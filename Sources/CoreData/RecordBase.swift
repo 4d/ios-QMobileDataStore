@@ -62,8 +62,12 @@ extension RecordBase {
     }
 
     open override func value(forUndefinedKey key: String) -> Any? {
-        assertionFailure("Undefined key for '\(key) for record \(self)")
+        assertionFailure("Undefined field '\(key) for record \(self)")
         return nil
+    }
+
+    open var predicate: NSPredicate {
+        return NSPredicate(format: "SELF = %@", objectID)
     }
 
     /*open func willSave() {

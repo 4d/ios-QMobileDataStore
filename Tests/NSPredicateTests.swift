@@ -40,9 +40,20 @@ class NSPredicateTests: XCTestCase {
         XCTAssertNil("".predicate)
         XCTAssertNotNil("ww like ww".predicate)
         XCTAssertNotNil("TRUEPREDICATE".predicate)
-        
+
         let string = String(predicate: NSPredicate.true)
         XCTAssertFalse(string.isEmpty)
     }
+    
+    func testPredicateToPredicate() {
+        let predicate = NSPredicate.true
+        XCTAssertEqual(predicate.predicate, predicate)
+    }
+
+    func testNSSortDescriptor() {
+        let sortDescriptor = NSSortDescriptor(key: "test", ascending: true)
+        XCTAssertEqual(sortDescriptor.sortDescriptor, sortDescriptor)
+    }
+
 }
     

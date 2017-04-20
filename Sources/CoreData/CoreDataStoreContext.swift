@@ -12,8 +12,17 @@ import CoreData
 // some extension for NSManagedObjectContext
 extension NSManagedObjectContext: DataStoreContext {
 
+    public func exists(table: String) -> Bool {
+        // XXX cache it??, have a list somewhere?
+        let description = NSEntityDescription.entity(forEntityName: table, in: self)
+        return description != nil
+    }
+
     public func create(in table: String) -> Record? {
-        return NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
+        if exists(table: table) {
+            return NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
+        }
+        return nil
     }
 
     public func getOrCreate(in table: String, matching predicate: NSPredicate) throws -> Record? {
