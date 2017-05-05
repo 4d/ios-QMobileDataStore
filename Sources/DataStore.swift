@@ -78,6 +78,19 @@ public protocol DataStore {
     /// Access to store metadata
     var metadata: Metadata? {get set}
 
+    // MARK: Structure
+    var tablesInfo: [DataStoreTableInfo] {get}
+    func tableInfo(for name: String) -> DataStoreTableInfo?
+}
+
+public protocol DataStoreTableInfo {
+    var name: String {get}
+    var fields: [DataStoreFieldInfo] {get}
+}
+public typealias DataStoreFieldType = String
+public protocol DataStoreFieldInfo {
+    var name: String {get}
+    var type: DataStoreFieldType {get}
 }
 
 // MARK: Error

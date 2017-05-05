@@ -174,11 +174,11 @@ extension DataStore {
         }
     }
 
-    fileprivate var storeURL: URL? {
+    var storeURL: URL? {
         var storeURL = self.storeDirectoryURL
 
         if let storeDirectoryURL = storeURL {
-           try? FileManager.default.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
+            try? FileManager.default.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
         }
 
         storeURL?.appendPathComponent(self.model.name())
@@ -195,7 +195,79 @@ extension DataStore {
     }
 }
 
+// MARK: Structure
+
+struct CoreDataStoreTableInfo: DataStoreTableInfo {
+    let entity: NSEntityDescription
+
+    var fields: [DataStoreFieldInfo] {
+        return entity.attributesByName.values.map { CoreDataStoreFieldInfo(attribute: $0) }
+    }
+
+    var name: String {
+       return self.entity.name!
+    }
+}
+
+struct CoreDataStoreFieldInfo: DataStoreFieldInfo {
+    let attribute: NSAttributeDescription
+    var name: String {
+        return attribute.name
+    }
+
+    var type: DataStoreFieldType {
+        return self.attribute.attributeType.coreData
+    }
+}
+
+extension NSAttributeType {
+    var coreData: String {
+        switch self {
+        case .binaryDataAttributeType:
+            return "Binary"
+        case .booleanAttributeType:
+            return "Boolean"
+        case .dateAttributeType:
+            return "Date"
+        case .decimalAttributeType:
+            return "Decimal"
+        case .doubleAttributeType:
+            return "Double"
+        case .floatAttributeType:
+            return "Float"
+        case .integer16AttributeType:
+            return "Integer 16"
+        case .integer32AttributeType:
+            return "Integer 32"
+        case .integer64AttributeType:
+            return "Integer 64"
+        case .stringAttributeType:
+            return "String"
+        case .transformableAttributeType:
+            return "Transformable"
+        case .objectIDAttributeType:
+            return "Object ID"
+        case .undefinedAttributeType:
+            return ""
+        }
+    }
+}
+
 extension CoreDataStore: DataStore {
+
+    // MARK: Structures
+    var tablesInfo: [DataStoreTableInfo] {
+        let entities = persistentContainer.managedObjectModel.entities
+        return entities.filter { $0.name != nil }.map { CoreDataStoreTableInfo(entity: $0) }
+    }
+
+    func tableInfo(for name: String) -> DataStoreTableInfo? {
+        let entities = persistentContainer.managedObjectModel.entities
+        for entity in entities where entity.name == name {
+            return CoreDataStoreTableInfo(entity: entity)
+        }
+        return nil
+    }
 
     // MARK: Metadata
     var metadata: CoreDataStore.Metadata? {

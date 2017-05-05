@@ -75,6 +75,32 @@ class CoreDataStoreTests: XCTestCase {
 
         super.tearDown()
     }
+    
+    // MARK: test structure
+    func testTablesInfo() {
+        let tablesInfo = dataStore.tablesInfo
+        XCTAssertFalse(tablesInfo.isEmpty)
+        XCTAssertTrue(tablesInfo.map{$0.name}.contains(table))
+        
+        for tableInfo in tablesInfo {
+            XCTAssertFalse(tableInfo.name.isEmpty)
+        }
+    }
+    
+    func testFieldForTable() {
+        if let tableInfo = dataStore.tableInfo(for: table) {
+            let fields = tableInfo.fields
+            XCTAssertFalse(fields.isEmpty)
+            XCTAssertTrue(fields.count == 10)
+            
+            for field in fields {
+                XCTAssertFalse(field.name.isEmpty)
+                XCTAssertFalse(field.type.isEmpty)
+            }
+        } else {
+            XCTFail("No table \(table) in table info")
+        }
+    }
 
     // MARK: DataStore
     func testDataStoreSave() {
