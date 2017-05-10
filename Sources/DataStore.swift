@@ -73,14 +73,18 @@ public protocol DataStore {
 
     // MARK: Metadata
 
-    /// Meta data alias.
-    typealias Metadata = [String : Any]
     /// Access to store metadata
-    var metadata: Metadata? {get set}
+    /// return nil if not ready
+    var metadata: DataStoreMetadata? {get}
 
     // MARK: Structure
     var tablesInfo: [DataStoreTableInfo] {get}
     func tableInfo(for name: String) -> DataStoreTableInfo?
+}
+
+public protocol DataStoreMetadata {
+
+    subscript(key: String) -> Any? { get set }
 }
 
 public protocol DataStoreTableInfo {

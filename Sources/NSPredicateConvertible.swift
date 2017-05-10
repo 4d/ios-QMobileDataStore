@@ -43,3 +43,23 @@ extension NSPredicate {
     @nonobjc public static let `false` = NSPredicate(value: false)
 
 }
+
+public func && (left: NSPredicate, right: NSPredicate) -> NSPredicate {
+    return [left] && [right]
+}
+
+public func && (left: [NSPredicate], right: [NSPredicate]) -> NSPredicate {
+    let predicates: [NSPredicate] = left + right
+    return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+}
+public func || (left: NSPredicate, right: NSPredicate) -> NSPredicate {
+    return [left] || [right]
+}
+
+public func || (left: [NSPredicate], right: [NSPredicate]) -> NSPredicate {
+    let predicates: [NSPredicate] = left + right
+    return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+}
+prefix public func ! (left: NSPredicate) -> NSPredicate {
+    return NSCompoundPredicate(type: .not, subpredicates: [left])
+}

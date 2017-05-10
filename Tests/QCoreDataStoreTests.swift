@@ -348,5 +348,57 @@ class CoreDataStoreTests: XCTestCase {
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
+    
+    func testMetaData() {
+        testMetaData("expectedValue")
+        testMetaData(true)
+        testMetaData(["one", "two", ""])
+        
+        testMetaData(["one": "1", "two": "2", "": "empty"])
+    }
+    
+    func testMetaData<T: Equatable>(_ expectedValue: T) {
+        var metadata = dataStore.metadata
+        let key = UUID().uuidString
+        XCTAssertNil(metadata?[key])
+        metadata?[key] = expectedValue
+        XCTAssertNotNil(metadata?[key])
+        let value = metadata?[key] as? T
+        XCTAssertEqual(value, expectedValue)
+        
+        metadata?[key] = nil
+        XCTAssertNil(metadata?[key])
+    }
+    func testMetaData<T: Equatable>(_ expectedValue: [T]) {
+        var metadata = dataStore.metadata
+        let key = UUID().uuidString
+        XCTAssertNil(metadata?[key])
+        metadata?[key] = expectedValue
+        XCTAssertNotNil(metadata?[key])
+        
+        if let value = metadata?[key] as? [T] {
+            XCTAssertEqual(value, expectedValue)
+        }
+        
+        metadata?[key] = nil
+        XCTAssertNil(metadata?[key])
+    }
+    func testMetaData<T : Hashable, U : Equatable>(_ expectedValue:  [T : U]) {
+        var metadata = dataStore.metadata
+        let key = UUID().uuidString
+        XCTAssertNil(metadata?[key])
+        metadata?[key] = expectedValue
+        XCTAssertNotNil(metadata?[key])
+        
+        if let value = metadata?[key] as? [T : U] {
+            XCTAssertEqual(value, expectedValue)
+        }
+        
+        metadata?[key] = nil
+        XCTAssertNil(metadata?[key])
+    }
+    
+    
+    
 
 }

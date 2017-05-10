@@ -253,6 +253,21 @@ extension NSAttributeType {
     }
 }
 
+struct CoreDataStoreMetaData: DataStoreMetadata {
+
+    let persistentStore: NSPersistentStore
+
+    subscript(key: String) -> Any? {
+        get {
+            return persistentStore.metadata[key]
+        }
+        set {
+            persistentStore.metadata[key] = newValue
+        }
+    }
+
+}
+
 extension CoreDataStore: DataStore {
 
     // MARK: Structures
@@ -270,13 +285,11 @@ extension CoreDataStore: DataStore {
     }
 
     // MARK: Metadata
-    var metadata: CoreDataStore.Metadata? {
-        get {
-            return self.persistentStore?.metadata
+    var metadata: DataStoreMetadata? {
+        guard let persistentStore = self.persistentStore else {
+            return nil
         }
-        set {
-            self.persistentStore?.metadata = newValue
-        }
+        return CoreDataStoreMetaData(persistentStore: persistentStore)
     }
 
     // MARK: Main

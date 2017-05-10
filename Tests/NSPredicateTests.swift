@@ -54,6 +54,22 @@ class NSPredicateTests: XCTestCase {
         let sortDescriptor = NSSortDescriptor(key: "test", ascending: true)
         XCTAssertEqual(sortDescriptor.sortDescriptor, sortDescriptor)
     }
+    
+    func testCompoundPredicateOperators() {
+        XCTAssertTrue((NSPredicate.true && NSPredicate.true).evaluate(with: "anything"))
+        XCTAssertFalse((NSPredicate.true && NSPredicate.false).evaluate(with: "anything"))
+        XCTAssertFalse((NSPredicate.false && NSPredicate.true).evaluate(with: "anything"))
+        XCTAssertFalse((NSPredicate.false && NSPredicate.false).evaluate(with: "anything"))
+        
+        XCTAssertTrue((NSPredicate.true || NSPredicate.true).evaluate(with: "anything"))
+        XCTAssertTrue((NSPredicate.true || NSPredicate.false).evaluate(with: "anything"))
+        XCTAssertTrue((NSPredicate.false || NSPredicate.true).evaluate(with: "anything"))
+        XCTAssertFalse((NSPredicate.false || NSPredicate.false).evaluate(with: "anything"))
+        
+        
+        XCTAssertFalse(!NSPredicate.true.evaluate(with: "anything"))
+        XCTAssertTrue(!NSPredicate.false.evaluate(with: "anything"))
+    }
 
 }
     
