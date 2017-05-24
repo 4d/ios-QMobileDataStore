@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */; };
 		48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */; };
 		482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482485101E7A7C5400DA5390 /* DataStoreContext.swift */; };
 		483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483867AF1E8A4D2E00E44F49 /* Globals.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreCorrupedTests.swift; sourceTree = "<group>"; };
 		48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSPredicateTests.swift; sourceTree = "<group>"; };
 		482485101E7A7C5400DA5390 /* DataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreContext.swift; sourceTree = "<group>"; };
 		483867AF1E8A4D2E00E44F49 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				48D5844C1E78303C006F56B5 /* QCoreDataStoreTests.swift */,
+				480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */,
 				48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */,
 				48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */,
 			);
@@ -441,6 +444,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */,
 				48D584521E78304A006F56B5 /* QCoreDataStoreTests.swift in Sources */,
 				48D584531E78304C006F56B5 /* QMobileDataStoreTests.xcdatamodeld in Sources */,
 				48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */,
