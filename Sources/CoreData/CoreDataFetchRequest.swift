@@ -246,7 +246,7 @@ extension CoreDataStore {
 
         let request = (fetchRequest as! CoreDataFetchRequest).fetchRequest
         if request.sortDescriptors == nil {
-            if let sectionNameKeyPath = sectionNameKeyPath {
+            if let sectionNameKeyPath = sectionNameKeyPath, sectionNameKeyPath != "" {
                 request.sortDescriptors = [NSSortDescriptor(key: sectionNameKeyPath, ascending: true)]
             } else {
                 if let entityDescription = NSEntityDescription.entity(forEntityName: fetchRequest.tableName, in: self.viewContext),
