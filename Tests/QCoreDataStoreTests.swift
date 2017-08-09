@@ -117,6 +117,28 @@ class CoreDataStoreTests: XCTestCase {
 
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
+
+    func testDataStoreSaveNotif() {
+        let expectation = self.expectation(description: #function)
+        let testQueue = OperationQueue()
+        testQueue.underlyingQueue = DispatchQueue(label: "test.queue")
+        let obs = dataStore.observe(.dataStoreSaved, queue: testQueue) { notif in
+            expectation.fulfill()
+        }
+
+        dataStore.save { result in
+            switch result {
+            case .success:
+                print("success ok. wait for event")
+            case .failure(let error):
+                XCTFail("\(error)")
+            }
+            dataStore.unobserve(obs)
+        }
+        
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
     
     // MARK: NSManagedObjectContext
     func testGetAndCreateContext() {

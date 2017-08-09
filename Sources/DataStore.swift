@@ -91,6 +91,36 @@ public protocol DataStore {
 
 }
 
+extension DataStore {
+
+    /// Observe notification from data store
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public func observe(_ name: Notification.Name, queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return NotificationCenter.dataStore.addObserver(forName: name, object: nil, queue: queue, using: using)
+    }
+
+    /// Unobserve notification from data store
+    public func unobserve(_ observer: NSObjectProtocol) {
+        NotificationCenter.dataStore.removeObserver(observer)
+    }
+
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public func onLoad(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return observe(.dataStoreLoaded, queue: queue, using: using)
+    }
+
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public func onDrop(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return observe(.dataStoreDropped, queue: queue, using: using)
+    }
+
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public func onSave(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return observe(.dataStoreSaved, queue: queue, using: using)
+    }
+
+}
+
 public protocol DataStoreMetadata {
 
     subscript(key: String) -> Any? { get set }
