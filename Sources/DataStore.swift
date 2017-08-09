@@ -6,6 +6,8 @@
 //  Copyright © 2017 Eric Marchand. All rights reserved.
 //
 
+import Result
+
 /// A delegate for `DataStore`
 public protocol DataStoreDelegate: class {
 
@@ -50,7 +52,7 @@ public protocol DataStore {
     /// - returns: true if action will be performed, false if store not ready.
     func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool
 
-    // MARK Fetch request
+    // MARK: Fetch request
 
     /// Create a fetch request for specific `tableName`
     /// - parameters tableName: the table name to request.`tableName`
@@ -80,6 +82,13 @@ public protocol DataStore {
     // MARK: Structure
     var tablesInfo: [DataStoreTableInfo] {get}
     func tableInfo(for name: String) -> DataStoreTableInfo?
+
+    // MARK: Result
+    /// Result of data store operation
+    typealias CompletionResult = Result<Void, DataStoreError>
+    /// Closure result of data store operation
+    typealias CompletionHandler = (CompletionResult) -> Void
+
 }
 
 public protocol DataStoreMetadata {
@@ -98,9 +107,6 @@ public protocol DataStoreFieldInfo {
 }
 
 // MARK: Error
-import Result
-public typealias CompletionHandler = (Result<Void, DataStoreError>) -> Void
-
 /// An error from data store
 public struct DataStoreError: Error {
 
@@ -110,6 +116,21 @@ public struct DataStoreError: Error {
     public init(_ error: Error) {
         self.error = error
     }
+
+    /// Message from underlying error if core data error
+    /// https://developer.apple.com/reference/coredata/1535452-validation_error_codes?language=swift
+    public var coreDataMessage: String? {
+        if error._domain == NSCocoaErrorDomain {
+            let code = error._code
+            if code == NSFileReadUnknownError /*256*/{
+                return "Could not read data store file"
+            } else {
+                 return CoreDataStore.message(for: code)
+            }
+        }
+        return nil
+    }
+
 }
 
 // MARK: some shortcut
@@ -135,7 +156,7 @@ extension DataStore {
     public func fetchedResultsController(fetchRequest: FetchRequest) -> FetchedResultsController {
         return self.fetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: nil)
     }
-
+/*
     func load() {
         self.save(completionHandler: nil)
     }
@@ -145,5 +166,5 @@ extension DataStore {
     func drop() {
         self.drop(completionHandler: nil)
     }
-
+*/
 }

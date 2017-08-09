@@ -28,7 +28,7 @@ enum CoreDataObjectModel {
 
     func name() -> String {
         switch self {
-        case .merged(_):
+        case .merged:
             return "mergerd" + UUID().uuidString
         case .named(let name, _):
             return name

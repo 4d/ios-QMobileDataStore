@@ -40,7 +40,7 @@ public extension NSManagedObjectContext {
 
 }
 
-// MARK : record bqse
+// MARK: record base
 extension RecordBase {
 
     /// Access record attribute value using string key
@@ -62,7 +62,7 @@ extension RecordBase {
     }
 
     open override func value(forUndefinedKey key: String) -> Any? {
-        if (!key.isEmpty) {
+        if !key.isEmpty {
             assertionFailure("Undefined field '\(key)' for record \(self)")
         }
         return nil

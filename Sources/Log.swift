@@ -17,8 +17,8 @@ let logger: Logger = Logger.forClass(Record.self)
 extension Logger {
 
     class open func forClass(_ aClass: Swift.AnyClass) -> Logger {
-         return XCGLogger.default
-         // return Logger(identifier: NSStringFromClass(aClass), includeDefaultDestinations: true)
+        return XCGLogger.default
+        // return Logger(identifier: NSStringFromClass(aClass), includeDefaultDestinations: true)
     }
 
     open func log(_ level: Level, _ closure: @autoclosure @escaping () -> Any?, functionName: StaticString = #function, fileName: StaticString = #file, lineNumber: Int = #line, userInfo: [String: Any] = [:]) {

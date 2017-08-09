@@ -21,9 +21,9 @@ extension Bundle {
     /// Bundle used to load data store data. By default main bundle
     @nonobjc public static var dataStore: Bundle = .main
     /// Key used to get data store file name. By default 'CFBundleName'
-    @nonobjc public static var  dataStoreKey: String = "CFBundleName"
+    @nonobjc public static var dataStoreKey: String = "CFBundleName"
 
-    @nonobjc public static var  dataStoreModelName: String? {
+    @nonobjc public static var dataStoreModelName: String? {
         return Bundle.dataStore[Bundle.dataStoreKey] as? String
     }
 

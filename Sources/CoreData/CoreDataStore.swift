@@ -299,6 +299,8 @@ extension CoreDataStore: DataStore {
         self.delegate?.dataStoreWillLoad(self)
 
         persistentContainer.loadPersistentStores { [unowned self] (storeDescription, error) in
+            var doNotify = true
+            var result: DataStore.CompletionResult = .success()
             if let error = error {
 
                 if error._domain == NSCocoaErrorDomain {
@@ -314,29 +316,31 @@ extension CoreDataStore: DataStore {
                         }
 
                         if self.dropIfMigrationFailed {
-                            logger.warning("Data will be erased from local datastore. Get data from remote source will be necessary")
+                            logger.warning("Data will be erased from local datastore. Get data from an other source will be necessary")
 
                             if let url = storeDescription.url {
                                 do {
                                     try self.drop(storeURL: url)
+
+                                    doNotify = false // let next load notify
                                     self.dropIfMigrationFailed = false // try only one time
                                     self.load(completionHandler: completionHandler)
                                 } catch let dropError {
                                     logger.error("Failed to drop data store files \(dropError).")
-                                    completionHandler?(.failure(DataStoreError(error)))
+                                    result = .failure(DataStoreError(error))
                                 }
                             } else {
-                                completionHandler?(.failure(DataStoreError(error)))
+                                result = .failure(DataStoreError(error))
                             }
                         } else {
-                            completionHandler?(.failure(DataStoreError(error)))
+                            result = .failure(DataStoreError(error))
                         }
                     }
 
                 } else {
                     // Unknown error
                     logger.error("Unknown error \(error)")
-                    completionHandler?(.failure(DataStoreError(error)))
+                    result = .failure(DataStoreError(error))
                 }
 
             } else {
@@ -344,7 +348,11 @@ extension CoreDataStore: DataStore {
                 self.isLoaded = true
                 self.delegate?.dataStoreDidLoad(dataStore)
                 logger.verbose("store loaded: \(storeDescription)")
-                completionHandler?(.success())
+                // .success
+            }
+            if doNotify {
+                Notification(name: .dataStoreLoaded, object:result).post(.dataStore)
+                completionHandler?(result)
             }
         }
     }
@@ -373,14 +381,16 @@ extension CoreDataStore: DataStore {
 
     public func save(completionHandler: CompletionHandler? = nil) {
         self.viewContext.perform {
+            var result: DataStore.CompletionResult = .success()
             do {
                 if self.viewContext.hasChanges {
                     try self.viewContext.save()
                 }
-                completionHandler?(.success())
             } catch {
-                completionHandler?(.failure(DataStoreError(error)))
+                result = .failure(DataStoreError(error))
             }
+            Notification(name: .dataStoreSaved, object:result).post(.dataStore)
+            completionHandler?(result)
         }
     }
 
@@ -389,6 +399,7 @@ extension CoreDataStore: DataStore {
      */
     public func drop(completionHandler: CompletionHandler? = nil) {
         self.viewContext.performAndWait {
+            var result: DataStore.CompletionResult = .success()
             self.viewContext.reset()
 
             self.persistentStoreCoordinator.performAndWait {
@@ -400,21 +411,24 @@ extension CoreDataStore: DataStore {
                         if !isLoaded, let url = self.storeURL, url != NSPersistentStore.defaultURL {
                             try self.drop(storeURL: url)
                         }
-                        completionHandler?(.success())
                     } catch {
-                        completionHandler?(.failure(DataStoreError(error)))
+                        result = .failure(DataStoreError(error))
                     }
+                    Notification(name: .dataStoreDropped, object:result).post(.dataStore)
+                    completionHandler?(result)
                     return
                 }
                 // Do not try to remove /dev/null files
                 if store.isTransient {
-                    completionHandler?(.success())
+                    Notification(name: .dataStoreDropped, object:result, userInfo: ["transient": true]).post(.dataStore)
+                    completionHandler?(result)
                     return
                 }
 
                 // get the store url
                 guard let storeURL = store.url, storeURL.isFileURL else {
-                    completionHandler?(.success())
+                    Notification(name: .dataStoreDropped, object:result, userInfo: ["noFile": true]).post(.dataStore)
+                    completionHandler?(result)
                     return
                 }
 
@@ -424,10 +438,11 @@ extension CoreDataStore: DataStore {
                     // remove the files
                     try self.drop(storeURL: storeURL)
 
-                    completionHandler?(.success())
                 } catch {
-                    completionHandler?(.failure(DataStoreError(error)))
+                    result = .failure(DataStoreError(error))
                 }
+                Notification(name: .dataStoreDropped, object:result).post(.dataStore)
+                completionHandler?(result)
             }
         }
     }

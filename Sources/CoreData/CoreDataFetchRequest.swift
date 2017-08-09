@@ -229,7 +229,7 @@ extension CoreDataFetchedResultsController: NSFetchedResultsControllerDelegate {
 
 }
 
-// MARK : FetchRequest in CoreDataStore
+// MARK: FetchRequest in CoreDataStore
 
 extension CoreDataStore {
 

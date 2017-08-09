@@ -25,6 +25,8 @@
 		485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */; };
 		486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */; };
 		486A7C8D1E8BF8F700F646AF /* RecordBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486A7C8C1E8BF8F700F646AF /* RecordBase.swift */; };
+		489C15D61F3A1A0F004844F3 /* Notification+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */; };
+		489C15D81F3A1A92004844F3 /* DataStore+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489C15D71F3A1A92004844F3 /* DataStore+Notification.swift */; };
 		48D5842F1E782F6C006F56B5 /* QMobileDataStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48D584251E782F6C006F56B5 /* QMobileDataStore.framework */; };
 		48D584361E782F6C006F56B5 /* QMobileDataStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 48D584281E782F6C006F56B5 /* QMobileDataStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		48D584471E783025006F56B5 /* CoreDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584421E783025006F56B5 /* CoreDataStore.swift */; };
@@ -65,6 +67,8 @@
 		485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreContext.swift; sourceTree = "<group>"; };
 		486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStore+Transient.swift"; sourceTree = "<group>"; };
 		486A7C8C1E8BF8F700F646AF /* RecordBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordBase.swift; sourceTree = "<group>"; };
+		489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notification+QMobile.swift"; sourceTree = "<group>"; };
+		489C15D71F3A1A92004844F3 /* DataStore+Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataStore+Notification.swift"; sourceTree = "<group>"; };
 		48D584251E782F6C006F56B5 /* QMobileDataStore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QMobileDataStore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48D584281E782F6C006F56B5 /* QMobileDataStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QMobileDataStore.h; sourceTree = "<group>"; };
 		48D584291E782F6C006F56B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 			children = (
 				48D584441E783025006F56B5 /* DataStore.swift */,
 				482485101E7A7C5400DA5390 /* DataStoreContext.swift */,
+				489C15D71F3A1A92004844F3 /* DataStore+Notification.swift */,
 				48D584881E784921006F56B5 /* FetchRequest.swift */,
 				48D584411E783025006F56B5 /* CoreData */,
 			);
@@ -154,6 +159,7 @@
 			children = (
 				485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */,
 				485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */,
+				489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -264,17 +270,17 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
-		485CCDA91E793F5400CDB2B3 /* swiftLint */ = {
+		485CCDA91E793F5400CDB2B3 /* swiftlint autocorrect */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = autocorrect;
-			buildConfigurationList = 485CCDAA1E793F5400CDB2B3 /* Build configuration list for PBXLegacyTarget "swiftLint" */;
+			buildConfigurationList = 485CCDAA1E793F5400CDB2B3 /* Build configuration list for PBXLegacyTarget "swiftlint autocorrect" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/local/bin/swiftlint;
 			buildWorkingDirectory = "";
 			dependencies = (
 			);
-			name = swiftLint;
+			name = "swiftlint autocorrect";
 			passBuildSettingsInEnvironment = 1;
 			productName = swiftLint;
 		};
@@ -359,7 +365,7 @@
 			targets = (
 				48D584241E782F6C006F56B5 /* QMobileDataStore */,
 				48D5842D1E782F6C006F56B5 /* QMobileDataStoreTests */,
-				485CCDA91E793F5400CDB2B3 /* swiftLint */,
+				485CCDA91E793F5400CDB2B3 /* swiftlint autocorrect */,
 			);
 		};
 /* End PBXProject section */
@@ -422,6 +428,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				489C15D61F3A1A0F004844F3 /* Notification+QMobile.swift in Sources */,
+				489C15D81F3A1A92004844F3 /* DataStore+Notification.swift in Sources */,
 				48D584891E784921006F56B5 /* FetchRequest.swift in Sources */,
 				486A7C8D1E8BF8F700F646AF /* RecordBase.swift in Sources */,
 				48D584481E783025006F56B5 /* Log.swift in Sources */,
@@ -668,7 +676,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		485CCDAA1E793F5400CDB2B3 /* Build configuration list for PBXLegacyTarget "swiftLint" */ = {
+		485CCDAA1E793F5400CDB2B3 /* Build configuration list for PBXLegacyTarget "swiftlint autocorrect" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				485CCDAB1E793F5400CDB2B3 /* Debug */,
