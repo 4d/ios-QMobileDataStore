@@ -63,7 +63,7 @@ extension RecordBase {
 
     open override func value(forUndefinedKey key: String) -> Any? {
         if !key.isEmpty {
-            assertionFailure("Undefined field '\(key)' for record \(self)")
+            assertionFailure("Undefined field '\(key)' for record \(self). Check your binding in storyboard.")
         }
         return nil
     }
