@@ -65,9 +65,10 @@ public protocol DataStore {
     /// Create a fetched results controller for a fetch request.
     /// - parameters fetchRequest: the fetch request.
     /// - parameters sectionNameKeyPath: optionnal keypath for sectionName.
+    /// - parameters context: context of fetch operation. Default view context
     ///
     /// - returns: a new fetch request
-    func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController
+    func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?, context: DataStoreContext?) -> FetchedResultsController
 
     // MARK: Observable
 
@@ -100,8 +101,12 @@ extension DataStore {
     /// - parameters block: the block to perform in data store foregroud context.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+    public func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
         return self.perform(type, wait: false, block)
+    }
+    
+    public func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController {
+        return self.fetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: sectionNameKeyPath, context: nil)
     }
 
     /// Observe notification from data store

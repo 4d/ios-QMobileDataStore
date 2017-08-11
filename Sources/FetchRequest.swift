@@ -58,6 +58,8 @@ public protocol FetchedResultsController {
 
     var dataStore: DataStore { get }
 
+    var context: DataStoreContext { get }
+
     func performFetch() throws
 
     func fetchKeyPath(_ keyPath: String, ascending: Bool) -> [Any]

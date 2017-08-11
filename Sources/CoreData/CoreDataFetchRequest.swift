@@ -68,6 +68,8 @@ enum RecordChange {
 }
 
 internal class CoreDataFetchedResultsController: NSObject, FetchedResultsController {
+ 
+
 
     weak var delegate: FetchedResultsControllerDelegate?
 
@@ -76,10 +78,10 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
 
     fileprivate var batchChanges: [RecordChange] = []
 
-    init(dataStore: CoreDataStore, sectionNameKeyPath: String?, fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
+    init(dataStore: CoreDataStore, sectionNameKeyPath: String?, context: DataStoreContext? = nil, fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
         coreDataStore = dataStore
 
-        let context = dataStore.viewContext // XXX check the context, or allow to customize
+        let context = context as? NSManagedObjectContext ?? dataStore.viewContext
         self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
 
         super.init()
@@ -98,7 +100,9 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     var dataStore: DataStore {
         return coreDataStore
     }
-
+    var context: DataStoreContext {
+        return fetchedResultsController.managedObjectContext
+    }
     func performFetch() throws {
         try self.fetchedResultsController.performFetch()
     }
@@ -240,7 +244,7 @@ extension CoreDataStore {
         return CoreDataFetchRequest(fetchRequest)
     }
 
-    func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController {
+    func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?, context: DataStoreContext? = nil) -> FetchedResultsController {
 
         // CLEAN Tricky way to add a sort descriptor... maybe add attribute name as attribute or flag in core data model
 
@@ -258,7 +262,7 @@ extension CoreDataStore {
             }
         }
 
-        return CoreDataFetchedResultsController(dataStore: self, sectionNameKeyPath: sectionNameKeyPath, fetchRequest: request)
+        return CoreDataFetchedResultsController(dataStore: self, sectionNameKeyPath: sectionNameKeyPath, context: context, fetchRequest: request)
     }
 
 }
