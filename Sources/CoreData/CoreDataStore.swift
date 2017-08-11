@@ -92,9 +92,12 @@ extension DataStore {
                     self.viewContext.perform {
                         self.viewContext.rollback()
                         self.viewContext.mergeChanges(fromContextDidSave: note)
+                        self.save()
                     }
                 }
             }
+            //Notification(name: .dataStoreSaved).post(.dataStore)
+
             self.delegate?.dataStoreDidSave(self)
         })
         observers.append(center.addObserver(forName: .NSManagedObjectContextWillSave, object: nil, queue: .main) { [unowned self] _ in
@@ -484,24 +487,34 @@ fileprivate extension FileManager {
 
 extension CoreDataStore {
 
-    func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+    func perform(_ type: DataStoreContextType, wait: Bool = false, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
         if !isLoaded {
             // CLEAN wait data store loaded and execute perform
-            logger.error("Action on store not loaded yet")
+            logger.error("Perform action on store but not loaded yet")
             return false
         }
+
+        Notification(name: .dataStoreWillPerformAction, object: type).post(.dataStore)
+
+        let blockTask: ((NSManagedObjectContext) -> Void) = { context in
+            block(context) { [unowned self] in
+                try self.save(context)
+            }
+            Notification(name: .dataStoreDidPerformAction, object: type).post(.dataStore)
+        }
+
         switch type {
         case .foreground:
-            performForegroundTask { managedObjectContext in
-                block(managedObjectContext) { [unowned self] in
-                    try self.save(managedObjectContext)
-                }
+            if wait {
+                performAndWaitForegroundTask(blockTask)
+            } else {
+                performForegroundTask(blockTask)
             }
         case .background:
-            performBackgroundTask { managedObjectContext in
-                block(managedObjectContext) { [unowned self] in
-                    try self.save(managedObjectContext)
-                }
+            if wait {
+                performAndWaitBackgroundTask(blockTask)
+            } else {
+                performBackgroundTask(blockTask)
             }
         }
         return true
@@ -520,24 +533,26 @@ extension CoreDataStore {
             block(self.viewContext)
         }
     }
-
-    func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
-        /*self.newBackgroundContext().perform {
+    func performAndWaitForegroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        self.viewContext.performAndWait {
             block(self.viewContext)
-        }*/
-        self.persistentContainer.performBackgroundTask(block)
+        }
+    }
+
+    func performBackgroundTask(newContext: Bool = false, _ block: @escaping (NSManagedObjectContext) -> Void) {
+        if newContext {
+            self.newBackgroundContext().perform {
+                block(self.viewContext)
+            }
+        } else {
+            self.persistentContainer.performBackgroundTask(block)
+        }
+    }
+
+    func performAndWaitBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        self.newBackgroundContext().performAndWait { // XXX no method in container...
+            block(self.viewContext)
+        }
     }
 
 }
-
-/*
-extension URL {
-    fileprivate static var directoryURL: URL {
-        #if os(tvOS)
-            return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).last!
-        #else
-            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
-        #endif
-    }
-}
-*/

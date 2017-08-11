@@ -47,10 +47,11 @@ public protocol DataStore {
     /// Perform a data store task by passing a context to a callback `block`.
     ///
     /// - parameters type: the type of context.
+    /// - parameters wait: wait until task end. Default false.
     /// - parameters block: the block to perform in data store foregroud context.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool
+    func perform(_ type: DataStoreContextType, wait: Bool, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool
 
     // MARK: Fetch request
 
@@ -92,6 +93,16 @@ public protocol DataStore {
 }
 
 extension DataStore {
+
+    /// Perform a data store task by passing a context to a callback `block`.
+    ///
+    /// - parameters type: the type of context.
+    /// - parameters block: the block to perform in data store foregroud context.
+    ///
+    /// - returns: true if action will be performed, false if store not ready.
+    func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+        return self.perform(type, wait: false, block)
+    }
 
     /// Observe notification from data store
     /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.

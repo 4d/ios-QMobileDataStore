@@ -84,7 +84,7 @@ extension NSManagedObjectContext: DataStoreContext {
         return result != 0 // something has been updated
     }
 
-    public func delete(in table: String, matching predicate: NSPredicate) throws -> Bool {
+    public func delete(in table: String, matching predicate: NSPredicate? = nil) throws -> Bool {
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: table)
         fetch.predicate = predicate
         let request = NSBatchDeleteRequest(fetchRequest: fetch)
@@ -97,8 +97,14 @@ extension NSManagedObjectContext: DataStoreContext {
     }
 
     public func delete(record: Record) {
-        // CLEAN will fald is not good table, use predicate?
-        self.delete(record as NSManagedObject)
+        let managedObject = record as NSManagedObject
+
+        if managedObject.managedObjectContext != self {
+            let managedObjectInContext = self.object(with: managedObject.objectID)
+            self.delete(managedObjectInContext)
+        } else {
+            self.delete(managedObject)
+        }
     }
 
 }
