@@ -26,6 +26,8 @@ class CoreDataStoreTests: XCTestCase {
             XCTFail("Failed to wait expectation: \(error)")
         }
     }
+    
+    let contextType: DataStoreContextType = .background
 
     override func setUp() {
         super.setUp()
@@ -151,7 +153,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityCreate() {
         let expectation = self.expectation(description: #function)
    
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
       
             if let record = context.create(in: self.table) {
                 do {
@@ -181,7 +183,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityCreateFalseTable() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
             let record = context.create(in: "Entity \(UUID().uuidString)")
             XCTAssertNil(record)
             expectation.fulfill()
@@ -192,7 +194,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityDelete() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
             
             if let record = context.create(in: self.table) {
                 
@@ -213,14 +215,25 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityUpdate() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
 
             if let record = context.create(in: self.table) {
-                XCTAssertTrue(try! context.has(in: self.table, matching: record.predicate))
+                let predicate = record.predicate
+                XCTAssertTrue(try! context.has(in: self.table, matching: predicate))
+                XCTAssertTrue(context.has(record: record))
                 
-               // try? save()
-                let _ = try? context.update(in: self.table, matching: record.predicate, values: ["attribute": 11])
+                let get = try! context.get(in: self.table, matching: predicate)
+                XCTAssertEqual(get?.first, record)
 
+                try? save()
+                let newValue = 11
+                let result = try! context.update(in: self.table, matching: predicate, values: ["attribute": newValue])
+                XCTAssertTrue(result) // FIXME
+                
+                XCTAssertEqual(record["attribute"] as? Int, newValue)
+                context.refresh(record, mergeChanges: true)
+                
+                XCTAssertEqual(record["attribute"] as? Int, newValue)
             } else {
                 XCTFail("Cannot create entity")
             }
@@ -233,7 +246,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityDeleteUsingPredicate() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
             
             if let record = context.create(in: self.table) {
                 
@@ -260,7 +273,7 @@ class CoreDataStoreTests: XCTestCase {
         
         let fetchRequest = dataStore.fetchRequest(tableName: self.table)
         
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
             
             let count: Int = try! fetchRequest.count(context: context)
             if let _ = context.create(in: self.table) {
@@ -281,7 +294,7 @@ class CoreDataStoreTests: XCTestCase {
         
         var fetchRequest = dataStore.fetchRequest(tableName: self.table)
         
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
             
             if let record = context.create(in: self.table) {
                 
@@ -329,7 +342,7 @@ class CoreDataStoreTests: XCTestCase {
             XCTAssertTrue(controller.inBounds(indexPath: indexPath!))
         }
 
-        let _ = dataStore.perform(.background, { (context, save) in
+        let _ = dataStore.perform(contextType, { (context, save) in
             
             if let record = context.create(in: self.table) {
                 try? save()
@@ -369,58 +382,5 @@ class CoreDataStoreTests: XCTestCase {
         })
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
-    
-    
-    func testMetaData() {
-        testMetaData("expectedValue")
-        testMetaData(true)
-        testMetaData(["one", "two", ""])
-        
-        testMetaData(["one": "1", "two": "2", "": "empty"])
-    }
-    
-    func testMetaData<T: Equatable>(_ expectedValue: T) {
-        var metadata = dataStore.metadata
-        let key = UUID().uuidString
-        XCTAssertNil(metadata?[key])
-        metadata?[key] = expectedValue
-        XCTAssertNotNil(metadata?[key])
-        let value = metadata?[key] as? T
-        XCTAssertEqual(value, expectedValue)
-        
-        metadata?[key] = nil
-        XCTAssertNil(metadata?[key])
-    }
-    func testMetaData<T: Equatable>(_ expectedValue: [T]) {
-        var metadata = dataStore.metadata
-        let key = UUID().uuidString
-        XCTAssertNil(metadata?[key])
-        metadata?[key] = expectedValue
-        XCTAssertNotNil(metadata?[key])
-        
-        if let value = metadata?[key] as? [T] {
-            XCTAssertEqual(value, expectedValue)
-        }
-        
-        metadata?[key] = nil
-        XCTAssertNil(metadata?[key])
-    }
-    func testMetaData<T : Hashable, U : Equatable>(_ expectedValue:  [T : U]) {
-        var metadata = dataStore.metadata
-        let key = UUID().uuidString
-        XCTAssertNil(metadata?[key])
-        metadata?[key] = expectedValue
-        XCTAssertNotNil(metadata?[key])
-        
-        if let value = metadata?[key] as? [T : U] {
-            XCTAssertEqual(value, expectedValue)
-        }
-        
-        metadata?[key] = nil
-        XCTAssertNil(metadata?[key])
-    }
-    
-    
-    
 
 }

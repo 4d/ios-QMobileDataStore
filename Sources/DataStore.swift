@@ -17,6 +17,7 @@ public protocol DataStoreDelegate: class {
 
     func dataStoreWillLoad(_ dataStore: DataStore)
     func dataStoreDidLoad(_ dataStore: DataStore)
+    func dataStoreAlreadyLoaded(_ dataStore: DataStore)
 }
 
 /// A store responsible to store record
@@ -104,7 +105,7 @@ extension DataStore {
     public func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
         return self.perform(type, wait: false, block)
     }
-    
+
     public func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController {
         return self.fetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: sectionNameKeyPath, context: nil)
     }

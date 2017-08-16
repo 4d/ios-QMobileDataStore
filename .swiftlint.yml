@@ -17,3 +17,7 @@ opt_in_rules:
 line_length:
 - 230
 - 250
+
+function_body_length:
+- 50
+- 100

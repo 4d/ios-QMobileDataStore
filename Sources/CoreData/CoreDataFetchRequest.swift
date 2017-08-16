@@ -68,8 +68,6 @@ enum RecordChange {
 }
 
 internal class CoreDataFetchedResultsController: NSObject, FetchedResultsController {
- 
-
 
     weak var delegate: FetchedResultsControllerDelegate?
 

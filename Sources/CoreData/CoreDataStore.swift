@@ -70,8 +70,7 @@ extension DataStore {
     /// - parameter storeType: the store type (default: sql).
     ///
     /// - returns: The new `QMobileCoreDataStore` instance.
-    //swiftlint:disable force_cast
-    internal init(model: CoreDataObjectModel = CoreDataObjectModel.named(Bundle.dataStore[Bundle.dataStoreKey] as! String, Bundle.dataStore), storeType: StoreType = .sql) {
+    internal init(model: CoreDataObjectModel = CoreDataObjectModel.named(Bundle.dataStore[Bundle.dataStoreKey] as? String ?? "Structures", Bundle.dataStore), storeType: StoreType = .sql) {
         self.model = model
         self.storeType = storeType
 
@@ -90,7 +89,6 @@ extension DataStore {
             if let moc = note.object as? NSManagedObjectContext {
                 if moc != self.viewContext {
                     self.viewContext.perform {
-                        self.viewContext.rollback()
                         self.viewContext.mergeChanges(fromContextDidSave: note)
                         self.save()
                     }
@@ -298,6 +296,10 @@ extension CoreDataStore: DataStore {
     // MARK: Main
 
     public func load(completionHandler: CompletionHandler? = nil) {
+        if isLoaded {
+            self.delegate?.dataStoreAlreadyLoaded(self)
+            return
+        }
         // CLEAN: bug, could be called two times during migration fail. could extract function or add a isLoading boolean with didSet
         self.delegate?.dataStoreWillLoad(self)
 
@@ -541,8 +543,9 @@ extension CoreDataStore {
 
     func performBackgroundTask(newContext: Bool = false, _ block: @escaping (NSManagedObjectContext) -> Void) {
         if newContext {
-            self.newBackgroundContext().perform {
-                block(self.viewContext)
+            let context = self.newBackgroundContext()
+            context.perform {
+                block(context)
             }
         } else {
             self.persistentContainer.performBackgroundTask(block)
@@ -550,8 +553,9 @@ extension CoreDataStore {
     }
 
     func performAndWaitBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
-        self.newBackgroundContext().performAndWait { // XXX no method in container...
-            block(self.viewContext)
+        let context = self.newBackgroundContext()
+        context.performAndWait { // XXX no method in container...
+            block(context)
         }
     }
 

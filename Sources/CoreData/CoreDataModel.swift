@@ -21,6 +21,7 @@ enum CoreDataObjectModel {
             return NSManagedObjectModel.mergedModel(from: bundles)
         case .named(let name, let bundle):
             return NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)
+        // If EXC_BAD_INSTRUCTION, model name is not well defined in bundle, check Bundle.dataStoreKey value and Bundle.dataStore
         case .url(let url):
             return NSManagedObjectModel(contentsOf: url)
         }
