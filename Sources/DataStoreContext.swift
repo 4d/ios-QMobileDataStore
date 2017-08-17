@@ -43,6 +43,8 @@ public protocol DataStoreContext: class {
     func rollback()
     /// Returns the context to its base state.
     func reset()
+    /// Perform an operation on context queue
+    func perform(wait: Bool, _ block: @escaping () -> Void)
 
     // func undo()
     // func redo()
@@ -85,6 +87,10 @@ extension DataStoreContext {
         return try delete(in: table, matching: nil)
     }
 
+    /// Perform an operation on context queue
+    public func perform(_ block: @escaping () -> Void) {
+        perform(wait: false, block)
+    }
 }
 
 /// A type of DataStoreContext
@@ -93,4 +99,11 @@ public enum DataStoreContextType: Equatable {
     case foreground
     /// Context used for background task, using a private queue.
     case background
+}
+
+/// An enum for history change
+enum DataStoreChangeType { // TODO manage history to send change to server
+    case inserted
+    case updated
+    case deleted
 }

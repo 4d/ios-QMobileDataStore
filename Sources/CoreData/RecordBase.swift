@@ -71,6 +71,9 @@ extension RecordBase {
     open var predicate: NSPredicate {
         return NSPredicate(format: "SELF = %@", objectID)
     }
+    open var predicateForBatch: NSPredicate {
+        return NSPredicate(format: "objectID = %@", objectID)
+    }
 
     /*open func willSave() {
          // can set here timestamps to know objec =t with modification since last SyNCHRO

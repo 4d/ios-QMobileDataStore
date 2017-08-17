@@ -180,6 +180,24 @@ public struct DataStoreError: Error {
 
 }
 
+extension DataStoreError: LocalizedError {
+    public var errorDescription: String? {
+        return (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+    }
+
+    public var failureReason: String? {
+        return (error as? LocalizedError)?.failureReason ?? coreDataMessage
+    }
+
+    public var recoverySuggestion: String? {
+        return (error as? LocalizedError)?.recoverySuggestion
+    }
+
+    public var helpAnchor: String? {
+       return (error as? LocalizedError)?.helpAnchor
+    }
+}
+
 // MARK: some shortcut
 extension DataStore {
 

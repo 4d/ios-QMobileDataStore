@@ -89,12 +89,13 @@ extension DataStore {
             if let moc = note.object as? NSManagedObjectContext {
                 if moc != self.viewContext {
                     self.viewContext.perform {
+                        Notification(name: .dataStoreWillMerge).post(.dataStore)
                         self.viewContext.mergeChanges(fromContextDidSave: note)
+                        Notification(name: .dataStoreDidMerge).post(.dataStore)
                         self.save()
                     }
                 }
             }
-            //Notification(name: .dataStoreSaved).post(.dataStore)
 
             self.delegate?.dataStoreDidSave(self)
         })
@@ -495,14 +496,14 @@ extension CoreDataStore {
             logger.error("Perform action on store but not loaded yet")
             return false
         }
-
-        Notification(name: .dataStoreWillPerformAction, object: type).post(.dataStore)
+        let userInfo: [String: Any] = ["in": type, "wait": wait]
+        Notification(name: .dataStoreWillPerformAction, object: type, userInfo: userInfo).post(.dataStore)
 
         let blockTask: ((NSManagedObjectContext) -> Void) = { context in
             block(context) { [unowned self] in
                 try self.save(context)
             }
-            Notification(name: .dataStoreDidPerformAction, object: type).post(.dataStore)
+            Notification(name: .dataStoreDidPerformAction, object: type, userInfo: userInfo).post(.dataStore)
         }
 
         switch type {

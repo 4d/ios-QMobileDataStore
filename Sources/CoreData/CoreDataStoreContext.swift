@@ -59,6 +59,7 @@ extension NSManagedObjectContext: DataStoreContext {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: table)
         request.predicate = predicate
         request.resultType = .managedObjectResultType
+        // request.returnsObjectsAsFaults = false
 
         guard let fetchedObjects = try self.fetch(request) as? [Record] else {
             return nil
@@ -78,14 +79,15 @@ extension NSManagedObjectContext: DataStoreContext {
 
     public func update(in table: String, matching predicate: NSPredicate, values: [String : Any]) throws -> Bool {
         let request = NSBatchUpdateRequest(entityName: table)
+
         request.predicate = predicate
         request.propertiesToUpdate = values
 
-        request.resultType = .updatedObjectsCountResultType
+        /*request.resultType = .updatedObjectsCountResultType
         guard let batchResult = try self.execute(request) as? NSBatchUpdateResult, let result = batchResult.result as? Int else {
             return false
         }
-        return result != 0 // something has been updated
+        return result != 0 // something has been updated*/
 
         /*
         request.resultType = .statusOnlyResultType
@@ -94,13 +96,16 @@ extension NSManagedObjectContext: DataStoreContext {
         }
         return result
          */
-        /*
+
         request.resultType = .updatedObjectIDsResultType
         guard let batchResult = try self.execute(request) as? NSBatchUpdateResult, let result = batchResult.result as? [NSManagedObjectID]  else {
             return false
         }
+
+        //let changes = [NSUpdatedObjectsKey: result]
+       // NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
+
         return !result.isEmpty // something has been updated
-        */
     }
 
     public func delete(in table: String, matching predicate: NSPredicate? = nil) throws -> Bool {
@@ -109,13 +114,15 @@ extension NSManagedObjectContext: DataStoreContext {
         let request = NSBatchDeleteRequest(fetchRequest: fetch)
 
         // If we want a list of deleted objects.
-        /*
+
         request.resultType = .resultTypeObjectIDs
         guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? [NSManagedObjectID] else {
             return false
         }
+        let changes = [NSDeletedObjectsKey: result]
+        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
+
         return !result.isEmpty
-         */
 
         // If we want status
         /*
@@ -127,11 +134,11 @@ extension NSManagedObjectContext: DataStoreContext {
          */
 
         // If we want a count, or check that one element has been removed
-        request.resultType = .resultTypeCount
+        /*request.resultType = .resultTypeCount
         guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? Int else {
             return false
         }
-        return result != 0 // something has been deleted
+        return result != 0 // something has been deleted*/
     }
 
     public func delete(record: Record) {
@@ -154,6 +161,15 @@ extension NSManagedObjectContext: DataStoreContext {
         default:
             assertionFailure("deprecated type \(self.concurrencyType)")
             return .background
+        }
+    }
+
+    /// Perform an operation on context queue and wait
+    public func perform(wait: Bool, _ block: @escaping () -> Void) {
+        if wait {
+            self.performAndWait(block)
+        } else {
+            self.perform(block)
         }
     }
 
@@ -184,5 +200,16 @@ extension NSManagedObjectContext: DataStoreContext {
     }
     public func refreshAllRecords() {
         self.refreshAllObjects()
+    }
+}
+
+extension DataStoreChangeType {
+
+    var coreData: String {
+        switch self {
+        case .inserted: return NSInsertedObjectsKey
+        case .deleted: return NSDeletedObjectsKey
+        case .updated: return NSUpdatedObjectsKey
+        }
     }
 }

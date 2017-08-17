@@ -10,11 +10,13 @@ import Foundation
 
 public extension Notification.Name {
 
-    static let dataStoreLoaded = Notification.Name("dataStore.loaded")
-    static let dataStoreDropped = Notification.Name("dataStore.dropped")
-    static let dataStoreSaved = Notification.Name("dataStore.saved")
+    public static let dataStoreLoaded = Notification.Name("dataStore.loaded")
+    public static let dataStoreDropped = Notification.Name("dataStore.dropped")
+    public static let dataStoreSaved = Notification.Name("dataStore.saved")
 
-    static let dataStoreWillPerformAction = Notification.Name("dataStore.willPerformAction")
-    static let dataStoreDidPerformAction = Notification.Name("dataStore.didPerformAction")
+    public static let dataStoreWillPerformAction = Notification.Name("dataStore.willPerformAction")
+    public static let dataStoreDidPerformAction = Notification.Name("dataStore.didPerformAction")
 
+    public static let dataStoreWillMerge = Notification.Name("dataStore.willMerge")
+    public static let dataStoreDidMerge = Notification.Name("dataStore.didMerge")
 }
