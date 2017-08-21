@@ -173,6 +173,16 @@ extension NSManagedObjectContext: DataStoreContext {
         }
     }
 
+    public func performOnChildContext(_ type: DataStoreContextType, wait: Bool, _ block: @escaping (DataStoreContext) -> Void) {
+        let childContext = NSManagedObjectContext(concurrencyType: type.concurrencyType)
+        childContext.parent = self
+        childContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+
+        childContext.perform(wait: wait) {
+            block(childContext)
+        }
+    }
+
     public var parentContext: DataStoreContext? {
         get {
             return self.parent // protocol do not use Self to not force generic
@@ -254,6 +264,16 @@ extension DataStoreChangeType {
         case .inserted: return NSInsertedObjectsKey
         case .deleted: return NSDeletedObjectsKey
         case .updated: return NSUpdatedObjectsKey
+        }
+    }
+}
+extension DataStoreContextType {
+    var concurrencyType: NSManagedObjectContextConcurrencyType {
+        switch self {
+        case .foreground:
+            return .mainQueueConcurrencyType
+        case .background:
+            return .privateQueueConcurrencyType
         }
     }
 }

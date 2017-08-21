@@ -45,7 +45,15 @@ public protocol DataStoreContext: class {
     func reset()
 
     /// Perform an operation on context queue
+    /// @param wait: if true wait end of block operation
+    /// @block block: the block to execute
     func perform(wait: Bool, _ block: @escaping () -> Void)
+
+    /// Perform an operation on new child context queue
+    /// @param wait: if true wait end of block operation
+    /// @block block: the block to execute
+    func performOnChildContext(wait: Bool, _ block: @escaping (DataStoreContext) -> Void)
+
     /// Fetch records according to request
     func fetch(_ request: FetchRequest) throws -> [Record]
     /// Count records that match request
@@ -141,6 +149,11 @@ extension DataStoreContext {
     /// Perform an operation on context queue
     public func perform(_ block: @escaping () -> Void) {
         perform(wait: false, block)
+    }
+
+    /// Perform an operation on child context queue
+    public func performOnChildContext(wait: Bool, _ block: @escaping (DataStoreContext) -> Void) {
+        self.performOnChildContext(wait: false, block)
     }
 
 }

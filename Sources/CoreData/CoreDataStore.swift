@@ -491,12 +491,19 @@ fileprivate extension FileManager {
 extension CoreDataStore {
 
     func perform(_ type: DataStoreContextType, wait: Bool = false, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+        return self.perform(type, wait: wait, blockName: nil, block)
+    }
+
+    func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
         if !isLoaded {
             // CLEAN wait data store loaded and execute perform
             logger.error("Perform action on store but not loaded yet")
             return false
         }
-        let userInfo: [String: Any] = ["in": type, "wait": wait]
+        var userInfo: [String: Any] = ["in": type, "wait": wait]
+        if let blockName = blockName {
+            userInfo["block"] = blockName // useful for debugging request, have some info on the block executed
+        }
         Notification(name: .dataStoreWillPerformAction, object: type, userInfo: userInfo).post(.dataStore)
 
         let blockTask: ((NSManagedObjectContext) -> Void) = { context in
