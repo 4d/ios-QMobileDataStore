@@ -113,6 +113,7 @@ extension DataStore {
     /// Observe notification from data store
     /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
     public func observe(_ name: Notification.Name, queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        // XXX not compatible if multiple data store...could filter on current dataStore
         return NotificationCenter.dataStore.addObserver(forName: name, object: nil, queue: queue, using: using)
     }
 

@@ -278,10 +278,10 @@ class CoreDataStoreTests: XCTestCase {
         
         let _ = dataStore.perform(contextType, { (context, save) in
             
-            let count: Int = try! fetchRequest.count(context: context)
+            let count: Int = try! context.count(for: fetchRequest)
             if let _ = context.create(in: self.table) {
 
-                XCTAssertEqual(try? fetchRequest.count(context: context), count + 1)
+                XCTAssertEqual(try? context.count(for: fetchRequest), count + 1)
                 
                 
             } else {
@@ -307,7 +307,7 @@ class CoreDataStoreTests: XCTestCase {
                 
                 XCTAssertTrue(exist)
                 
-                XCTAssertEqual(try? fetchRequest.count(context: context), 1)
+                XCTAssertEqual(try? context.count(for: fetchRequest), 1)
                 
                 
             } else {

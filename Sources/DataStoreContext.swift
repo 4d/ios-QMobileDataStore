@@ -43,8 +43,18 @@ public protocol DataStoreContext: class {
     func rollback()
     /// Returns the context to its base state.
     func reset()
+
     /// Perform an operation on context queue
     func perform(wait: Bool, _ block: @escaping () -> Void)
+    /// Fetch records according to request
+    func fetch(_ request: FetchRequest) throws -> [Record]
+    /// Count records that match request
+    func count(for request: FetchRequest) throws -> Int
+    /// Count element in table
+    func count(in table: String) throws -> Int
+    /// Execute a function
+    func function(_ function: String, in tableName: String, for fieldNames: [String], with predicate: NSPredicate?) throws -> [Double]
+    func function(_ function: String, request: FetchRequest, for fieldNames: [String]) throws -> [Double]
 
     // func undo()
     // func redo()
@@ -71,6 +81,47 @@ public protocol DataStoreContext: class {
     /// Parent context
     var parentContext: DataStoreContext? { get set }
     var automaticallyMergesChangesFromParent: Bool { get set }
+
+}
+
+extension DataStoreContext {
+
+    public func function(_ function: String, in tableName: String, for fieldNames: [String]) throws -> [Double] {
+        return try self.function(function, in: tableName, for: fieldNames, with: nil)
+    }
+
+    public func sum(in tableName: String, for fieldNames: [String], with predicate: NSPredicate? = nil) throws -> [Double] {
+        return try self.function("sum:", in: tableName, for: fieldNames, with: predicate)
+    }
+
+    public func sum(tableName: String, for fieldName: String, with predicate: NSPredicate? = nil) throws -> Double {
+        return try self.sum(in: tableName, for: [fieldName], with: predicate).first ?? 0
+    }
+
+    public func max(in tableName: String, for fieldNames: [String], with predicate: NSPredicate? = nil) throws -> [Double] {
+        return try self.function("max:", in: tableName, for: fieldNames, with: predicate)
+    }
+
+    public func max(in tableName: String, for fieldName: String, predicate: NSPredicate? = nil) throws -> Double {
+        return try self.max(in: tableName, for: [fieldName], with: predicate).first ?? 0
+    }
+
+    public func min(in tableName: String, for fieldNames: [String], predicate: NSPredicate? = nil) throws -> [Double] {
+        return try  self.function("min:", in: tableName, for: fieldNames, with: predicate)
+    }
+
+    public func min(in tableName: String, for fieldName: String, predicate: NSPredicate? = nil) throws -> Double {
+        return try self.min(in: tableName, for: [fieldName], predicate: predicate).first ?? 0
+    }
+
+    public func avg(in tableName: String, for fieldNames: [String], predicate: NSPredicate? = nil) throws -> [Double] {
+        return try self.function("average:", in: tableName, for: fieldNames, with: predicate)
+    }
+
+    public func avg(in tableName: String, for fieldName: String, predicate: NSPredicate? = nil) throws -> Double {
+        return try self.avg(in: tableName, for: [fieldName], predicate: predicate).first ?? 0
+    }
+
 }
 
 extension DataStoreContext {
@@ -91,6 +142,7 @@ extension DataStoreContext {
     public func perform(_ block: @escaping () -> Void) {
         perform(wait: false, block)
     }
+
 }
 
 /// A type of DataStoreContext

@@ -16,6 +16,21 @@ class CoreDataFetchRequest: FetchRequest {
     init(_ fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
         self.fetchRequest = fetchRequest
     }
+    init(_ fetchRequest: FetchRequest) {
+        if let coredataRequest = fetchRequest as? CoreDataFetchRequest {
+            self.fetchRequest = coredataRequest.fetchRequest // XXX could make a factory instead of init to not recreate the object
+        } else {
+            self.fetchRequest = CoreDataFetchRequest.from(request: fetchRequest)
+        }
+    }
+    static func from<ResultType: NSFetchRequestResult>(request: FetchRequest) -> NSFetchRequest<ResultType> {
+        let nsRequest = NSFetchRequest<ResultType>(entityName: request.tableName)
+
+        nsRequest.predicate = request.predicate
+        nsRequest.sortDescriptors = request.sortDescriptors
+        nsRequest.fetchLimit = request.fetchLimit
+        return nsRequest
+    }
 
     public var tableName: String {
         return fetchRequest.entityName ?? ""
@@ -45,18 +60,6 @@ class CoreDataFetchRequest: FetchRequest {
         set {
             fetchRequest.fetchLimit = newValue
         }
-    }
-
-    func count(context: DataStoreContext) throws -> Int {
-        //swiftlint:disable force_cast
-        let count = try (context as! NSManagedObjectContext).count(for: self.fetchRequest)
-
-        if count == NSNotFound {
-            logger.warning("Not found result when counting reauest \(self)")
-            // return ) but could manage error
-            return 0
-        }
-        return count
     }
 
 }
@@ -107,6 +110,7 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
 
     func fetchKeyPath(_ keyPath: String, ascending: Bool) -> [Any] {
         var result = [Any]()
+        // swiftlint:disable:next force_cast
         let request = (self.newFetchRequest() as! CoreDataFetchRequest).fetchRequest
         request.resultType = .dictionaryResultType
         request.returnsDistinctResults = true
@@ -246,7 +250,7 @@ extension CoreDataStore {
 
         // CLEAN Tricky way to add a sort descriptor... maybe add attribute name as attribute or flag in core data model
 
-        let request = (fetchRequest as! CoreDataFetchRequest).fetchRequest
+        let request = CoreDataFetchRequest(fetchRequest).fetchRequest
         if request.sortDescriptors == nil {
             if let sectionNameKeyPath = sectionNameKeyPath, sectionNameKeyPath != "" {
                 request.sortDescriptors = [NSSortDescriptor(key: sectionNameKeyPath, ascending: true)]

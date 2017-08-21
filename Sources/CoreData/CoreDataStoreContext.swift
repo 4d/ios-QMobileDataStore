@@ -201,6 +201,50 @@ extension NSManagedObjectContext: DataStoreContext {
     public func refreshAllRecords() {
         self.refreshAllObjects()
     }
+
+    public func fetch(_ request: FetchRequest) throws -> [Record] {
+        return try fetch(CoreDataFetchRequest.from(request: request))
+    }
+    public func count(for request: FetchRequest) throws -> Int {
+        return try count(for: CoreDataFetchRequest.from(request: request))
+    }
+
+    public func count(in table: String) throws -> Int {
+        return try count(for: NSFetchRequest<Record>(entityName: table))
+    }
+
+    public func function(_ function: String, in tableName: String, for fieldNames: [String], with predicate: NSPredicate?) throws -> [Double] {
+
+        var expressionsDescription = [NSExpressionDescription]()
+        for field in fieldNames {
+            let expression = NSExpression(forKeyPath: field)
+            let expressionDescription = NSExpressionDescription()
+            expressionDescription.expression = NSExpression(forFunction: function, arguments: [expression])
+            expressionDescription.expressionResultType = NSAttributeType.doubleAttributeType
+            expressionDescription.name = field
+            expressionsDescription.append(expressionDescription)
+        }
+
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)
+        fetchRequest.propertiesToFetch = expressionsDescription
+        fetchRequest.resultType = NSFetchRequestResultType.dictionaryResultType
+
+        var resultValue = [Double]()
+
+        let results = try self.fetch(fetchRequest) as? [[String: Any]]
+
+        for result in results ?? [] {
+            for field in fieldNames {
+                let value = result[field] as? Double ?? 0
+                resultValue.append(value)
+            }
+        }
+        return resultValue
+    }
+
+    public func function(_ function: String, request: FetchRequest, for fieldNames: [String]) throws -> [Double] {
+        return try self.function(function, in: request.tableName, for: fieldNames, with: request.predicate)
+    }
 }
 
 extension DataStoreChangeType {

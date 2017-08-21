@@ -23,11 +23,6 @@ public protocol FetchRequest {
     /// The fetch limit of the fetch request
     var fetchLimit: Int { get set }
 
-    // MARK: Request utility
-    /// Execute the request in specific data store context
-    /// - return the number of records
-    func count(context: DataStoreContext) throws -> Int
-
 }
 
 extension FetchRequest {
