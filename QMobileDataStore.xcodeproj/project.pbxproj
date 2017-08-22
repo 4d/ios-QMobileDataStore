@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */; };
 		48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */; };
+		481EDC931F4C7FCB00E97960 /* DataStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */; };
+		481EDC951F4C7FE300E97960 /* DataStoreMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */; };
+		481EDC971F4C7FF900E97960 /* DataStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC961F4C7FF900E97960 /* DataStoreError.swift */; };
 		482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482485101E7A7C5400DA5390 /* DataStoreContext.swift */; };
 		483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483867AF1E8A4D2E00E44F49 /* Globals.swift */; };
 		485271971E93810600BABB16 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */; };
@@ -55,6 +58,9 @@
 /* Begin PBXFileReference section */
 		480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreCorrupedTests.swift; sourceTree = "<group>"; };
 		48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSPredicateTests.swift; sourceTree = "<group>"; };
+		481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreDelegate.swift; sourceTree = "<group>"; };
+		481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreMetadata.swift; sourceTree = "<group>"; };
+		481EDC961F4C7FF900E97960 /* DataStoreError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreError.swift; sourceTree = "<group>"; };
 		482485101E7A7C5400DA5390 /* DataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreContext.swift; sourceTree = "<group>"; };
 		483867AF1E8A4D2E00E44F49 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
@@ -131,6 +137,9 @@
 			children = (
 				48D584441E783025006F56B5 /* DataStore.swift */,
 				482485101E7A7C5400DA5390 /* DataStoreContext.swift */,
+				481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */,
+				481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */,
+				481EDC961F4C7FF900E97960 /* DataStoreError.swift */,
 				489C15D71F3A1A92004844F3 /* DataStore+Notification.swift */,
 				48D584881E784921006F56B5 /* FetchRequest.swift */,
 				48D584411E783025006F56B5 /* CoreData */,
@@ -446,6 +455,7 @@
 			files = (
 				489C15D61F3A1A0F004844F3 /* Notification+QMobile.swift in Sources */,
 				489C15D81F3A1A92004844F3 /* DataStore+Notification.swift in Sources */,
+				481EDC951F4C7FE300E97960 /* DataStoreMetadata.swift in Sources */,
 				48D584891E784921006F56B5 /* FetchRequest.swift in Sources */,
 				486A7C8D1E8BF8F700F646AF /* RecordBase.swift in Sources */,
 				48D584481E783025006F56B5 /* Log.swift in Sources */,
@@ -458,6 +468,8 @@
 				48D5844A1E783025006F56B5 /* Record.swift in Sources */,
 				483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */,
 				486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */,
+				481EDC931F4C7FCB00E97960 /* DataStoreDelegate.swift in Sources */,
+				481EDC971F4C7FF900E97960 /* DataStoreError.swift in Sources */,
 				485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */,
 				485CCDA71E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift in Sources */,
 				48D584491E783025006F56B5 /* DataStore.swift in Sources */,
