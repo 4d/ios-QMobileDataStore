@@ -184,12 +184,72 @@ class CoreDataStoreTests: XCTestCase {
         let expectation = self.expectation(description: #function)
         
         let _ = dataStore.perform(contextType, { (context, save) in
-            let record = context.create(in: "Entity \(UUID().uuidString)")
+            let record = context.create(in: "\(self.table)\(UUID().uuidString)")
             XCTAssertNil(record)
             expectation.fulfill()
         })
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
+    
+    
+    func testEntityCreateMandatoryFieldTable() {
+        let expectation = self.expectation(description: #function)
+        
+        let _ = dataStore.perform(contextType, { (context, save) in
+            
+            if let record = context.create(in: "\(self.table)1") {
+                
+                do {
+                    try record.validateForInsert()
+                    
+                    XCTFail("Must not be valid, a parameter is requested")
+                    // dataStore.save will failed
+                } catch {
+                    print("Entity1 not valid to insert \(error) in data store. OK")
+                }
+                
+                do {
+                    try save()
+                    XCTFail("Expecting error when saving context with invalid object")
+                } catch {
+                    print("ok save connot be done ")
+                    if let dataStoreError = error as? DataStoreError {
+                        print(String(describing:  dataStoreError.errorDescription))
+                        print(String(describing:  dataStoreError.failureReason))
+                        print("\(error)")
+                    }
+                }
+  
+                record["attribute1"] = "454545"
+                XCTAssertEqual(record["attribute1"] as? String, "454545")
+
+                do {
+                    try record.validateForInsert()
+                } catch {
+                    XCTFail("Entity not valid to insert \(error) in data store")
+                }
+                
+                XCTAssertTrue(try! context.has(in: "\(self.table)1", matching : record.predicate))
+                
+                // unknown attribute will throw assert
+                // let _ = record["attribute \(UUID().uuidString)"]
+             
+                do {
+                    try save()
+                } catch {
+                    XCTFail("Expecting error \(error)")
+                }
+                expectation.fulfill()
+            } else {
+                XCTFail("Cannot create entity")
+            }
+        })
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+    
+    
+    
+
     
     func testEntityDelete() {
         let expectation = self.expectation(description: #function)

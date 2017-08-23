@@ -88,6 +88,9 @@ extension DataStore {
     ///
     /// - parameters type: the type of context.
     /// - parameters block: the block to perform in data store foregroud context.
+    ///   in block you receive
+    ///       - the context to perform operation
+    ///       - a save closure to save the context, ie. commit your operation. could throw DataStoreError.
     ///
     /// - returns: true if action will be performed, false if store not ready.
     public func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
