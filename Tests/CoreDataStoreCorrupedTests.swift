@@ -34,14 +34,11 @@ class CoreDataStoreCorrupedTests: XCTestCase {
         Bundle.dataStore = bundle
         XCTAssertNotNil(Bundle.dataStoreModelName)
         print("\(dataStore)")
-        
-
     }
     
     override func tearDown() {
         let expectation = self.expectation(description: #function)
-        
-        
+
         dataStore.drop { result in
             switch result {
             case .success:

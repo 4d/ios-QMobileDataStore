@@ -199,62 +199,6 @@ extension DataStore {
 
 // MARK: Structure
 
-struct CoreDataStoreTableInfo: DataStoreTableInfo {
-    let entity: NSEntityDescription
-
-    var fields: [DataStoreFieldInfo] {
-        return entity.attributesByName.values.map { CoreDataStoreFieldInfo(attribute: $0) }
-    }
-
-    var name: String {
-       return self.entity.name!
-    }
-}
-
-struct CoreDataStoreFieldInfo: DataStoreFieldInfo {
-    let attribute: NSAttributeDescription
-    var name: String {
-        return attribute.name
-    }
-
-    var type: DataStoreFieldType {
-        return self.attribute.attributeType.coreData
-    }
-}
-
-extension NSAttributeType {
-    var coreData: String {
-        switch self {
-        case .binaryDataAttributeType:
-            return "Binary"
-        case .booleanAttributeType:
-            return "Boolean"
-        case .dateAttributeType:
-            return "Date"
-        case .decimalAttributeType:
-            return "Decimal"
-        case .doubleAttributeType:
-            return "Double"
-        case .floatAttributeType:
-            return "Float"
-        case .integer16AttributeType:
-            return "Integer 16"
-        case .integer32AttributeType:
-            return "Integer 32"
-        case .integer64AttributeType:
-            return "Integer 64"
-        case .stringAttributeType:
-            return "String"
-        case .transformableAttributeType:
-            return "Transformable"
-        case .objectIDAttributeType:
-            return "Object ID"
-        case .undefinedAttributeType:
-            return ""
-        }
-    }
-}
-
 struct CoreDataStoreMetaData: DataStoreMetadata {
 
     let persistentStore: NSPersistentStore

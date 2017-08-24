@@ -118,8 +118,7 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
         request.predicate = self.fetchedResultsController.fetchRequest.predicate
         request.sortDescriptors = [NSSortDescriptor(key: keyPath, ascending: ascending)]
 
-        // swiftlint:disable force_cast
-        // swiftlint:disable force_try
+        // swiftlint:disable:next force_try force_cast
         let objects = try! self.fetchedResultsController.managedObjectContext.fetch(request) as! [NSDictionary]
         for object in objects {
             result.append(contentsOf: object.allValues)
