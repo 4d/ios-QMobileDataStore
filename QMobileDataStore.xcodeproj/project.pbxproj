@@ -13,6 +13,7 @@
 		481EDC951F4C7FE300E97960 /* DataStoreMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */; };
 		481EDC971F4C7FF900E97960 /* DataStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC961F4C7FF900E97960 /* DataStoreError.swift */; };
 		482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482485101E7A7C5400DA5390 /* DataStoreContext.swift */; };
+		48358DAA1F500559001AB755 /* QMobileDataStoreTestsModel.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48358DA91F50051C001AB755 /* QMobileDataStoreTestsModel.strings */; };
 		483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483867AF1E8A4D2E00E44F49 /* Globals.swift */; };
 		485271971E93810600BABB16 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */; };
 		485271981E93810600BABB16 /* Prephirences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271931E9380F000BABB16 /* Prephirences.framework */; };
@@ -65,6 +66,7 @@
 		481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreMetadata.swift; sourceTree = "<group>"; };
 		481EDC961F4C7FF900E97960 /* DataStoreError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreError.swift; sourceTree = "<group>"; };
 		482485101E7A7C5400DA5390 /* DataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreContext.swift; sourceTree = "<group>"; };
+		48358DA81F50051C001AB755 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/QMobileDataStoreTestsModel.strings; sourceTree = "<group>"; };
 		483867AF1E8A4D2E00E44F49 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
 		485271931E9380F000BABB16 /* Prephirences.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Prephirences.framework; path = Carthage/Build/iOS/Prephirences.framework; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */,
 				48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */,
 				48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */,
+				48358DA91F50051C001AB755 /* QMobileDataStoreTestsModel.strings */,
 				48F4D39A1F442E39007C7CB8 /* ContextTypeTests.swift */,
 				48F4D39C1F443AAE007C7CB8 /* MetaDataTests.swift */,
 			);
@@ -396,6 +399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48358DAA1F500559001AB755 /* QMobileDataStoreTestsModel.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +506,17 @@
 			targetProxy = 48D584301E782F6C006F56B5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		48358DA91F50051C001AB755 /* QMobileDataStoreTestsModel.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48358DA81F50051C001AB755 /* en */,
+			);
+			name = QMobileDataStoreTestsModel.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		485CCDAB1E793F5400CDB2B3 /* Debug */ = {

@@ -57,12 +57,20 @@ extension RecordBase {
         }
     }
 
+    open var tableInfo: DataStoreTableInfo {
+        return CoreDataStoreTableInfo(entity: self.entity)
+    }
+
     open func hasKey(_ key: String) -> Bool {
         return self.entity.propertiesByName[key] != nil // CLEAN optimize how to known if record KVC compliant to key
     }
 
     open override func value(forUndefinedKey key: String) -> Any? {
         if !key.isEmpty {
+
+            // XXX here maybe map with other field, like mapped field, renamed field for core data
+            // for instance look into entity fields the keyMapping userInfo
+
             assertionFailure("Undefined field '\(key)' for record \(self). Check your binding in storyboard.")
         }
         return nil

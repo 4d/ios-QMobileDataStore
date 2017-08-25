@@ -1,0 +1,7 @@
+"Entity/Entity" = "Record";
+"Entity/Entity1" = "Record1";
+"Entity/Entity2" = "Record2";
+"Entity/Entity3" = "Record3";
+"Entity/Entity4" = "Record4";
+
+"Property/attribute/Entity/Entity" = "anAttribute";

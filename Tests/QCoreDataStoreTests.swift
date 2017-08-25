@@ -86,10 +86,12 @@ class CoreDataStoreTests: XCTestCase {
         
         for tableInfo in tablesInfo {
             XCTAssertFalse(tableInfo.name.isEmpty)
+            XCTAssertNotEqual(tableInfo.localizedName, tableInfo.name)
         }
     }
-    
+
     func testFieldForTable() {
+        var hasLocalizedField = false
         if let tableInfo = dataStore.tableInfo(for: table) {
             let fields = tableInfo.fields
             XCTAssertFalse(fields.isEmpty)
@@ -98,10 +100,14 @@ class CoreDataStoreTests: XCTestCase {
             for field in fields {
                 XCTAssertFalse(field.name.isEmpty)
                 XCTAssertFalse(field.type.isEmpty)
+                if field.name != field.localizedName {
+                    hasLocalizedField = true
+                }
             }
         } else {
             XCTFail("No table \(table) in table info")
         }
+        XCTAssertTrue(hasLocalizedField, "One field must be localized, see strings file")
     }
 
     // MARK: DataStore
