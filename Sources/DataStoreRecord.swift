@@ -8,15 +8,16 @@
 
 import Foundation
 
-/// A Record, parent class of all business object.
-//public typealias Record = RecordBase
-
-public protocol DataStoreRecord: NSObjectProtocol, Hashable, Equatable {
+protocol DataStoreRecord: NSObjectProtocol, Hashable, Equatable {
 }
 
 // XXX Record could be a class if core data model class generation allow a root class
 
+/// A Record, parent class of all business object.
 public class Record: NSObject {
+    
+    // CLEAN merge it with one from api, set this one in api, its a datastore constrains
+    @nonobjc public static var reservedSwiftVars: [String] =  ["objectID", "description", "shortDescription", "isDeleted", "isUpdated", "isInserted", "hasChanges", "hasPersistentChangedValues", "entity", "isFault"]
 
     public var store: RecordBase // DataStoreRecord
 
@@ -75,15 +76,28 @@ public class Record: NSObject {
     }
 
     public override func value(forKey key: String) -> Any? {
-        return store.value(forKey: key)
+        if Record.reservedSwiftVars.contains(key) {
+            return store.value(forKey: "\(key)_")   //" XXX Same rules in api, have to place for this rules is bad
+        } else {
+            return store.value(forKey: key)
+        }
     }
-
+    
     public override func value(forKeyPath keyPath: String) -> Any? {
-        return store.value(forKeyPath: keyPath.replacingOccurrences(of: " ", with: ""))
+        let keyPath = keyPath.replacingOccurrences(of: " ", with: "") // simple conversion, not really the one done in api, check coherence...
+        if Record.reservedSwiftVars.contains(keyPath) {
+            return store.value(forKeyPath: "\(keyPath)_")
+        } else {
+            return store.value(forKeyPath: keyPath)
+        }
     }
 
     public override func setValue(_ value: Any?, forKey key: String) {
-        store.setValue(value, forKey: key)
+        //if Record.reservedSwiftVars.contains(key) {
+         //   store.setValue(value, forKey: "\(key)_") // XXX Same rules in api, have to place for this rules is bad
+       // } else {
+            store.setValue(value, forKey: key)
+       // }
     }
 
     public override func setValuesForKeys(_ keyedValues: [String : Any]) {
