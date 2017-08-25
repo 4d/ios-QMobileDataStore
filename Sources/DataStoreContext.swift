@@ -76,10 +76,10 @@ public protocol DataStoreContext: class {
     var hasChanges: Bool { get }
 
     // records history
-    var insertedRecords: Set<Record> { get }
-    var updatedRecords: Set<Record> { get }
-    var deletedRecords: Set<Record> { get }
-    var registeredRecords: Set<Record> { get }
+    var insertedRecords: [Record] { get }
+    var updatedRecords: [Record] { get }
+    var deletedRecords: [Record] { get }
+    var registeredRecords: [Record] { get }
 
     func refresh(_ record: Record, mergeChanges flag: Bool)
     func detectConflicts(for record: Record)

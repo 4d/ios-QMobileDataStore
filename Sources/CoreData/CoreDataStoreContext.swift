@@ -24,7 +24,7 @@ extension NSManagedObjectContext: DataStoreContext {
 
     public func create(in table: String) -> Record? {
         if exists(table: table) {
-            return NSEntityDescription.insertNewObject(forEntityName: table, into: self) //as? Record
+            return Record(store: NSEntityDescription.insertNewObject(forEntityName: table, into: self))
         }
         return nil
     }
@@ -56,7 +56,7 @@ extension NSManagedObjectContext: DataStoreContext {
     }
 
     public func has(record: Record) -> Bool {
-        return self.registeredObject(for: record.objectID) != nil
+        return self.registeredObject(for: record.store.objectID) != nil
     }
 
     public func get(in table: String, matching predicate: NSPredicate) throws -> [Record]? {
@@ -146,7 +146,7 @@ extension NSManagedObjectContext: DataStoreContext {
     }
 
     public func delete(record: Record) {
-        let managedObject = record as NSManagedObject
+        let managedObject = record.store as NSManagedObject
 
         if managedObject.managedObjectContext != self {
             let managedObjectInContext = self.object(with: managedObject.objectID)
@@ -154,6 +154,13 @@ extension NSManagedObjectContext: DataStoreContext {
         } else {
             self.delete(managedObject)
         }
+    }
+
+    public func refresh(_ record: Record, mergeChanges flag: Bool) {
+        self.refresh(record.store, mergeChanges: flag)
+    }
+    public func detectConflicts(for record: Record) {
+        self.detectConflicts(for: record.store)
     }
 
     public var type: DataStoreContextType {
@@ -200,31 +207,31 @@ extension NSManagedObjectContext: DataStoreContext {
         }
     }
 
-    public var insertedRecords: Set<Record> {
-        return self.insertedObjects
+    public var insertedRecords: [Record] {
+        return self.insertedObjects.map { Record(store :$0) }
     }
-    public var updatedRecords: Set<Record> {
-        return self.updatedObjects
+    public var updatedRecords: [Record] {
+        return self.updatedObjects.map { Record(store :$0) }
     }
-    public var deletedRecords: Set<Record> {
-        return self.deletedObjects
+    public var deletedRecords: [Record] {
+        return self.deletedObjects.map { Record(store :$0) }
     }
-    public var registeredRecords: Set<Record> {
-        return self.registeredObjects
+    public var registeredRecords: [Record] {
+        return self.registeredObjects.map { Record(store :$0) }
     }
     public func refreshAllRecords() {
         self.refreshAllObjects()
     }
 
     public func fetch(_ request: FetchRequest) throws -> [Record] {
-        return try fetch(CoreDataFetchRequest.from(request: request))
+        return try fetch(CoreDataFetchRequest.from(request: request)).map { Record(store :$0) }
     }
     public func count(for request: FetchRequest) throws -> Int {
         return try count(for: CoreDataFetchRequest.from(request: request))
     }
 
     public func count(in table: String) throws -> Int {
-        return try count(for: NSFetchRequest<Record>(entityName: table))
+        return try count(for: NSFetchRequest<RecordBase>(entityName: table))
     }
 
     public func function(_ function: String, in tableName: String, for fieldNames: [String], with predicate: NSPredicate?) throws -> [Double] {

@@ -13,6 +13,10 @@ import Result
 
 public typealias RecordBase = NSManagedObject
 
+extension NSManagedObject: DataStoreRecord {
+
+}
+
 public extension NSManagedObjectContext {
 
     public static var `default`: NSManagedObjectContext {

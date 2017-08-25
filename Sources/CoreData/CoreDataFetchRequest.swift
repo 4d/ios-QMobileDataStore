@@ -140,11 +140,14 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     }
 
     func record(at indexPath: IndexPath) -> Record? {
-        return self.fetchedResultsController.object(at: indexPath) as? Record
+        guard let store = self.fetchedResultsController.object(at: indexPath) as? RecordBase else {
+            return nil
+        }
+        return Record(store: store)
     }
 
     func indexPath(for record: Record) -> IndexPath? {
-        return self.fetchedResultsController.indexPath(forObject: record)
+        return self.fetchedResultsController.indexPath(forObject: record.store)
     }
 
     var isEmpty: Bool {
@@ -209,11 +212,11 @@ extension NSFetchedResultsChangeType {
 extension CoreDataFetchedResultsController: NSFetchedResultsControllerDelegate {
 
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let record = anObject as? Record else {
+        guard let record = anObject as? RecordBase else {
             logger.warning("Wrong object type presented in data: \(anObject)")
             return
         }
-        self.delegate?.controller(self, didChangeRecord: record, at: indexPath, for: type.mappedType, newIndexPath: newIndexPath)
+        self.delegate?.controller(self, didChangeRecord: Record(store: record), at: indexPath, for: type.mappedType, newIndexPath: newIndexPath)
     }
 
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
