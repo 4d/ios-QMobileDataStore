@@ -57,7 +57,7 @@ public protocol FetchedResultsController {
 
     func performFetch() throws
 
-    /*func fetchKeyPath(_ keyPath: String, ascending: Bool) -> [Any]*/
+    func fetch(keyPath: String, ascending: Bool) -> [Any]
 
     // MARK: Records
     var numberOfRecords: Int { get }

@@ -107,24 +107,26 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     func performFetch() throws {
         try self.fetchedResultsController.performFetch()
     }
-/*
-    func fetchKeyPath(_ keyPath: String, ascending: Bool) -> [Any] {
+
+    func fetch(keyPath: String, ascending: Bool) -> [Any] {
         var result = [Any]()
         // swiftlint:disable:next force_cast
-        let request = (self.newFetchRequest() as! CoreDataFetchRequest).fetchRequest
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)
         request.resultType = .dictionaryResultType
         request.returnsDistinctResults = true
         request.propertiesToFetch = [keyPath]
         request.predicate = self.fetchedResultsController.fetchRequest.predicate
         request.sortDescriptors = [NSSortDescriptor(key: keyPath, ascending: ascending)]
 
-        // swiftlint:disable:next force_try force_cast
-        let objects = try! self.fetchedResultsController.managedObjectContext.fetch(request) as! [NSDictionary]
-        for object in objects {
-            result.append(contentsOf: object.allValues)
+        let context = self.fetchedResultsController.managedObjectContext
+
+        if let objects = try? context.fetch(request) as? [NSDictionary] {
+            for object in objects ?? [] {
+                result.append(contentsOf: object.allValues)
+            }
         }
         return result
-    }*/
+    }
 
     var numberOfRecords: Int {
         let sections = self.fetchedResultsController.sections ?? [NSFetchedResultsSectionInfo]()
