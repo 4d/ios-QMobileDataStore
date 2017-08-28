@@ -15,7 +15,7 @@ protocol DataStoreRecord: NSObjectProtocol, Hashable, Equatable {
 
 /// A Record, parent class of all business object.
 public class Record: NSObject {
-    
+
     // CLEAN merge it with one from api, set this one in api, its a datastore constrains
     @nonobjc public static var reservedSwiftVars: [String] =  ["objectID", "description", "shortDescription", "isDeleted", "isUpdated", "isInserted", "hasChanges", "hasPersistentChangedValues", "entity", "isFault"]
 
@@ -61,6 +61,30 @@ public class Record: NSObject {
         return self.store.predicateForBatch
     }
 
+    open func validateForInsert() throws {
+        do {
+            try store.validateForInsert()
+        } catch {
+            throw DataStoreError(error)
+        }
+    }
+
+    open func validateForUpdate() throws {
+        do {
+            try store.validateForUpdate()
+        } catch {
+            throw DataStoreError(error)
+        }
+    }
+
+    open func validateForDelete() throws {
+        do {
+            try store.validateForDelete()
+        } catch {
+            throw DataStoreError(error)
+        }
+    }
+
     // Hashable,
     public override var hashValue: Int {
         return store.hashValue
@@ -77,12 +101,16 @@ public class Record: NSObject {
 
     public override func value(forKey key: String) -> Any? {
         if Record.reservedSwiftVars.contains(key) {
-            return store.value(forKey: "\(key)_")   //" XXX Same rules in api, have to place for this rules is bad
+            if hasKey("\(key)_") {
+                return store.value(forKey: "\(key)_")   //" XXX Same rules in api, have to place for this rules is bad
+            } else {
+                return store.value(forKey: key)
+            }
         } else {
             return store.value(forKey: key)
         }
     }
-    
+
     public override func value(forKeyPath keyPath: String) -> Any? {
         let keyPath = keyPath.replacingOccurrences(of: " ", with: "") // simple conversion, not really the one done in api, check coherence...
         if Record.reservedSwiftVars.contains(keyPath) {

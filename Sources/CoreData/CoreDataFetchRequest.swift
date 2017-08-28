@@ -12,8 +12,8 @@ import Result
 
 class CoreDataFetchRequest: FetchRequest {
 
-    let fetchRequest: NSFetchRequest<NSFetchRequestResult>
-    init(_ fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
+    let fetchRequest: NSFetchRequest<RecordBase>
+    init(_ fetchRequest: NSFetchRequest<RecordBase>) {
         self.fetchRequest = fetchRequest
     }
     init(_ fetchRequest: FetchRequest) {
@@ -74,16 +74,16 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
 
     weak var delegate: FetchedResultsControllerDelegate?
 
-    let fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>
+    let fetchedResultsController: NSFetchedResultsController<RecordBase>
     let coreDataStore: CoreDataStore
 
     fileprivate var batchChanges: [RecordChange] = []
 
-    init(dataStore: CoreDataStore, sectionNameKeyPath: String?, context: DataStoreContext? = nil, fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
+    init(dataStore: CoreDataStore, sectionNameKeyPath: String?, context: DataStoreContext? = nil, fetchRequest: NSFetchRequest<RecordBase>) {
         coreDataStore = dataStore
 
         let context = context as? NSManagedObjectContext ?? dataStore.viewContext
-        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
+        self.fetchedResultsController = NSFetchedResultsController<RecordBase>(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
 
         super.init()
 
@@ -107,7 +107,7 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     func performFetch() throws {
         try self.fetchedResultsController.performFetch()
     }
-
+/*
     func fetchKeyPath(_ keyPath: String, ascending: Bool) -> [Any] {
         var result = [Any]()
         // swiftlint:disable:next force_cast
@@ -124,7 +124,7 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
             result.append(contentsOf: object.allValues)
         }
         return result
-    }
+    }*/
 
     var numberOfRecords: Int {
         let sections = self.fetchedResultsController.sections ?? [NSFetchedResultsSectionInfo]()
@@ -140,10 +140,11 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     }
 
     func record(at indexPath: IndexPath) -> Record? {
-        guard let store = self.fetchedResultsController.object(at: indexPath) as? RecordBase else {
-            return nil
+        if inBounds(indexPath: indexPath) {
+            let store = self.fetchedResultsController.object(at: indexPath)
+            return Record(store: store)
         }
-        return Record(store: store)
+        return nil
     }
 
     func indexPath(for record: Record) -> IndexPath? {
@@ -188,7 +189,7 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     // /!\ time consuming
     var fetchedRecords: [Record]? {
         //swiftlint:disable force_cast
-        return self.fetchedResultsController.fetchedObjects?.map { $0 as! Record }
+        return self.fetchedResultsController.fetchedObjects?.map { Record(store: $0) }
     }
 
 }
@@ -242,7 +243,7 @@ extension CoreDataFetchedResultsController: NSFetchedResultsControllerDelegate {
 extension CoreDataStore {
 
     public func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]?) -> FetchRequest {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)
+        let fetchRequest = NSFetchRequest<RecordBase>(entityName: tableName)
         fetchRequest.sortDescriptors = sortDescriptors
 
         return CoreDataFetchRequest(fetchRequest)

@@ -367,7 +367,7 @@ class CoreDataStoreTests: XCTestCase {
             
             if let record = context.create(in: self.table) {
                 
-                fetchRequest.predicate = NSPredicate(format: "objectID = %@", record.objectID) // not working with SELF...
+                fetchRequest.predicate = record.predicateForBatch
                 
                 let exist = fetchRequest.evaluate(record: record)
                 
