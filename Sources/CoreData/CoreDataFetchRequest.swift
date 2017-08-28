@@ -183,9 +183,25 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
         return self.fetchedResultsController.sectionNameKeyPath
     }
 
+    open var sectionNames: [String]? {
+        guard let sections = fetchedResultsController.sections else {
+            return nil
+        }
+        return sections.map { $0.name }
+    }
+
     func sectionName(_ section: FetchedResultsController.SectionIndex) -> String? {
         assert(section >= 0)
         return self.fetchedResultsController.sections?[section].name ?? nil
+    }
+
+    func record(in section: FetchedResultsController.SectionIndex) -> [Record]? {
+        assert(section >= 0)
+        guard let section = fetchedResultsController.sections?[section],
+            let objects = section.objects as? [RecordBase] else {
+            return nil
+        }
+        return objects.map { Record(store: $0) }
     }
 
     // /!\ time consuming

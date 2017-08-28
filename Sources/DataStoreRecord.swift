@@ -45,7 +45,10 @@ public class Record: NSObject {
              }*/
         }
     }
-
+    open var tableName: String {
+        //swiftlint:disable:next force_cast
+        return store.entity.name!
+    }
     open var tableInfo: DataStoreTableInfo {
         return store.tableInfo
     }
@@ -83,6 +86,26 @@ public class Record: NSObject {
         } catch {
             throw DataStoreError(error)
         }
+    }
+
+    open var context: DataStoreContext? {
+        return store.managedObjectContext
+    }
+
+    open var isInserted: Bool {
+        return store.isInserted
+    }
+
+    open var isUpdated: Bool {
+        return store.isUpdated
+    }
+
+    open var isDeleted: Bool {
+        return store.isDeleted
+    }
+
+    open var hasPersistentChangedValues: Bool {
+        return store.hasPersistentChangedValues
     }
 
     // Hashable,
