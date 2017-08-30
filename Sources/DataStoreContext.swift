@@ -79,6 +79,7 @@ public protocol DataStoreContext: class {
     var insertedRecords: [Record] { get }
     var updatedRecords: [Record] { get }
     var deletedRecords: [Record] { get }
+    // Object in the context
     var registeredRecords: [Record] { get }
 
     func refresh(_ record: Record, mergeChanges flag: Bool)
@@ -90,6 +91,21 @@ public protocol DataStoreContext: class {
     var parentContext: DataStoreContext? { get set }
     var automaticallyMergesChangesFromParent: Bool { get set }
 
+}
+
+extension DataStoreContext {
+
+    /*** Get the record associated with the change type */
+    public func records(for changeType: DataStoreChangeType) -> [Record] {
+        switch changeType {
+        case .updated:
+            return self.updatedRecords
+        case .deleted:
+            return self.deletedRecords
+        case .inserted:
+            return self.insertedRecords
+        }
+    }
 }
 
 extension DataStoreContext {
@@ -167,8 +183,10 @@ public enum DataStoreContextType: Equatable {
 }
 
 /// An enum for history change
-enum DataStoreChangeType { // TODO manage history to send change to server
+public enum DataStoreChangeType {
     case inserted
     case updated
     case deleted
 }
+
+// iOS11 manage history to send change to server: https://developer.apple.com/documentation/coredata/nspersistenthistorychange?language=objc

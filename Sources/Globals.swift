@@ -8,23 +8,12 @@
 
 import Foundation
 
-// Here come CoreData dependency to break if needed
-import CoreData
-
+// Here come CoreData dependency to break if needed, by chosing an other default type
 public let dataStore: DataStore = CoreDataStore.default
 
-// Configuration
-import Prephirences
+// XXX could use also a factory, allowing to change the default value in it
+/*public class DataStoreFactory {
 
-extension Bundle {
+    public static var dataStore: DataStore = CoreDataStore.default
 
-    /// Bundle used to load data store data. By default main bundle
-    @nonobjc public static var dataStore: Bundle = .main
-    /// Key used to get data store file name. By default 'QDataStore'
-    @nonobjc public static var dataStoreKey: String = "QDataStore"
-
-    @nonobjc public static var dataStoreModelName: String? {
-        return Bundle.dataStore[Bundle.dataStoreKey] as? String
-    }
-
-}
+}*/

@@ -28,6 +28,7 @@
 		485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */; };
 		486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */; };
 		486A7C8D1E8BF8F700F646AF /* CoreDataStoreRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486A7C8C1E8BF8F700F646AF /* CoreDataStoreRecord.swift */; };
+		487F7FE81F56F5D10064AF4B /* Bundle+DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487F7FE71F56F5D10064AF4B /* Bundle+DataStore.swift */; };
 		489C15D61F3A1A0F004844F3 /* Notification+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */; };
 		489C15D81F3A1A92004844F3 /* DataStore+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489C15D71F3A1A92004844F3 /* DataStore+Notification.swift */; };
 		48A1C4F31F4F37AF0041531F /* DataStoreTableInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A1C4F21F4F37AF0041531F /* DataStoreTableInfo.swift */; };
@@ -78,6 +79,7 @@
 		485F013E1E7C2865007D5FEE /* CoreDataStoreContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreContext.swift; sourceTree = "<group>"; };
 		486A7C8A1E8BF89D00F646AF /* NSPersistentStore+Transient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPersistentStore+Transient.swift"; sourceTree = "<group>"; };
 		486A7C8C1E8BF8F700F646AF /* CoreDataStoreRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreRecord.swift; sourceTree = "<group>"; };
+		487F7FE71F56F5D10064AF4B /* Bundle+DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+DataStore.swift"; sourceTree = "<group>"; };
 		489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notification+QMobile.swift"; sourceTree = "<group>"; };
 		489C15D71F3A1A92004844F3 /* DataStore+Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataStore+Notification.swift"; sourceTree = "<group>"; };
 		48A1C4F21F4F37AF0041531F /* DataStoreTableInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreTableInfo.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */,
 				485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */,
 				489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */,
+				487F7FE71F56F5D10064AF4B /* Bundle+DataStore.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				48A1C4F51F4F37C50041531F /* CoreDataStoreTableInfo.swift in Sources */,
 				48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */,
 				485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */,
+				487F7FE81F56F5D10064AF4B /* Bundle+DataStore.swift in Sources */,
 				48D5844A1E783025006F56B5 /* DataStoreRecord.swift in Sources */,
 				483867B01E8A4D2E00E44F49 /* Globals.swift in Sources */,
 				486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */,
