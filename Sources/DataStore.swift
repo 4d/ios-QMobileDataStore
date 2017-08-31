@@ -37,10 +37,10 @@ public protocol DataStore {
     ///
     /// - parameters type: the type of context.
     /// - parameters wait: wait until task end. Default false.
-    /// - parameters block: the block to perform in data store foregroud context.
+    /// - parameters block: the block to perform in data store foregroud context. Block provide context, and a safe save closure.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    func perform(_ type: DataStoreContextType, wait: Bool, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool
+    func perform(_ type: DataStoreContextType, wait: Bool, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool
 
     // MARK: Fetch request
 
@@ -80,6 +80,10 @@ public protocol DataStore {
     /// Closure result of data store operation
     typealias CompletionHandler = (CompletionResult) -> Void
 
+    /// Closure to save data store.
+    /// @throw DataStoreError
+    typealias SaveClosure = () throws -> Void
+
 }
 
 extension DataStore {
@@ -93,7 +97,7 @@ extension DataStore {
     ///       - a save closure to save the context, ie. commit your operation. could throw DataStoreError.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    public func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+    public func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
         return self.perform(type, wait: false, block)
     }
 
@@ -153,15 +157,5 @@ extension DataStore {
     public func fetchedResultsController(fetchRequest: FetchRequest) -> FetchedResultsController {
         return self.fetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: nil)
     }
-/*
-    func load() {
-        self.save(completionHandler: nil)
-    }
-    func save() {
-        self.save(completionHandler: nil)
-    }
-    func drop() {
-        self.drop(completionHandler: nil)
-    }
-*/
+
 }

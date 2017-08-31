@@ -307,6 +307,7 @@ extension CoreDataStore: DataStore {
         }
     }
 
+    /// Return for code a message from cocoa doc
     static func message(for code: Int) -> String? {
         switch code {
         case NSManagedObjectValidationError: return "generic validation error"
@@ -474,11 +475,11 @@ fileprivate extension FileManager {
 
 extension CoreDataStore {
 
-    func perform(_ type: DataStoreContextType, wait: Bool = false, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+    func perform(_ type: DataStoreContextType, wait: Bool = false, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
         return self.perform(type, wait: wait, blockName: nil, block)
     }
 
-    func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping () throws -> Void) -> Void) -> Bool {
+    func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
         if !isLoaded {
             logger.error("Perform action on store but not loaded yet. Type: \(type) \(blockName ?? "")")
             // XXX here could do better by waiting to data store loading. For instance by registering the task on data store load event.
