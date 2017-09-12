@@ -288,3 +288,15 @@ extension CoreDataStore {
     }
 
 }
+
+extension NSManagedObjectContext {
+    
+    public func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]? = nil) -> FetchRequest {
+        let fetchRequest = NSFetchRequest<RecordBase>(entityName: tableName)
+        fetchRequest.sortDescriptors = sortDescriptors
+        
+        return CoreDataFetchRequest(fetchRequest)
+    }
+    
+}
+

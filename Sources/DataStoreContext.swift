@@ -90,10 +90,21 @@ public protocol DataStoreContext: class {
     /// Parent context
     var parentContext: DataStoreContext? { get set }
     var automaticallyMergesChangesFromParent: Bool { get set }
-
+    
+    /// Structures
+    var tablesInfo: [DataStoreTableInfo]  { get }
+    func tableInfo(for name: String) -> DataStoreTableInfo?
+    
+    /// - returns: a new fetch request
+    func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]?) -> FetchRequest
+    
 }
 
 extension DataStoreContext {
+
+    public func fetchRequest(tableName: String) -> FetchRequest {
+        return fetchRequest(tableName: tableName, sortDescriptors: nil)
+    }
 
     /*** Get the record associated with the change type */
     public func records(for changeType: DataStoreChangeType) -> [Record] {
@@ -174,6 +185,26 @@ extension DataStoreContext {
 
 }
 
+extension DataStoreContext {
+    
+    /// Dump data store by tables
+    /// @parameter publish receive data by page
+    public func dump(publish: (DataStoreTableInfo, Result<[Record], DataStoreError>) -> Void) {
+        let tables = self.tablesInfo
+        for table in tables {
+            let request = self.fetchRequest(tableName: table.name)
+            do {
+                let records = try self.fetch(request)
+                publish(table, .success(records))
+            } catch {
+                publish(table, .failure(DataStoreError.error(from: error)))
+            }
+        }
+    }
+
+}
+
+// MARK: Enums
 /// A type of DataStoreContext
 public enum DataStoreContextType: Equatable {
     /// The context associated with the main queue. (Used to display data)
