@@ -206,7 +206,6 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
 
     // /!\ time consuming
     var fetchedRecords: [Record]? {
-        //swiftlint:disable force_cast
         return self.fetchedResultsController.fetchedObjects?.map { Record(store: $0) }
     }
 

@@ -48,7 +48,7 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         return self.entity.isAbstract
     }
     var name: String {
-        //swiftlint:disable:next force_cast
+        // swiftlint:disable:next force_cast
         return self.entity.name!
     }
 

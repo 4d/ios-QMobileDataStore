@@ -46,7 +46,7 @@ public class Record: NSObject {
         }
     }
     open var tableName: String {
-        //swiftlint:disable:next force_cast
+        // swiftlint:disable:next force_cast
         return store.entity.name!
     }
     open var tableInfo: DataStoreTableInfo {
