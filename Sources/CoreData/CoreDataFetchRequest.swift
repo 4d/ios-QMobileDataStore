@@ -109,6 +109,9 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
     }
 
     func fetch(keyPath: String, ascending: Bool) -> [Any] {
+        if keyPath.isEmpty {
+            return []
+        }
         var result = [Any]()
         // swiftlint:disable:next force_cast
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)

@@ -238,7 +238,7 @@ extension NSManagedObjectContext: DataStoreContext {
     public func function(_ function: String, in tableName: String, for fieldNames: [String], with predicate: NSPredicate?) throws -> [Double] {
 
         var expressionsDescription = [NSExpressionDescription]()
-        for field in fieldNames {
+        for field in fieldNames where !field.isEmpty {
             let expression = NSExpression(forKeyPath: field)
             let expressionDescription = NSExpressionDescription()
             expressionDescription.expression = NSExpression(forFunction: function, arguments: [expression])
