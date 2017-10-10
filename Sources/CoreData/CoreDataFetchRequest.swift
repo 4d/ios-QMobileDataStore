@@ -113,7 +113,6 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
             return []
         }
         var result = [Any]()
-        // swiftlint:disable:next force_cast
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)
         request.resultType = .dictionaryResultType
         request.returnsDistinctResults = true
@@ -293,13 +292,12 @@ extension CoreDataStore {
 }
 
 extension NSManagedObjectContext {
-    
+
     public func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]? = nil) -> FetchRequest {
         let fetchRequest = NSFetchRequest<RecordBase>(entityName: tableName)
         fetchRequest.sortDescriptors = sortDescriptors
-        
+
         return CoreDataFetchRequest(fetchRequest)
     }
-    
-}
 
+}

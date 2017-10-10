@@ -18,7 +18,23 @@ public protocol DataStoreTableInfo {
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo]
     var userInfo: [AnyHashable : Any]? { get }
 }
-public typealias DataStoreFieldType = String
+
+public enum DataStoreFieldType: String {
+    case boolean
+    case string
+    case date
+    case float
+    case decimal
+    case double
+    case binary
+    case integer16
+    case integer32
+    case integer64
+    case transformable
+    case undefined
+    case objectID
+}
+
 public protocol DataStoreFieldInfo {
     var name: String {get}
     var localizedName: String {get}

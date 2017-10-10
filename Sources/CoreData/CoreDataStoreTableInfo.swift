@@ -149,7 +149,7 @@ class CoreDataStoreFieldInfo: DataStoreFieldInfo {
     }
 
     var type: DataStoreFieldType {
-        return self.attribute.attributeType.coreData
+        return self.attribute.attributeType.dataStoreFieldType
     }
 
     var isOptional: Bool {
@@ -176,34 +176,38 @@ class CoreDataStoreFieldInfo: DataStoreFieldInfo {
 }
 
 extension NSAttributeType {
-    var coreData: String {
+    var dataStoreFieldType: DataStoreFieldType {
         switch self {
         case .binaryDataAttributeType:
-            return "Binary"
+            return .binary
         case .booleanAttributeType:
-            return "Boolean"
+            return .boolean
         case .dateAttributeType:
-            return "Date"
+            return .date
         case .decimalAttributeType:
-            return "Decimal"
+            return .decimal
         case .doubleAttributeType:
-            return "Double"
+            return .double
         case .floatAttributeType:
-            return "Float"
+            return .float
         case .integer16AttributeType:
-            return "Integer 16"
+            return .integer16
         case .integer32AttributeType:
-            return "Integer 32"
+            return .integer32
         case .integer64AttributeType:
-            return "Integer 64"
+            return .integer64
         case .stringAttributeType:
-            return "String"
+            return .string
         case .transformableAttributeType:
-            return "Transformable"
+            return .transformable
         case .objectIDAttributeType:
-            return "Object ID"
+            return .objectID
         case .undefinedAttributeType:
-            return ""
+            return .undefined
+        case .UUIDAttributeType:
+            return .string
+        case .URIAttributeType:
+            return .string
         }
     }
 }

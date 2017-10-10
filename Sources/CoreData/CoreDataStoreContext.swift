@@ -175,7 +175,6 @@ extension NSManagedObjectContext: DataStoreContext {
         }
     }
 
-
     /// Perform an operation on context queue and wait
     public func perform(wait: Bool, _ block: @escaping () -> Void) {
         if wait {
@@ -267,8 +266,7 @@ extension NSManagedObjectContext: DataStoreContext {
     public func function(_ function: String, request: FetchRequest, for fieldNames: [String]) throws -> [Double] {
         return try self.function(function, in: request.tableName, for: fieldNames, with: request.predicate)
     }
-    
-    
+
     // MARK: Structures
     public var tablesInfo: [DataStoreTableInfo] {
         guard let entities = self.persistentStoreCoordinator?.managedObjectModel.entities else {
@@ -276,7 +274,7 @@ extension NSManagedObjectContext: DataStoreContext {
         }
         return entities.filter { $0.name != nil }.map { CoreDataStoreTableInfo(entity: $0) }
     }
-    
+
     public func tableInfo(for name: String) -> DataStoreTableInfo? {
         guard let entities = self.persistentStoreCoordinator?.managedObjectModel.entities else {
             return nil

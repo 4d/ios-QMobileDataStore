@@ -90,14 +90,14 @@ public protocol DataStoreContext: class {
     /// Parent context
     var parentContext: DataStoreContext? { get set }
     var automaticallyMergesChangesFromParent: Bool { get set }
-    
+
     /// Structures
-    var tablesInfo: [DataStoreTableInfo]  { get }
+    var tablesInfo: [DataStoreTableInfo] { get }
     func tableInfo(for name: String) -> DataStoreTableInfo?
-    
+
     /// - returns: a new fetch request
     func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]?) -> FetchRequest
-    
+
 }
 
 extension DataStoreContext {
@@ -186,7 +186,7 @@ extension DataStoreContext {
 }
 
 extension DataStoreContext {
-    
+
     /// Dump data store by tables
     /// @parameter publish receive data by page
     public func dump(publish: (DataStoreTableInfo, Result<[Record], DataStoreError>) -> Void) {

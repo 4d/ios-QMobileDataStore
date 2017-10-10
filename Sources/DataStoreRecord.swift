@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol DataStoreRecord: NSObjectProtocol, Hashable, Equatable {
+protocol DataStoreRecord: NSObjectProtocol, Hashable {
 }
 
 // XXX Record could be a class if core data model class generation allow a root class
