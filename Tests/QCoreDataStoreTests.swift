@@ -99,7 +99,7 @@ class CoreDataStoreTests: XCTestCase {
             
             for field in fields {
                 XCTAssertFalse(field.name.isEmpty)
-                XCTAssertFalse(field.type.isEmpty)
+                XCTAssertFalse(field.type == .undefined)
                 if field.name != field.localizedName {
                     hasLocalizedField = true
                 }

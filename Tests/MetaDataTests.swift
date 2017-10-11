@@ -99,7 +99,7 @@ class MetaDataTests: XCTestCase {
         metadata?[key] = nil
         XCTAssertNil(metadata?[key])
     }
-    func testMetaData<T : Hashable, U : Equatable>(_ expectedValue:  [T : U]) {
+    func testMetaData<T, U: Equatable>(_ expectedValue:  [T : U]) {
         var metadata = dataStore.metadata
         let key = UUID().uuidString
         XCTAssertNil(metadata?[key])
@@ -113,8 +113,6 @@ class MetaDataTests: XCTestCase {
         metadata?[key] = nil
         XCTAssertNil(metadata?[key])
     }
-    
-    
 
     
 }
