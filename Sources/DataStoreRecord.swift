@@ -46,11 +46,17 @@ public class Record: NSObject {
         }
     }
     open var tableName: String {
-        // swiftlint:disable:next force_cast
-        return store.entity.name!
+        return store.entity.name ?? store.entity.managedObjectClassName
     }
     open var tableInfo: DataStoreTableInfo {
         return store.tableInfo
+    }
+
+    open override var description: String {
+        return self.store.description
+    }
+    open override var debugDescription: String {
+        return self.store.debugDescription
     }
 
     open func hasKey(_ key: String) -> Bool {
@@ -119,7 +125,7 @@ public class Record: NSObject {
 
     // MARK: override KVO
     public override func value(forUndefinedKey key: String) -> Any? {
-         return store.value(forKey:key)
+         return store.value(forKey: key)
     }
 
     public override func value(forKey key: String) -> Any? {
@@ -151,7 +157,7 @@ public class Record: NSObject {
        // }
     }
 
-    public override func setValuesForKeys(_ keyedValues: [String : Any]) {
+    public override func setValuesForKeys(_ keyedValues: [String: Any]) {
           store.setValuesForKeys(keyedValues)
     }
 
@@ -162,7 +168,7 @@ public class Record: NSObject {
         store.setValue(value, forUndefinedKey: key)
     }
 
-    public override func dictionaryWithValues(forKeys keys: [String]) -> [String : Any] {
+    public override func dictionaryWithValues(forKeys keys: [String]) -> [String: Any] {
         return store.dictionaryWithValues(forKeys: keys)
     }
 

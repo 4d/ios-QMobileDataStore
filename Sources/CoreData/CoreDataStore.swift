@@ -260,8 +260,7 @@ extension CoreDataStore: DataStore {
                         logger.error("Could not load datastore \(error)")
                         completionHandler?(.failure(DataStoreError(error)))
                     } else {
-                        // https://developer.apple.com/reference/coredata/1535452-validation_error_codes?language=swift
-                        if let message = CoreDataStore.message(for: code) {
+                        if let message = CocoaError.Code.message(for: code) {
                             logger.error(message)
                         }
 
@@ -301,67 +300,9 @@ extension CoreDataStore: DataStore {
                 // .success
             }
             if doNotify {
-                Notification(name: .dataStoreLoaded, object:result).post(.dataStore)
+                Notification(name: .dataStoreLoaded, object: result).post(.dataStore)
                 completionHandler?(result)
             }
-        }
-    }
-
-    /// Return for code a message from cocoa doc
-    static func message(for code: Int) -> String? {
-        switch code {
-        case NSManagedObjectValidationError: return "generic validation error"
-        case NSManagedObjectConstraintValidationError: return "one or more uniqueness constraints were violated"
-        case NSValidationMultipleErrorsError: return "generic message for error containing multiple validation errors"
-        case NSValidationMissingMandatoryPropertyError: return "non-optional property with a nil value"
-        case NSValidationRelationshipLacksMinimumCountError: return "to-many relationship with too few destination objects"
-        case NSValidationRelationshipExceedsMaximumCountError: return "bounded, to-many relationship with too many destination objects"
-        case NSValidationRelationshipDeniedDeleteError: return "some relationship with NSDeleteRuleDeny is non-empty"
-        case NSValidationNumberTooLargeError: return "some numerical value is too large"
-        case NSValidationNumberTooSmallError: return "some numerical value is too small"
-        case NSValidationDateTooLateError: return "some date value is too late"
-        case NSValidationDateTooSoonError: return "some date value is too soon"
-        case NSValidationInvalidDateError: return "some date value fails to match date pattern"
-        case NSValidationStringTooLongError: return "some string value is too long"
-        case NSValidationStringTooShortError: return "some string value is too short"
-        case NSValidationStringPatternMatchingError: return "some string value fails to match some pattern"
-
-        case NSManagedObjectContextLockingError: return "can't acquire a lock in a managed object context"
-        case NSPersistentStoreCoordinatorLockingError: return "can't acquire a lock in a persistent store coordinator"
-
-        case NSManagedObjectReferentialIntegrityError: return "attempt to fire a fault pointing to an object that does not exist (we can see the store, we can't see the object)"
-        case NSManagedObjectExternalRelationshipError: return "an object being saved has a relationship containing an object from another store"
-        case NSManagedObjectMergeError: return "merge policy failed - unable to complete merging"
-        case NSManagedObjectConstraintMergeError: return "merge policy failed - unable to complete merging due to multiple conflicting constraint violations"
-
-        case NSPersistentStoreInvalidTypeError: return "unknown persistent store type/format/version"
-        case NSPersistentStoreTypeMismatchError: return "returned by persistent store coordinator if a store is accessed that does not match the specified type"
-        case NSPersistentStoreIncompatibleSchemaError: return "store returned an error for save operation (database level errors ie missing table, no permissions)"
-        case NSPersistentStoreSaveError: return "unclassified save error - something we depend on returned an error"
-        case NSPersistentStoreIncompleteSaveError: return "one or more of the stores returned an error during save (stores/objects that failed will be in userInfo)"
-        case NSPersistentStoreSaveConflictsError: return "an unresolved merge conflict was encountered during a save.  userInfo has NSPersistentStoreSaveConflictsErrorKey"
-
-        case NSCoreDataError: return "general Core Data error"
-        case NSPersistentStoreOperationError: return "the persistent store operation failed "
-        case NSPersistentStoreOpenError: return "an error occurred while attempting to open the persistent store"
-        case NSPersistentStoreTimeoutError: return "failed to connect to the persistent store within the specified timeout (see NSPersistentStoreTimeoutOption)"
-        case NSPersistentStoreUnsupportedRequestTypeError: return "an NSPersistentStore subclass was passed an NSPersistentStoreRequest that it did not understand"
-
-        case NSPersistentStoreIncompatibleVersionHashError: return "entity version hashes incompatible with data model"
-        case NSMigrationError: return "general migration error"
-        case NSMigrationConstraintViolationError: return "migration failed due to a violated uniqueness constraint"
-        case NSMigrationCancelledError: return "migration failed due to manual cancellation"
-        case NSMigrationMissingSourceModelError: return "migration failed due to missing source data model"
-        case NSMigrationMissingMappingModelError: return "migration failed due to missing mapping model"
-        case NSMigrationManagerSourceStoreError: return "migration failed due to a problem with the source data store"
-        case NSMigrationManagerDestinationStoreError: return "migration failed due to a problem with the destination data store"
-        case NSEntityMigrationPolicyError: return "migration failed during processing of the entity migration policy "
-
-        case NSSQLiteError: return "general SQLite error "
-
-        case NSInferredMappingModelError: return "inferred mapping model creation error"
-        case NSExternalRecordImportError: return "general error encountered while importing external records"
-        default: return nil
         }
     }
 
@@ -380,7 +321,7 @@ extension CoreDataStore: DataStore {
             } catch {
                 result = .failure(DataStoreError(error))
             }
-            Notification(name: .dataStoreSaved, object:result).post(.dataStore)
+            Notification(name: .dataStoreSaved, object: result).post(.dataStore)
             completionHandler?(result)
         }
     }
@@ -405,20 +346,20 @@ extension CoreDataStore: DataStore {
                     } catch {
                         result = .failure(DataStoreError(error))
                     }
-                    Notification(name: .dataStoreDropped, object:result).post(.dataStore)
+                    Notification(name: .dataStoreDropped, object: result).post(.dataStore)
                     completionHandler?(result)
                     return
                 }
                 // Do not try to remove /dev/null files
                 if store.isTransient {
-                    Notification(name: .dataStoreDropped, object:result, userInfo: ["transient": true]).post(.dataStore)
+                    Notification(name: .dataStoreDropped, object: result, userInfo: ["transient": true]).post(.dataStore)
                     completionHandler?(result)
                     return
                 }
 
                 // get the store url
                 guard let storeURL = store.url, storeURL.isFileURL else {
-                    Notification(name: .dataStoreDropped, object:result, userInfo: ["noFile": true]).post(.dataStore)
+                    Notification(name: .dataStoreDropped, object: result, userInfo: ["noFile": true]).post(.dataStore)
                     completionHandler?(result)
                     return
                 }
@@ -432,7 +373,7 @@ extension CoreDataStore: DataStore {
                 } catch {
                     result = .failure(DataStoreError(error))
                 }
-                Notification(name: .dataStoreDropped, object:result).post(.dataStore)
+                Notification(name: .dataStoreDropped, object: result).post(.dataStore)
                 completionHandler?(result)
             }
         }

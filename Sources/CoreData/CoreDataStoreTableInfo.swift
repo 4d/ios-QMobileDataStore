@@ -22,17 +22,21 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         }
         self.entity = des
     }
-    var userInfo: [AnyHashable : Any]? {
+    var userInfo: [AnyHashable: Any]? {
         return self.entity.userInfo
     }
     lazy var fields: [DataStoreFieldInfo] = {
         return self.entity.attributesByName.values.map { CoreDataStoreFieldInfo(attribute: $0) }
     }()
 
-    lazy var fieldsByName: [String : DataStoreFieldInfo] = {
+    lazy var fieldsByName: [String: DataStoreFieldInfo] = {
         return Dictionary(self.entity.attributesByName.map {  ($0, CoreDataStoreFieldInfo(attribute: $1)) })
     }()
-    lazy var relationshipsByName: [String : DataStoreRelationInfo] = {
+
+    lazy var relationships: [DataStoreRelationInfo] = {
+        return self.entity.relationshipsByName.map { CoreDataStoreRelationInfo(relation: $1) }
+    }()
+    lazy var relationshipsByName: [String: DataStoreRelationInfo] = {
         return Dictionary(self.entity.relationshipsByName.map {  ($0, CoreDataStoreRelationInfo(relation: $1)) })
     }()
 
@@ -48,8 +52,7 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         return self.entity.isAbstract
     }
     var name: String {
-        // swiftlint:disable:next force_cast
-        return self.entity.name!
+        return self.entity.name ?? self.entity.managedObjectClassName
     }
 
     var localizedName: String {
@@ -117,7 +120,7 @@ class CoreDataStoreRelationInfo: DataStoreRelationInfo {
     var name: String {
         return self.relation.name
     }
-    var userInfo: [AnyHashable : Any]? {
+    var userInfo: [AnyHashable: Any]? {
         return self.relation.userInfo
     }
 
@@ -144,7 +147,7 @@ class CoreDataStoreFieldInfo: DataStoreFieldInfo {
     var name: String {
         return self.attribute.name
     }
-    var userInfo: [AnyHashable : Any]? {
+    var userInfo: [AnyHashable: Any]? {
         return self.attribute.userInfo
     }
 

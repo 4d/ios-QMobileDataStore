@@ -13,10 +13,11 @@ public protocol DataStoreTableInfo {
     var localizedName: String {get}
     var isAbstract: Bool {get}
     var fields: [DataStoreFieldInfo] {get}
-    var fieldsByName: [String : DataStoreFieldInfo] { get }
-    var relationshipsByName: [String : DataStoreRelationInfo] { get }
+    var fieldsByName: [String: DataStoreFieldInfo] { get }
+    var relationships: [DataStoreRelationInfo] { get }
+    var relationshipsByName: [String: DataStoreRelationInfo] { get }
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo]
-    var userInfo: [AnyHashable : Any]? { get }
+    var userInfo: [AnyHashable: Any]? { get }
 }
 
 public enum DataStoreFieldType: String {
@@ -40,7 +41,7 @@ public protocol DataStoreFieldInfo {
     var localizedName: String {get}
     var type: DataStoreFieldType {get}
     var isOptional: Bool {get}
-    var userInfo: [AnyHashable : Any]? {get}
+    var userInfo: [AnyHashable: Any]? {get}
     var table: DataStoreTableInfo {mutating get}
     var validationPredicates: [NSPredicate] { get }
 }
@@ -73,7 +74,7 @@ public protocol DataStoreRelationInfo {
     var isToMany: Bool { get }
     var isOrdered: Bool { get }
     var isOptional: Bool {get}
-    var userInfo: [AnyHashable : Any]? {get}
+    var userInfo: [AnyHashable: Any]? {get}
 
 }
 public enum DeleteRule: UInt {

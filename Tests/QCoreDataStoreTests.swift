@@ -95,7 +95,7 @@ class CoreDataStoreTests: XCTestCase {
         if let tableInfo = dataStore.tableInfo(for: table) {
             let fields = tableInfo.fields
             XCTAssertFalse(fields.isEmpty)
-            XCTAssertTrue(fields.count == 10)
+            XCTAssertEqual(fields.count, 11)
             
             for field in fields {
                 XCTAssertFalse(field.name.isEmpty)

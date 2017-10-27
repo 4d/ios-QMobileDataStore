@@ -81,7 +81,7 @@ extension NSManagedObjectContext: DataStoreContext {
         return newRecord
     }
 
-    public func update(in table: String, matching predicate: NSPredicate, values: [String : Any]) throws -> Bool {
+    public func update(in table: String, matching predicate: NSPredicate, values: [String: Any]) throws -> Bool {
         let request = NSBatchUpdateRequest(entityName: table)
 
         request.predicate = predicate
@@ -208,23 +208,23 @@ extension NSManagedObjectContext: DataStoreContext {
     }
 
     public var insertedRecords: [Record] {
-        return self.insertedObjects.map { Record(store :$0) }
+        return self.insertedObjects.map { Record(store: $0) }
     }
     public var updatedRecords: [Record] {
-        return self.updatedObjects.map { Record(store :$0) }
+        return self.updatedObjects.map { Record(store: $0) }
     }
     public var deletedRecords: [Record] {
-        return self.deletedObjects.map { Record(store :$0) }
+        return self.deletedObjects.map { Record(store: $0) }
     }
     public var registeredRecords: [Record] {
-        return self.registeredObjects.map { Record(store :$0) }
+        return self.registeredObjects.map { Record(store: $0) }
     }
     public func refreshAllRecords() {
         self.refreshAllObjects()
     }
 
     public func fetch(_ request: FetchRequest) throws -> [Record] {
-        return try fetch(CoreDataFetchRequest.from(request: request)).map { Record(store :$0) }
+        return try fetch(CoreDataFetchRequest.from(request: request)).map { Record(store: $0) }
     }
     public func count(for request: FetchRequest) throws -> Int {
         return try count(for: CoreDataFetchRequest.from(request: request))

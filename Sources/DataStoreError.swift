@@ -32,3 +32,5 @@ extension DataStoreError: ErrorConvertible {
     }
 
 }
+
+extension DataStoreError: LocalizedError {}
