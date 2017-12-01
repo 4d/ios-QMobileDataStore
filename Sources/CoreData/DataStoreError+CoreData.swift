@@ -114,7 +114,7 @@ extension DataStoreError {
         let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         if let range = message.range(of: "(Cocoa error"),
             let errorCode = errorCode, let errorDescription = errorCode.coreDataDescription?.localized {
-            return message.substring(to: range.lowerBound) + "(\(errorDescription): \(String(describing: errorCode.rawValue))"
+            return message[..<range.lowerBound] + "(\(errorDescription): \(String(describing: errorCode.rawValue))"
         } else {
             return message
         }

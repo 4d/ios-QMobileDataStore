@@ -250,7 +250,7 @@ extension CoreDataStore: DataStore {
 
         persistentContainer.loadPersistentStores { [unowned self] (storeDescription, error) in
             var doNotify = true
-            var result: DataStore.CompletionResult = .success()
+            var result: DataStore.CompletionResult = .success(())
             if let error = error {
 
                 if error._domain == NSCocoaErrorDomain {
@@ -313,7 +313,7 @@ extension CoreDataStore: DataStore {
 
     public func save(completionHandler: CompletionHandler? = nil) {
         self.viewContext.perform {
-            var result: DataStore.CompletionResult = .success()
+            var result: DataStore.CompletionResult = .success(())
             do {
                 if self.viewContext.hasChanges {
                     try self.viewContext.save()
@@ -331,7 +331,7 @@ extension CoreDataStore: DataStore {
      */
     public func drop(completionHandler: CompletionHandler? = nil) {
         self.viewContext.performAndWait {
-            var result: DataStore.CompletionResult = .success()
+            var result: DataStore.CompletionResult = .success(())
             self.viewContext.reset()
 
             self.persistentStoreCoordinator.performAndWait {
