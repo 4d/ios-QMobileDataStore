@@ -83,3 +83,41 @@ public enum DeleteRule: UInt {
     case cascade
     case deny
 }
+
+// MARK: DataStoreContext extension
+extension DataStoreContext {
+
+    public func create(in table: DataStoreTableInfo) -> Record? {
+        return create(in: table.name)
+    }
+
+    public func getOrCreate(in table: DataStoreTableInfo, matching predicate: NSPredicate) throws -> Record? {
+        return try getOrCreate(in: table.name, matching: predicate)
+    }
+
+    /// Create and updates values
+    public func insert(in table: DataStoreTableInfo, values: [String: Any]) -> Record? {
+        return insert(in: table.name, values: values)
+    }
+
+    /// Get records that match the predicate.
+    public func get(in table: DataStoreTableInfo, matching predicate: NSPredicate) throws -> [Record]? {
+        return try get(in: table.name, matching: predicate)
+    }
+
+    /// Update the records that match the predicate with the given `values`
+    public func update(in table: DataStoreTableInfo, matching predicate: NSPredicate, values: [String: Any]) throws -> Bool {
+        return try update(in: table.name, matching: predicate, values: values)
+    }
+
+    /// Check if there is records that match the predicate.
+    public func has(in table: DataStoreTableInfo, matching predicate: NSPredicate) throws -> Bool {
+        return try has(in: table.name, matching: predicate)
+    }
+
+    /// Delete records, which match the predicate.
+    public func delete(in table: DataStoreTableInfo, matching predicate: NSPredicate? = nil) throws -> Bool {
+        return try delete(in: table.name, matching: nil) // xxx remove predicate when updated
+    }
+
+}
