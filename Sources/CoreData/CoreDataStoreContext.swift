@@ -112,7 +112,7 @@ extension NSManagedObjectContext: DataStoreContext {
         return !result.isEmpty // something has been updated
     }
 
-    public func delete(in table: String, matching predicate: NSPredicate? = nil) throws -> Bool {
+    public func delete(in table: String, matching predicate: NSPredicate? = nil) throws -> Int {
         let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: table)
         fetch.predicate = predicate
         let request = NSBatchDeleteRequest(fetchRequest: fetch)
@@ -121,12 +121,12 @@ extension NSManagedObjectContext: DataStoreContext {
 
         request.resultType = .resultTypeObjectIDs
         guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? [NSManagedObjectID] else {
-            return false
+            return -1
         }
         let changes = [NSDeletedObjectsKey: result]
         NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
 
-        return !result.isEmpty
+        return result.count
 
         // If we want status
         /*

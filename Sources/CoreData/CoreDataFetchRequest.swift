@@ -211,6 +211,10 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
         return self.fetchedResultsController.fetchedObjects?.map { Record(store: $0) }
     }
 
+    override var description: String {
+        return "CoreDataFetchedResultsController[\(fetchedResultsController)]"
+    }
+
 }
 
 extension NSFetchedResultsChangeType {

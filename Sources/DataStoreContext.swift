@@ -37,7 +37,7 @@ public protocol DataStoreContext: class {
     func delete(record: Record)
 
     /// Delete records, which match the predicate.
-    func delete(in table: String, matching predicate: NSPredicate?) throws -> Bool
+    func delete(in table: String, matching predicate: NSPredicate?) throws -> Int
 
     /// Removes everything from the undo stack, discards all insertions and deletions, and restores updated objects to their last committed values.
     func rollback()
@@ -169,7 +169,7 @@ extension DataStoreContext {
     }
 
     /// Delete all the records in table.
-    public func delete(in table: String) throws -> Bool {
+    public func delete(in table: String) throws -> Int {
         return try delete(in: table, matching: nil)
     }
 

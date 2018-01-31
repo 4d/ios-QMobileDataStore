@@ -46,7 +46,6 @@ public protocol DataStoreFieldInfo {
     var validationPredicates: [NSPredicate] { get }
 }
 
-let kkeyMapping = "keyMapping"
 let knameTransformer = "nameTransformer"
 
 extension DataStoreFieldInfo {
@@ -54,13 +53,9 @@ extension DataStoreFieldInfo {
         return !isOptional
     }
 
-    public var mappedName: String? {
-        return self.userInfo?[kkeyMapping] as? String
-    }
-
-    public var nameTransformer: String? {
-        return self.userInfo?[kkeyMapping] as? String
-    }
+    /*public var nameTransformer: String? {
+        return self.userInfo?[knameTransformer] as? String
+    }*/
 }
 
 public protocol DataStoreRelationInfo {
@@ -116,8 +111,8 @@ extension DataStoreContext {
     }
 
     /// Delete records, which match the predicate.
-    public func delete(in table: DataStoreTableInfo, matching predicate: NSPredicate? = nil) throws -> Bool {
-        return try delete(in: table.name, matching: nil) // xxx remove predicate when updated
+    public func delete(in table: DataStoreTableInfo, matching predicate: NSPredicate? = nil) throws -> Int {
+        return try delete(in: table.name)
     }
 
 }

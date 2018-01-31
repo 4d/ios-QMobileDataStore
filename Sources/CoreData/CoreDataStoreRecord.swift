@@ -75,7 +75,7 @@ extension RecordBase {
             // XXX here maybe map with other field, like mapped field, renamed field for core data
             // for instance look into entity fields the keyMapping userInfo
 
-            assertionFailure("Undefined field '\(key)' for record \(self). Check your binding in storyboard.")
+            // assertionFailure("Undefined field '\(key)' for record \(self). Check your binding in storyboard.")
         }
         return nil
     }
