@@ -324,7 +324,7 @@ class CoreDataStoreTests: XCTestCase {
                 try? save()
                 
                 let result  = try! context.delete(in: self.table, matching: record.predicate)
-                XCTAssertTrue(result, "not deleted")
+                XCTAssertTrue(result>0, "not deleted")
                 
                 // check no more in context
                 XCTAssertFalse(try! context.has(in: self.table, matching : record.predicate))
