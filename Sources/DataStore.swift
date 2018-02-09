@@ -37,10 +37,11 @@ public protocol DataStore {
     ///
     /// - parameters type: the type of context.
     /// - parameters wait: wait until task end. Default false.
+    /// - parameters blockName: name the block, for debug purpose.
     /// - parameters block: the block to perform in data store foregroud context. Block provide context, and a safe save closure.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    func perform(_ type: DataStoreContextType, wait: Bool, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool
+    func perform(_ type: DataStoreContextType, wait: Bool, blockName: String?, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool
 
     // MARK: Fetch request
 
@@ -97,8 +98,8 @@ extension DataStore {
     ///       - a save closure to save the context, ie. commit your operation. could throw DataStoreError.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    public func perform(_ type: DataStoreContextType, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
-        return self.perform(type, wait: false, block)
+    public func perform(_ type: DataStoreContextType, blockName: String? = nil, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
+        return self.perform(type, wait: false, blockName: blockName, block)
     }
 
     public func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController {

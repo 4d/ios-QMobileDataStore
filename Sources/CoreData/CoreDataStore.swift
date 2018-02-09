@@ -146,9 +146,10 @@ extension DataStore {
     }
 
     internal func newBackgroundContext() -> NSManagedObjectContext {
+        let backgroundContext = self.persistentContainer.newBackgroundContext()
         // let backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         // backgroundContext.parent = viewContext
-        return self.persistentContainer.newBackgroundContext()
+        return backgroundContext
     }
 
     fileprivate func storeDescription(with url: URL?) -> NSPersistentStoreDescription {
@@ -434,18 +435,28 @@ extension CoreDataStore {
         Notification(name: .dataStoreWillPerformAction, object: type, userInfo: userInfo).post(.dataStore)
 
         let blockTask: ((NSManagedObjectContext) -> Void) = { context in
-            block(context) { [unowned self] in
+
+            let saveBlock: SaveClosure = { [unowned self] in
                 do {
+                    logger.verbose("Will save context type:  \(context.type) (from param:\(type))")
                     try self.save(context)
+                    assert(context.type == type)
+                    logger.verbose("Did save context type:  \(context.type) (from param:\(type))")
                 } catch let error as DataStoreError {
                     throw error
                 } catch {
                     throw DataStoreError(error)
                 }
             }
+            block(context, saveBlock)
             Notification(name: .dataStoreDidPerformAction, object: type, userInfo: userInfo).post(.dataStore)
         }
 
+        doPerform(type, wait, blockTask)
+        return true
+    }
+
+    fileprivate func doPerform(_ type: DataStoreContextType, _ wait: Bool, _ blockTask: @escaping ((NSManagedObjectContext) -> Void)) {
         switch type {
         case .foreground:
             if wait {
@@ -459,15 +470,6 @@ extension CoreDataStore {
             } else {
                 performBackgroundTask(blockTask)
             }
-        }
-        return true
-    }
-
-    func save(_ managedObjectContext: NSManagedObjectContext) throws {
-        do {
-            try managedObjectContext.save()
-        } catch {
-            throw DataStoreError(error)
         }
     }
 
@@ -497,6 +499,14 @@ extension CoreDataStore {
         let context = self.newBackgroundContext()
         context.performAndWait { // XXX no method in container...
             block(context)
+        }
+    }
+
+    func save(_ managedObjectContext: NSManagedObjectContext) throws {
+        do {
+            try managedObjectContext.save()
+        } catch {
+            throw DataStoreError(error)
         }
     }
 

@@ -252,6 +252,7 @@ extension CoreDataFetchedResultsController: NSFetchedResultsControllerDelegate {
     }
 
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        assert(controller == self.fetchedResultsController)
         self.delegate?.controllerDidChangeContent(self)
     }
 
