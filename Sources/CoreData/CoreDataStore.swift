@@ -417,11 +417,11 @@ fileprivate extension FileManager {
 
 extension CoreDataStore {
 
-    func perform(_ type: DataStoreContextType, wait: Bool = false, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
+    func perform(_ type: DataStoreContextType, wait: Bool = false, _ block: @escaping (_ context: DataStoreContext) -> Void) -> Bool {
         return self.perform(type, wait: wait, blockName: nil, block)
     }
 
-    func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
+    func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext) -> Void) -> Bool {
         if !isLoaded {
             logger.error("Perform action on store but not loaded yet. Type: \(type) \(blockName ?? "")")
             // XXX here could do better by waiting to data store loading. For instance by registering the task on data store load event.
@@ -435,20 +435,7 @@ extension CoreDataStore {
         Notification(name: .dataStoreWillPerformAction, object: type, userInfo: userInfo).post(.dataStore)
 
         let blockTask: ((NSManagedObjectContext) -> Void) = { context in
-
-            let saveBlock: SaveClosure = { [unowned self] in
-                do {
-                    logger.verbose("Will save context type:  \(context.type) (from param:\(type))")
-                    try self.save(context)
-                    assert(context.type == type)
-                    logger.verbose("Did save context type:  \(context.type) (from param:\(type))")
-                } catch let error as DataStoreError {
-                    throw error
-                } catch {
-                    throw DataStoreError(error)
-                }
-            }
-            block(context, saveBlock)
+            block(context)
             Notification(name: .dataStoreDidPerformAction, object: type, userInfo: userInfo).post(.dataStore)
         }
 
@@ -499,14 +486,6 @@ extension CoreDataStore {
         let context = self.newBackgroundContext()
         context.performAndWait { // XXX no method in container...
             block(context)
-        }
-    }
-
-    func save(_ managedObjectContext: NSManagedObjectContext) throws {
-        do {
-            try managedObjectContext.save()
-        } catch {
-            throw DataStoreError(error)
         }
     }
 

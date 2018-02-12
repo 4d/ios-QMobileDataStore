@@ -175,6 +175,15 @@ extension NSManagedObjectContext: DataStoreContext {
         }
     }
 
+    /// Commit data store context modifications.
+    public func commit() throws {
+        do {
+            try self.save()
+        } catch {
+            throw DataStoreError.error(from: error)
+        }
+    }
+
     /// Perform an operation on context queue and wait
     public func perform(wait: Bool, _ block: @escaping () -> Void) {
         if wait {

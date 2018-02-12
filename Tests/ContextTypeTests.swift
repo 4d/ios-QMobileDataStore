@@ -58,13 +58,13 @@ class ContextTypeTests: XCTestCase {
     func testBackgroundIsBackground() {
         let expectation = self.expectation(description: #function)
         
-        let result = dataStore.perform(.background, { (context, save) in
+        let result = dataStore.perform(.background) { context in
             
             XCTAssertEqual(context.type, .background)
             XCTAssertNil(context.parentContext) // Not really a test, background has no parent until we decide change it, like at foreground context has parent
             
             expectation.fulfill()
-        })
+        }
         if result {
             self.waitForExpectations(timeout: timeout, handler: waitHandler)
         } else {
@@ -75,12 +75,12 @@ class ContextTypeTests: XCTestCase {
     func testForegroundIsForeground() {
         let expectation = self.expectation(description: #function)
         
-        let result = dataStore.perform(.foreground, { (context, save) in
+        let result = dataStore.perform(.foreground) { context in
             
             XCTAssertEqual(context.type, .foreground)
             
             expectation.fulfill()
-        })
+        }
         if result {
             self.waitForExpectations(timeout: timeout, handler: waitHandler)
         } else {
@@ -91,12 +91,12 @@ class ContextTypeTests: XCTestCase {
     func testBackgroundIsBackgroundSync() {
         let expectation = self.expectation(description: #function)
         
-        let result = dataStore.perform(.background, wait: true, { (context, save) in
+        let result = dataStore.perform(.background, wait: true) { context in
             
             XCTAssertEqual(context.type, .background)
             
             expectation.fulfill()
-        })
+        }
         if result {
             self.waitForExpectations(timeout: timeout, handler: waitHandler)
         } else {
@@ -107,12 +107,12 @@ class ContextTypeTests: XCTestCase {
     func testForegroundIsForegroundSync() {
         let expectation = self.expectation(description: #function)
         
-        let result = dataStore.perform(.foreground, wait: true, { (context, save) in
+        let result = dataStore.perform(.foreground, wait: true) { context in
             
             XCTAssertEqual(context.type, .foreground)
             
             expectation.fulfill()
-        })
+        }
         if result {
             self.waitForExpectations(timeout: timeout, handler: waitHandler)
         } else {

@@ -159,7 +159,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityCreate() {
         let expectation = self.expectation(description: #function)
    
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
       
             if let record = context.create(in: self.table) {
                 do {
@@ -182,18 +182,18 @@ class CoreDataStoreTests: XCTestCase {
                 XCTFail("Cannot create entity")
             }
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
     func testEntityCreateFalseTable() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             let record = context.create(in: "\(self.table)\(UUID().uuidString)")
             XCTAssertNil(record)
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
@@ -201,7 +201,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityCreateMandatoryFieldTable() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             
             if let record = context.create(in: "\(self.table)1") {
                 
@@ -215,7 +215,7 @@ class CoreDataStoreTests: XCTestCase {
                 }
                 
                 do {
-                    try save()
+                    try context.commit()
                     XCTFail("Expecting error when saving context with invalid object")
                 } catch {
                     print("ok save connot be done ")
@@ -241,7 +241,7 @@ class CoreDataStoreTests: XCTestCase {
                 // let _ = record["attribute \(UUID().uuidString)"]
              
                 do {
-                    try save()
+                    try context.commit()
                 } catch {
                     XCTFail("Expecting error \(error)")
                 }
@@ -249,7 +249,7 @@ class CoreDataStoreTests: XCTestCase {
             } else {
                 XCTFail("Cannot create entity")
             }
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
@@ -260,7 +260,7 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityDelete() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             
             if let record = context.create(in: self.table) {
                 
@@ -274,14 +274,14 @@ class CoreDataStoreTests: XCTestCase {
                 XCTFail("Cannot create entity")
             }
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
 
     func _testEntityUpdate() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
 
             if let record = context.insert(in: self.table, values: ["attribute": 0]) {
                 let predicate = record.predicate
@@ -290,8 +290,8 @@ class CoreDataStoreTests: XCTestCase {
                 
                 var get = try! context.get(in: self.table, matching: predicate)?.first
                 XCTAssertEqual(get, record)
-                
-                try? save()
+
+                try? context.commit()
                 let newValue = 11
                 let result = try! context.update(in: self.table, matching: .true /*all?*/, values: ["attribute": newValue])
                 XCTAssertTrue(result) // FIXME
@@ -307,7 +307,7 @@ class CoreDataStoreTests: XCTestCase {
                 XCTFail("Cannot create entity")
             }
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
 
@@ -315,13 +315,13 @@ class CoreDataStoreTests: XCTestCase {
     func testEntityDeleteUsingPredicate() {
         let expectation = self.expectation(description: #function)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             
             if let record = context.create(in: self.table) {
                 
                 XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
                 
-                try? save()
+                try? context.commit()
                 
                 let result  = try! context.delete(in: self.table, matching: record.predicate)
                 XCTAssertTrue(result>0, "not deleted")
@@ -332,7 +332,7 @@ class CoreDataStoreTests: XCTestCase {
                 XCTFail("Cannot create entity")
             }
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
@@ -342,7 +342,7 @@ class CoreDataStoreTests: XCTestCase {
         
         let fetchRequest = dataStore.fetchRequest(tableName: self.table)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             
             let count: Int = try! context.count(for: fetchRequest)
             if let _ = context.create(in: self.table) {
@@ -354,7 +354,7 @@ class CoreDataStoreTests: XCTestCase {
                 XCTFail("Cannot create entity")
             }
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
     
@@ -363,7 +363,7 @@ class CoreDataStoreTests: XCTestCase {
         
         var fetchRequest = dataStore.fetchRequest(tableName: self.table)
         
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             
             if let record = context.create(in: self.table) {
                 
@@ -380,7 +380,7 @@ class CoreDataStoreTests: XCTestCase {
                 XCTFail("Cannot create entity")
             }
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
 
@@ -411,10 +411,10 @@ class CoreDataStoreTests: XCTestCase {
             XCTAssertTrue(controller.inBounds(indexPath: indexPath!))
         }
 
-        let _ = dataStore.perform(contextType, { (context, save) in
+        let _ = dataStore.perform(contextType) { context in
             
             if let record = context.create(in: self.table) {
-                try? save()
+                try? context.commit()
  
                 try? controller.performFetch()
                 
@@ -448,7 +448,7 @@ class CoreDataStoreTests: XCTestCase {
             }
 
             expectation.fulfill()
-        })
+        }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
 

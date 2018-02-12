@@ -39,6 +39,8 @@ public protocol DataStoreContext: class {
     /// Delete records, which match the predicate.
     func delete(in table: String, matching predicate: NSPredicate?) throws -> Int
 
+    /// Save modification to database.
+    func commit() throws
     /// Removes everything from the undo stack, discards all insertions and deletions, and restores updated objects to their last committed values.
     func rollback()
     /// Returns the context to its base state.
@@ -117,6 +119,18 @@ extension DataStoreContext {
             return self.insertedRecords
         }
     }
+
+    /// Commit data store context modifications.
+    /// @param completionHandler : callback to receive result
+    public func commit(completionHandler: DataStore.CompletionHandler) {
+        do {
+            try self.commit()
+            completionHandler(.success(()))
+        } catch {
+            completionHandler(.failure(DataStoreError.error(from: error)))
+        }
+    }
+
 }
 
 extension DataStoreContext {

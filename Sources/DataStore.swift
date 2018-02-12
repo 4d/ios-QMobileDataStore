@@ -41,7 +41,7 @@ public protocol DataStore {
     /// - parameters block: the block to perform in data store foregroud context. Block provide context, and a safe save closure.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    func perform(_ type: DataStoreContextType, wait: Bool, blockName: String?, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool
+    func perform(_ type: DataStoreContextType, wait: Bool, blockName: String?, _ block: @escaping (_ context: DataStoreContext) -> Void) -> Bool
 
     // MARK: Fetch request
 
@@ -92,14 +92,15 @@ extension DataStore {
     /// Perform a data store task by passing a context to a callback `block`.
     ///
     /// - parameters type: the type of context.
+    /// - parameters blockName: a name for the block, debug purpose.
     /// - parameters block: the block to perform in data store foregroud context.
     ///   in block you receive
     ///       - the context to perform operation
     ///       - a save closure to save the context, ie. commit your operation. could throw DataStoreError.
     ///
     /// - returns: true if action will be performed, false if store not ready.
-    public func perform(_ type: DataStoreContextType, blockName: String? = nil, _ block: @escaping (_ context: DataStoreContext, _ save: @escaping SaveClosure) -> Void) -> Bool {
-        return self.perform(type, wait: false, blockName: blockName, block)
+    public func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String? = nil, _ block: @escaping (_ context: DataStoreContext) -> Void) -> Bool {
+        return self.perform(type, wait: wait, blockName: blockName, block)
     }
 
     public func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController {
