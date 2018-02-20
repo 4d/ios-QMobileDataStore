@@ -89,7 +89,7 @@ extension FetchedResultsController {
 
     /// Create a new fetch request on same table.
     public func newFetchRequest() -> FetchRequest {
-        return self.dataStore.fetchRequest(tableName: tableName)
+        return self.dataStore.fetchRequest(tableName: tableName, sortDescriptors: self.fetchRequest.sortDescriptors)
     }
 
 }
