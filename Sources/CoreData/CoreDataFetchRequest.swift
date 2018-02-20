@@ -274,23 +274,7 @@ extension CoreDataStore {
     }
 
     func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?, context: DataStoreContext? = nil) -> FetchedResultsController {
-
-        // CLEAN Tricky way to add a sort descriptor... maybe add attribute name as attribute or flag in core data model
-
         let request = CoreDataFetchRequest(fetchRequest).fetchRequest
-        if request.sortDescriptors == nil {
-            if let sectionNameKeyPath = sectionNameKeyPath, sectionNameKeyPath != "" {
-                request.sortDescriptors = [NSSortDescriptor(key: sectionNameKeyPath, ascending: true)]
-            } else {
-                if let entityDescription = NSEntityDescription.entity(forEntityName: fetchRequest.tableName, in: self.viewContext),
-                    let key = entityDescription.attributesByName.first?.key {
-                    request.sortDescriptors = [NSSortDescriptor(key: key, ascending: true)]
-                } else {
-                    fatalError("Table \(fetchRequest.tableName) has no fields and could not be displayed")
-                }
-            }
-        }
-
         return CoreDataFetchedResultsController(dataStore: self, sectionNameKeyPath: sectionNameKeyPath, context: context, fetchRequest: request)
     }
 
