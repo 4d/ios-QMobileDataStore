@@ -340,7 +340,7 @@ class CoreDataStoreTests: XCTestCase {
     func testFetch() {
         let expectation = self.expectation(description: #function)
         
-        let fetchRequest = dataStore.fetchRequest(tableName: self.table)
+        let fetchRequest = dataStore.fetchRequest(tableName: self.table, sortDescriptors: nil)
         
         let _ = dataStore.perform(contextType) { context in
             
@@ -361,7 +361,7 @@ class CoreDataStoreTests: XCTestCase {
     func testFetchWithPredicate() {
         let expectation = self.expectation(description: #function)
         
-        var fetchRequest = dataStore.fetchRequest(tableName: self.table)
+        var fetchRequest = dataStore.fetchRequest(tableName: self.table, sortDescriptors: nil)
         
         let _ = dataStore.perform(contextType) { context in
             
@@ -389,7 +389,7 @@ class CoreDataStoreTests: XCTestCase {
     func testFetchController() {
         let expectation = self.expectation(description: #function)
         
-        let controller = dataStore.fetchedResultsController(tableName: self.table)
+        let controller = dataStore.fetchedResultsController(tableName: self.table, sortDescriptors: nil)
         XCTAssertEqual(controller.tableName, self.table)
         XCTAssertNil(controller.sectionNameKeyPath)
         
