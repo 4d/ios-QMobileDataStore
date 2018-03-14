@@ -152,7 +152,7 @@ extension DataStore {
     /// - parameters tableName the table name to request.
     ///
     /// - return a fetched results controller
-    public func fetchedResultsController(tableName: String, sectionNameKeyPath: String? = nil, sortDescriptors: [NSSortDescriptor]?) -> FetchedResultsController {
+    public func fetchedResultsController(tableName: String, sectionNameKeyPath: String? = nil, sortDescriptors: [NSSortDescriptor]) -> FetchedResultsController {
         return self.fetchedResultsController(fetchRequest: self.fetchRequest(tableName: tableName, sortDescriptors: sortDescriptors), sectionNameKeyPath: sectionNameKeyPath)
     }
 

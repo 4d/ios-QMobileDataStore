@@ -8,8 +8,7 @@
 
 import Foundation
 
-protocol DataStoreRecord: NSObjectProtocol, Hashable {
-}
+protocol DataStoreRecord: NSObjectProtocol, Hashable {}
 
 // XXX Record could be a class if core data model class generation allow a root class
 
@@ -177,3 +176,7 @@ public class Record: NSObject {
     }
 
 }
+
+/*func == (lhs: Record, rhs: Record) -> Bool {
+    return lhs.store == rhs.store
+}*/

@@ -77,7 +77,7 @@ public protocol DataStoreContext: class {
     var userInfo: NSMutableDictionary { get }
     var hasChanges: Bool { get }
 
-    // records history
+    /// records history
     var insertedRecords: [Record] { get }
     var updatedRecords: [Record] { get }
     var deletedRecords: [Record] { get }
@@ -89,7 +89,7 @@ public protocol DataStoreContext: class {
     /* calls -refreshObject:mergeChanges: on all currently registered objects with this context.  It handles dirtied objects and clearing the context reference queue */
     func refreshAllRecords()
 
-    /// Parent context
+    /// Parent context if any.
     var parentContext: DataStoreContext? { get set }
     var automaticallyMergesChangesFromParent: Bool { get set }
 
@@ -229,8 +229,11 @@ public enum DataStoreContextType: Equatable {
 
 /// An enum for history change
 public enum DataStoreChangeType {
+    /// Record has been inserted
     case inserted
+    /// Record has been updated
     case updated
+    /// Record has been deleted
     case deleted
 }
 

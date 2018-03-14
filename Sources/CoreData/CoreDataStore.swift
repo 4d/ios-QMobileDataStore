@@ -13,15 +13,6 @@ import Prephirences
 import Result
 import XCGLogger
 
-// MARK: shared
-extension DataStore {
-
-    /// shared DataStore
-    public static var shared: DataStore {
-        return CoreDataStore.default
-    }
-}
-
 // MARK: CoreData store
 @objc internal class CoreDataStore: NSObject {
 
@@ -52,6 +43,8 @@ extension DataStore {
     var shouldMigrateStoreAutomatically = true
     var shouldInferMappingModelAutomatically = true
 
+    var automaticMerge = true
+
     var dropIfMigrationFailed: Bool = true
 
     private var observers: [Any] = [Any]()
@@ -76,34 +69,94 @@ extension DataStore {
 
         super.init()
 
-        self.viewContext.automaticallyMergesChangesFromParent = true
+        // calling viewContext will create the persistance coordinator. Be sure to have defined all need information.
+        if automaticMerge {
+            // viewContext.automaticallyMergesChangesFromParent = true
+        }
 
         initObservers()
     }
 
     fileprivate func initObservers(center: NotificationCenter = NotificationCenter.default) {
+        let notificationQueue: OperationQueue = .main
         // here false positive for discarded_notification_center_observer
         //swiftlint:disable discarded_notification_center_observer
-        observers.append(center.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: .main) { [unowned self] note in
-
-            if let moc = note.object as? NSManagedObjectContext {
-                if moc != self.viewContext {
-                    self.viewContext.perform {
-                        Notification(name: .dataStoreWillMerge).post(.dataStore)
-                        self.viewContext.mergeChanges(fromContextDidSave: note)
-                        Notification(name: .dataStoreDidMerge).post(.dataStore)
-                        self.save()
-                    }
-                }
+        observers.append(center.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: notificationQueue) { [weak self] notification in
+            guard let this = self else {
+                return
             }
+            guard let moc = notification.object as? NSManagedObjectContext  else {
+                // not merge if two are the same context
+                return
+            }
+            this.delegate?.dataStoreDidSave(this, context: moc)
 
-            self.delegate?.dataStoreDidSave(self)
+            /*
+             let inserted = notification[.inserted]
+             let updated = notification[.updated]
+             let deleted = notification[.deleted]
+             */
+
+            if !this.automaticMerge {
+
+                let viewContext = this.viewContext
+                guard moc != viewContext  else {
+                    // not merge if two are the same context
+                    return
+                }
+
+                viewContext.perform {
+                    // notify observer before merging
+                    this.delegate?.dataStoreWillMerge(this, context: viewContext, with: moc)
+                    Notification(name: .dataStoreWillMerge, userInfo: notification.userInfo).post(.dataStore)
+
+                    // merge change from children context
+
+                    /*
+                     let insertedRecords = viewContext.insertedRecords
+                     let updatedRecords = viewContext.updatedRecords
+                     let registeredObjects = viewContext.registeredRecords*/
+
+                    viewContext.mergeChanges(fromContextDidSave: notification)
+
+                    /* let insertedRecordsAfter = viewContext.insertedRecords
+                     let updatedRecordsAfter = viewContext.updatedRecords
+                     let registeredObjectsAfter = viewContext.registeredRecords*/
+
+                    // notify observer after merging
+                    this.delegate?.dataStoreDidMerge(this, context: viewContext, with: moc)
+                    Notification(name: .dataStoreDidMerge, userInfo: notification.userInfo).post(.dataStore)
+
+                    // save
+                    this.save() // XXX will save viewContext if change
+                    /*let insertedRecordsAfterSave = viewContext.insertedRecords
+                     let updatedRecordsAfterSave = viewContext.updatedRecords
+                     let registeredObjectsAfterSave = viewContext.registeredRecords*/
+                }
+            } else {
+                // moc.mergeChanges(fromContextDidSave: notification) // just to study bug
+            }
         })
-        observers.append(center.addObserver(forName: .NSManagedObjectContextWillSave, object: nil, queue: .main) { [unowned self] _ in
-            self.delegate?.dataStoreWillSave(self)
+        observers.append(center.addObserver(forName: .NSManagedObjectContextWillSave, object: nil, queue: notificationQueue) { [weak self] notification in
+            guard let this = self else {
+                return
+            }
+            guard let moc = notification.object as? NSManagedObjectContext  else {
+                // not merge if two are the same context
+                return
+            }
+            this.delegate?.dataStoreWillSave(this, context: moc)
         })
-        observers.append(center.addObserver(forName: .NSManagedObjectContextObjectsDidChange, object: nil, queue: .main) { [unowned self] _ in
-            self.delegate?.objectsDidChange(dataStore: self)
+        observers.append(center.addObserver(forName: .NSManagedObjectContextObjectsDidChange, object: nil, queue: notificationQueue) { [weak self] notification in
+            guard let this = self else {
+                return
+            }
+            guard let moc = notification.object as? NSManagedObjectContext  else {
+                // not merge if two are the same context
+                return
+            }
+            //notification.userInfo["invalidateAll"]
+            this.delegate?.objectsDidChange(dataStore: this, context: moc)
         })
     }
 
@@ -146,9 +199,16 @@ extension DataStore {
     }
 
     internal func newBackgroundContext() -> NSManagedObjectContext {
-        let backgroundContext = self.persistentContainer.newBackgroundContext()
-        // let backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        // backgroundContext.parent = viewContext
+        // let backgroundContext = self.persistentContainer.newBackgroundContext()
+        let backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        if automaticMerge {
+            backgroundContext.parent = viewContext
+            backgroundContext.automaticallyMergesChangesFromParent = true
+            assert(backgroundContext.persistentStoreCoordinator != nil)
+        }
+        if backgroundContext.persistentStoreCoordinator == nil {
+            backgroundContext.persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
+        }
         return backgroundContext
     }
 
@@ -296,7 +356,7 @@ extension CoreDataStore: DataStore {
             } else {
                 // Normal case
                 self.isLoaded = true
-                self.delegate?.dataStoreDidLoad(dataStore)
+                self.delegate?.dataStoreDidLoad(self)
                 logger.verbose("store loaded: \(storeDescription)")
                 // .success
             }
@@ -390,29 +450,6 @@ extension CoreDataStore: DataStore {
 
 }
 
-fileprivate extension FileManager {
-
-    func removeItemIfExists(atPath path: String) throws {
-        if self.fileExists(atPath: path) {
-            try self.removeItem(atPath: path)
-        }
-    }
-
-    func removeItemIfExists(at url: URL) throws {
-        if self.fileExists(at: url) {
-            try self.removeItem(at: url)
-        }
-    }
-
-    func fileExists(at url: URL) -> Bool {
-        if url.isFileURL {
-            return fileExists(atPath: url.path)
-        }
-        return false
-    }
-
-}
-
 // MARK: Perform Task
 
 extension CoreDataStore {
@@ -471,13 +508,14 @@ extension CoreDataStore {
         }
     }
 
-    func performBackgroundTask(newContext: Bool = false, _ block: @escaping (NSManagedObjectContext) -> Void) {
+    func performBackgroundTask(newContext: Bool = true, _ block: @escaping (NSManagedObjectContext) -> Void) {
         if newContext {
             let context = self.newBackgroundContext()
             context.perform {
                 block(context)
             }
         } else {
+            // /!\if use this code, no parent for context
             self.persistentContainer.performBackgroundTask(block)
         }
     }

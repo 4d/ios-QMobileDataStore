@@ -7,12 +7,12 @@
 //
 
 import Foundation
-
 import XCGLogger
+
 public typealias Level = XCGLogger.Level
 public typealias Logger = XCGLogger
 
-let logger: Logger = Logger.forClass(Record.self)
+let logger: Logger = Logger.forClass(DataStoreFactory.self)
 
 extension Logger {
 

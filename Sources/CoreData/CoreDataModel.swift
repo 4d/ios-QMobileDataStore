@@ -20,8 +20,12 @@ enum CoreDataObjectModel {
         case .merged(let bundles):
             return NSManagedObjectModel.mergedModel(from: bundles)
         case .named(let name, let bundle):
-            return NSManagedObjectModel(contentsOf: bundle.url(forResource: name, withExtension: "momd")!)
-        // If EXC_BAD_INSTRUCTION, model name is not well defined in bundle, check Bundle.dataStoreKey value and Bundle.dataStore
+            if let url = bundle.url(forResource: name, withExtension: "momd") {
+                return NSManagedObjectModel(contentsOf: url)
+            }
+            logger.error("model name is not well defined in bundle, check Bundle.dataStoreKey value and Bundle.dataStore: \(name), \(bundle)")
+            // model name is not well defined in bundle, check Bundle.dataStoreKey value and Bundle.dataStore
+            return nil
         case .url(let url):
             return NSManagedObjectModel(contentsOf: url)
         }

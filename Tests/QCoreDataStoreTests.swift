@@ -13,10 +13,13 @@ import Prephirences
 import Result
 import CoreData
 
+
 class CoreDataStoreTests: XCTestCase {
-    
-    let bundle = Bundle(for: CoreDataStoreTests.self)
-  
+
+    lazy var dataStore: DataStore = {
+        Bundle.dataStore = Bundle(for: ContextTypeTests.self)
+        return DataStoreFactory.dataStore
+    }()
     let timeout: TimeInterval = 10
     
     let table = "Entity"
@@ -31,24 +34,15 @@ class CoreDataStoreTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-   
-        //let modelName = bundle[Bundle.dataStoreKey] as! String
-        //let model = CoreDataObjectModel.named(modelName , bundle)
-        Bundle.dataStore = bundle
-        
-        
-        /*self.dataStore = CoreDataStore(model: model, storeType: .inMemory) // memory do not allow batch update and delete
-        self.dataStore.modelBundle = bundle
-        CoreDataStore.default = self.dataStore*/
-        
-        XCTAssertNotNil(Bundle.dataStoreModelName)
 
         /*guard let dataStore = self.dataStore else {
             XCTFail("No data store to test")
             return
         }*/
-        print("\(dataStore)")
 
+        dataStore.delegate = self
+
+        XCTAssertNotNil( dataStore.tableInfo(for: table))
         let expectation = self.expectation(description: #function)
         dataStore.load { result in
             switch result {
@@ -64,6 +58,7 @@ class CoreDataStoreTests: XCTestCase {
     override func tearDown() {
         let expectation = self.expectation(description: #function)
 
+        dataStore.delegate = nil
         dataStore.drop { result in
             switch result {
             case .success:
@@ -91,23 +86,27 @@ class CoreDataStoreTests: XCTestCase {
     }
 
     func testFieldForTable() {
-        var hasLocalizedField = false
-        if let tableInfo = dataStore.tableInfo(for: table) {
-            let fields = tableInfo.fields
-            XCTAssertFalse(fields.isEmpty)
-            XCTAssertEqual(fields.count, 11)
-            
-            for field in fields {
-                XCTAssertFalse(field.name.isEmpty)
-                XCTAssertFalse(field.type == .undefined)
-                if field.name != field.localizedName {
-                    hasLocalizedField = true
-                }
-            }
-        } else {
+        guard let tableInfo = dataStore.tableInfo(for: table) else {
             XCTFail("No table \(table) in table info")
+            return
+        }
+        let fields = tableInfo.fields
+        XCTAssertFalse(fields.isEmpty)
+        XCTAssertEqual(fields.count, 11)
+
+        var hasLocalizedField = false
+        for field in fields {
+            XCTAssertFalse(field.name.isEmpty)
+            XCTAssertFalse(field.type == .undefined)
+            if field.name != field.localizedName {
+                hasLocalizedField = true
+            }
         }
         XCTAssertTrue(hasLocalizedField, "One field must be localized, see strings file")
+
+        let relations = tableInfo.relationships
+        for _ in relations {
+        }
     }
 
     // MARK: DataStore
@@ -134,14 +133,14 @@ class CoreDataStoreTests: XCTestCase {
             expectation.fulfill()
         }
 
-        dataStore.save { result in
+        dataStore.save { [unowned self] result in
             switch result {
             case .success:
                 print("success ok. wait for event")
             case .failure(let error):
                 XCTFail("\(error)")
             }
-            dataStore.unobserve(obs)
+            self.dataStore.unobserve(obs)
         }
         
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
@@ -149,11 +148,13 @@ class CoreDataStoreTests: XCTestCase {
     
     
     // MARK: NSManagedObjectContext
-    func testGetAndCreateContext() {
+    func testGetAndCreateDefaultContext() {
         let _ = NSManagedObjectContext.default
+    }
+    // MARK: NSManagedObjectContext
+    func testGetAndCreateBackgroundContext() {
         let _ = NSManagedObjectContext.newBackgroundContext()
     }
-    
     
     // MARK: Entity
     func testEntityCreate() {
@@ -174,6 +175,12 @@ class CoreDataStoreTests: XCTestCase {
                 
                 
                 XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
+
+                let getObject = try! context.get(in: self.table, matching : record.predicate)
+                XCTAssertNotNil(getObject)
+                XCTAssertFalse(getObject!.isEmpty)
+
+                XCTAssertEqual(record.store.objectID, getObject!.first!.store.objectID)
                 
                 // unknown attribute will throw assert
                 // let _ = record["attribute \(UUID().uuidString)"]
@@ -193,6 +200,44 @@ class CoreDataStoreTests: XCTestCase {
             let record = context.create(in: "\(self.table)\(UUID().uuidString)")
             XCTAssertNil(record)
             expectation.fulfill()
+        }
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+
+    func testEntityCreateAndCheckViewContext() {
+        let expectation = self.expectation(description: #function)
+
+        let _ = dataStore.perform(contextType) { context in
+
+            if let record = context.create(in: self.table) {
+                do {
+                    try record.validateForInsert()
+                } catch {
+                    XCTFail("Entity not valid to insert \(error) in data store")
+                }
+                let _ = record["attribute"]
+
+                record["attribute"] = 10
+                XCTAssertEqual(record["attribute"] as? Int, 10)
+
+                XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
+
+                _ = self.dataStore.perform(.foreground, wait: true) { viewContext in
+                    XCTAssertFalse(try! viewContext.has(in: self.table, matching : record.predicate), "Must not be yet in viewContext, commit needed")
+                }
+
+                context.commit { result in
+
+                    XCTAssertNotEqual(DataStoreContextType.foreground, self.contextType, "testing on view context, the following test is now useless")
+                    _ = self.dataStore.perform(.foreground, wait: true) { viewContext in
+                        XCTAssertTrue(try! viewContext.has(in: self.table, matching : record.predicate), "record must has been transfered to view context")
+                        expectation.fulfill()
+                    }
+                }
+
+            } else {
+                XCTFail("Cannot create entity")
+            }
         }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
@@ -317,21 +362,77 @@ class CoreDataStoreTests: XCTestCase {
         
         let _ = dataStore.perform(contextType) { context in
             
-            if let record = context.create(in: self.table) {
-                
-                XCTAssertTrue(try! context.has(in: self.table, matching : record.predicate))
-                
-                try? context.commit()
-                
-                let result  = try! context.delete(in: self.table, matching: record.predicate)
-                XCTAssertTrue(result>0, "not deleted")
-                
+            guard let record = context.create(in: self.table) else {
+                XCTFail("Cannot create entity")
+                return
+            }
+            XCTAssertTrue((try? context.has(in: self.table, matching : record.predicate)) ?? false)
+
+            context.commit { result in
+                if case let.failure(error) = result {
+                    XCTFail("failed to commit \(error)")
+                }
+                context.refreshAllRecords()
+                XCTAssertTrue((try? context.has(in: self.table, matching : record.predicate)) ?? false, "no more in context after commit")
+
+                context.refreshAllRecords()
+
+                let result: Int  = (try? context.delete(in: self.table, matching: record.predicateForBatch)) ?? 0
+                XCTAssertTrue(result>0, "no record deleted")
+
+                context.refreshAllRecords()
                 // check no more in context
                 XCTAssertFalse(try! context.has(in: self.table, matching : record.predicate))
-            } else {
-                XCTFail("Cannot create entity")
+
+                expectation.fulfill()
             }
-            expectation.fulfill()
+
+        }
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
+    }
+
+    func testEntityDeleteAll() {
+        let expectation = self.expectation(description: #function)
+
+        let _ = dataStore.perform(contextType) { context in
+
+            guard let record = context.create(in: self.table) else {
+                XCTFail("Cannot create entity")
+                return
+            }
+            guard let record2 = context.create(in: self.table) else {
+                XCTFail("Cannot create entity 2")
+                return
+            }
+            XCTAssertTrue((try? context.has(in: self.table, matching : record.predicate)) ?? false, "\(record.store.objectID)")
+            XCTAssertTrue((try? context.has(in: self.table, matching : record2.predicate)) ?? false, "\(record.store.objectID)")
+
+            XCTAssertTrue(record.isInserted)
+            XCTAssertFalse(record.isDeleted)
+
+            context.commit { result in
+                if case let.failure(error) = result {
+                    XCTFail("failed to commit \(error)")
+                }
+                XCTAssertTrue((try? context.has(in: self.table, matching : record.predicate)) ?? false, "no more in context after commit")
+                XCTAssertTrue((try? context.has(in: self.table, matching : record2.predicate)) ?? false, "no more in context after commit")
+
+                XCTAssertTrue((try? context.count(in: self.table) > 1) ?? false, "no enought record")
+
+                let result: Int  = (try? context.delete(in: self.table)) ?? 0
+                XCTAssertTrue(result>0, "no record deleted")
+
+                XCTAssertFalse(record.isInserted)
+                XCTAssertTrue(record.isDeleted)
+
+                // check no more in context
+                XCTAssertFalse(try! context.has(in: self.table, matching : record.predicate), "\(record.store.objectID)")
+                XCTAssertFalse(try! context.has(in: self.table, matching : record2.predicate), "\(record.store.objectID)")
+
+
+                expectation.fulfill()
+            }
+
         }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
@@ -388,8 +489,13 @@ class CoreDataStoreTests: XCTestCase {
     // MARK: FetchController
     func testFetchController() {
         let expectation = self.expectation(description: #function)
-        
-        let controller = dataStore.fetchedResultsController(tableName: self.table, sortDescriptors: nil)
+
+        guard let tableInfo = dataStore.tableInfo(for: table), let fieldInfo = tableInfo.fields.first else {
+            XCTAssertNil("Unable to get table info \(table) and first field info")
+            return
+        }
+        let sortDescriptor: NSSortDescriptor = fieldInfo.sortDescriptor
+        let controller = dataStore.fetchedResultsController(tableName: self.table, sortDescriptors: [sortDescriptor])
         XCTAssertEqual(controller.tableName, self.table)
         XCTAssertNil(controller.sectionNameKeyPath)
         
@@ -400,9 +506,9 @@ class CoreDataStoreTests: XCTestCase {
         
         let records = controller.fetchedRecords
         XCTAssertNotNil(records)
-        XCTAssertEqual(numberOfRecords, records!.count)
+        XCTAssertEqual(numberOfRecords, records?.count ?? 0)
         
-        for record in records! {
+        for record in records ?? [] {
             let indexPath = controller.indexPath(for: record)
             XCTAssertNotNil(indexPath)
             let r = controller.record(at: indexPath!)
@@ -435,8 +541,7 @@ class CoreDataStoreTests: XCTestCase {
                     
                     XCTAssertTrue(controller.inBounds(indexPath: indexPath!))
                 }
-                
-                
+
                 let numberOfSections = controller.numberOfSections
                 for section in 0..<numberOfSections {
                     let number = controller.numberOfRecords(in: section)
@@ -452,4 +557,44 @@ class CoreDataStoreTests: XCTestCase {
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
 
+}
+
+extension CoreDataStoreTests: DataStoreDelegate {
+
+    func dataStoreWillSave(_ dataStore: DataStore, context: DataStoreContext) {
+        logger.debug("Data store will save: context \(context.type)")
+        if !context.insertedRecords.isEmpty {
+            logger.debug("insertedRecords: \(context.insertedRecords)")
+        }
+        if !context.updatedRecords.isEmpty {
+            logger.debug("context.updatedRecords: \(context.updatedRecords)")
+        }
+        if !context.deletedRecords.isEmpty {
+            logger.debug("deletedRecords: \(context.deletedRecords)")
+        }
+    }
+    func dataStoreDidSave(_ dataStore: DataStore, context: DataStoreContext) {
+        logger.debug("Data store did save: context \(context.type)")
+
+    }
+    func objectsDidChange(dataStore: DataStore, context: DataStoreContext) {
+
+    }
+    func dataStoreWillLoad(_ dataStore: DataStore) {
+
+    }
+    func dataStoreDidLoad(_ dataStore: DataStore) {
+
+    }
+    func dataStoreAlreadyLoaded(_ dataStore: DataStore) {
+
+    }
+
+    func dataStoreWillMerge(_ dataStore: DataStore, context: DataStoreContext, with: DataStoreContext) {
+
+    }
+
+    func dataStoreDidMerge(_ dataStore: DataStore, context: DataStoreContext, with: DataStoreContext) {
+
+    }
 }

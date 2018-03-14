@@ -10,9 +10,11 @@ import XCTest
 @testable import QMobileDataStore
 
 class MetaDataTests: XCTestCase {
-    
-    let bundle = Bundle(for: CoreDataStoreTests.self)
-    
+
+    lazy var dataStore: DataStore = {
+        Bundle.dataStore = Bundle(for: MetaDataTests.self)
+        return DataStoreFactory.dataStore
+    }()
     let timeout: TimeInterval = 10
     
     let table = "Entity"
@@ -27,13 +29,9 @@ class MetaDataTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        
-        Bundle.dataStore = bundle
 
         XCTAssertNotNil(Bundle.dataStoreModelName)
 
-        print("\(dataStore)")
-        
         let expectation = self.expectation(description: #function)
         dataStore.load { result in
             switch result {

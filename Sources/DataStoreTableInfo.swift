@@ -8,84 +8,39 @@
 
 import Foundation
 
+/// Information about a table structure in data store.
 public protocol DataStoreTableInfo {
+    /// The table name.
     var name: String {get}
+    /// The localized name if any.
     var localizedName: String {get}
+    /// Is table abstract ie. could not instanciante a concrete type.
     var isAbstract: Bool {get}
+    /// List of fields.
     var fields: [DataStoreFieldInfo] {get}
+    /// List of fields indexed by name.
     var fieldsByName: [String: DataStoreFieldInfo] { get }
+    /// List of relations.
     var relationships: [DataStoreRelationInfo] { get }
+    /// List of relations indexed by name.
     var relationshipsByName: [String: DataStoreRelationInfo] { get }
+    /// Get the relations with passed table.
+    /// @param table : the table in relation with the current one.
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo]
+    /// Custom user information
     var userInfo: [AnyHashable: Any]? { get }
 }
 
-public enum DataStoreFieldType: String {
-    case boolean
-    case string
-    case date
-    case float
-    case decimal
-    case double
-    case binary
-    case integer16
-    case integer32
-    case integer64
-    case transformable
-    case undefined
-    case objectID
-}
-
-public protocol DataStoreFieldInfo {
-    var name: String {get}
-    var localizedName: String {get}
-    var type: DataStoreFieldType {get}
-    var isOptional: Bool {get}
-    var userInfo: [AnyHashable: Any]? {get}
-    var table: DataStoreTableInfo {mutating get}
-    var validationPredicates: [NSPredicate] { get }
-}
-
-let knameTransformer = "nameTransformer"
-
-extension DataStoreFieldInfo {
-    public var isMandatory: Bool {
-        return !isOptional
-    }
-
-    /*public var nameTransformer: String? {
-        return self.userInfo?[knameTransformer] as? String
-    }*/
-}
-
-public protocol DataStoreRelationInfo {
-    var name: String {get}
-
-    var destinationTable: DataStoreTableInfo? { get }
-    var inverseRelationship: DataStoreRelationInfo? { get }
-    var maxCount: Int { get }
-    var minCount: Int { get }
-    var deleteRule: DeleteRule { get }
-    var isToMany: Bool { get }
-    var isOrdered: Bool { get }
-    var isOptional: Bool {get}
-    var userInfo: [AnyHashable: Any]? {get}
-
-}
-public enum DeleteRule: UInt {
-    case noAction
-    case nullify
-    case cascade
-    case deny
-}
-
-// MARK: DataStoreContext extension
 extension DataStoreContext {
 
+    // MARK: Operation using `DataStoreTableInfo`
+
+    /// Create a new record and add it to data store.
     public func create(in table: DataStoreTableInfo) -> Record? {
         return create(in: table.name)
     }
 
+    /// Create a new record if there is no record that match the predicate, otherwise return the first one that match.
     public func getOrCreate(in table: DataStoreTableInfo, matching predicate: NSPredicate) throws -> Record? {
         return try getOrCreate(in: table.name, matching: predicate)
     }
@@ -115,4 +70,8 @@ extension DataStoreContext {
         return try delete(in: table.name)
     }
 
+    /// Count element in table
+    public func count(in table: DataStoreTableInfo) throws -> Int {
+        return try count(in: table.name)
+    }
 }

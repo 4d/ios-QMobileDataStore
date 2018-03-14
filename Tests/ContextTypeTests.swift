@@ -12,7 +12,10 @@ import XCTest
 class ContextTypeTests: XCTestCase {
     
     let timeout: TimeInterval = 10
-    let bundle = Bundle(for: ContextTypeTests.self)
+    lazy var dataStore: DataStore = {
+        Bundle.dataStore = Bundle(for: ContextTypeTests.self)
+        return DataStoreFactory.dataStore
+    }()
     
     let waitHandler: XCWaitCompletionHandler = { error in
         if let error = error {
@@ -22,7 +25,6 @@ class ContextTypeTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        Bundle.dataStore = bundle
     
         let expectation = self.expectation(description: #function)
         dataStore.load { result in
@@ -61,8 +63,10 @@ class ContextTypeTests: XCTestCase {
         let result = dataStore.perform(.background) { context in
             
             XCTAssertEqual(context.type, .background)
-            XCTAssertNil(context.parentContext) // Not really a test, background has no parent until we decide change it, like at foreground context has parent
-            
+            //if dataStore.automaticMerge {
+                XCTAssertNotNil(context.parentContext) // in automaticMerge, a parent needed
+           // }
+
             expectation.fulfill()
         }
         if result {

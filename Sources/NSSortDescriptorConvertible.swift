@@ -10,14 +10,19 @@ import Foundation
 
 public protocol NSSortDescriptorConvertible {
 
-    var sortDescriptor: NSSortDescriptor? { get }
+    var sortDescriptor: NSSortDescriptor { get }
+    func sortDescriptor(ascending: Bool) -> NSSortDescriptor
 
 }
 
-public extension NSSortDescriptor {
+extension NSSortDescriptor: NSSortDescriptorConvertible {
 
-    var sortDescriptor: NSSortDescriptor? {
+    public var sortDescriptor: NSSortDescriptor {
         return self
+    }
+
+    public func sortDescriptor(ascending: Bool) -> NSSortDescriptor {
+        return NSSortDescriptor(key: self.key, ascending: ascending, comparator: comparator)
     }
 
 }

@@ -13,9 +13,7 @@ import Result
 
 public typealias RecordBase = NSManagedObject
 
-extension NSManagedObject: DataStoreRecord {
-
-}
+extension NSManagedObject: DataStoreRecord {}
 
 public extension NSManagedObjectContext {
 

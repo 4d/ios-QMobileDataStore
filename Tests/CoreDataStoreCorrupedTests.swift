@@ -16,9 +16,11 @@ import Result
 import CoreData
 
 class CoreDataStoreCorrupedTests: XCTestCase {
-    
-    let bundle = Bundle(for: CoreDataStoreCorrupedTests.self)
-    
+
+    lazy var dataStore: DataStore = {
+        Bundle.dataStore = Bundle(for: CoreDataStoreCorrupedTests.self)
+        return DataStoreFactory.dataStore
+    }()
     let timeout: TimeInterval = 10
     
     let table = "Entity"
@@ -31,7 +33,6 @@ class CoreDataStoreCorrupedTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        Bundle.dataStore = bundle
         XCTAssertNotNil(Bundle.dataStoreModelName)
         print("\(dataStore)")
     }

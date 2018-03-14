@@ -35,7 +35,7 @@ extension NSManagedObjectContext: DataStoreContext {
         request.resultType = .managedObjectResultType
         request.fetchLimit = 1
 
-        guard let fetchedObjects = try self.fetch(request) as? [Record] else {
+        guard let fetchedObjects = try self.fetch(request) as? [RecordBase] else {
             return create(in: table)
         }
         guard let first = fetchedObjects.first else {
@@ -43,7 +43,7 @@ extension NSManagedObjectContext: DataStoreContext {
         }
         assert(fetchedObjects.count == 1, "There is more thant one records in table \(table) matching predicate \(predicate)")
 
-        return first
+        return Record(store: first)
     }
 
     public func has(in table: String, matching predicate: NSPredicate) throws -> Bool {
@@ -65,10 +65,10 @@ extension NSManagedObjectContext: DataStoreContext {
         request.resultType = .managedObjectResultType
         // request.returnsObjectsAsFaults = false
 
-        guard let fetchedObjects = try self.fetch(request) as? [Record] else {
+        guard let fetchedObjects = try self.fetch(request) as? [RecordBase] else {
             return nil
         }
-        return fetchedObjects
+        return fetchedObjects.map {Record(store: $0)}
     }
 
     public func insert(in table: String, values: [String: Any]) -> Record? {
@@ -113,12 +113,21 @@ extension NSManagedObjectContext: DataStoreContext {
     }
 
     public func delete(in table: String, matching predicate: NSPredicate? = nil) throws -> Int {
-        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: table)
-        fetch.predicate = predicate
-        let request = NSBatchDeleteRequest(fetchRequest: fetch)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: table)
+        fetchRequest.predicate = predicate
 
+        // Use simple fetch to get all object. Batch delete is more optimized but test doesn't work
+        fetchRequest.includesPropertyValues = false
+        guard let fetchedObjects = try self.fetch(fetchRequest) as? [RecordBase] else {
+            return -1
+        }
+        for object in fetchedObjects {
+            self.delete(object)
+        }
+        return fetchedObjects.count
+
+        /*let request = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         // If we want a list of deleted objects.
-
         request.resultType = .resultTypeObjectIDs
         guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? [NSManagedObjectID] else {
             return -1
@@ -126,7 +135,7 @@ extension NSManagedObjectContext: DataStoreContext {
         let changes = [NSDeletedObjectsKey: result]
         NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
 
-        return result.count
+        return result.count*/
 
         // If we want status
         /*
