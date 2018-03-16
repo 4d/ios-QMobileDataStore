@@ -76,6 +76,7 @@ public protocol FetchedResultsController {
     func numberOfRecords(in section: SectionIndex) -> Int
     func sectionName(_ section: SectionIndex) -> String?
     var sectionNames: [String]? { get }
+    func section(forSectionIndexTitle title: String, at index: Int) -> Int
     func record(in section: FetchedResultsController.SectionIndex) -> [Record]?
 
 }

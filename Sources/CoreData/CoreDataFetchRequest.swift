@@ -83,7 +83,11 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
         coreDataStore = dataStore
 
         let context = context as? NSManagedObjectContext ?? dataStore.viewContext
-        self.fetchedResultsController = NSFetchedResultsController<RecordBase>(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: sectionNameKeyPath, cacheName: nil)
+        self.fetchedResultsController = NSFetchedResultsController<RecordBase>(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: sectionNameKeyPath,
+            cacheName: nil)
 
         super.init()
 
@@ -194,7 +198,10 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
 
     func sectionName(_ section: FetchedResultsController.SectionIndex) -> String? {
         assert(section >= 0)
-        return self.fetchedResultsController.sections?[section].name ?? nil
+        return self.fetchedResultsController.sections?[section].name
+    }
+    func section(forSectionIndexTitle title: String, at index: Int) -> Int {
+        return self.fetchedResultsController.section(forSectionIndexTitle: title, at: index)
     }
 
     func record(in section: FetchedResultsController.SectionIndex) -> [Record]? {
