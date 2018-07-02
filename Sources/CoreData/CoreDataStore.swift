@@ -43,7 +43,7 @@ import XCGLogger
     var shouldMigrateStoreAutomatically = true
     var shouldInferMappingModelAutomatically = true
 
-    var automaticMerge = true
+    let automaticMerge = true // /!\ do not change without testing
 
     var dropIfMigrationFailed: Bool = true
 
@@ -69,11 +69,6 @@ import XCGLogger
 
         super.init()
 
-        // calling viewContext will create the persistance coordinator. Be sure to have defined all need information.
-        if automaticMerge {
-            // viewContext.automaticallyMergesChangesFromParent = true
-        }
-
         initObservers()
     }
 
@@ -89,21 +84,22 @@ import XCGLogger
                 // not merge if two are the same context
                 return
             }
-            this.delegate?.dataStoreDidSave(this, context: moc)
+            this.delegate?.dataStoreDidSave(this, context: moc) // XXX maybe move code if only for viewContext
 
             /*
              let inserted = notification[.inserted]
              let updated = notification[.updated]
              let deleted = notification[.deleted]
              */
-
-            if !this.automaticMerge {
-
-                let viewContext = this.viewContext
-                guard moc != viewContext  else {
-                    // not merge if two are the same context
-                    return
-                }
+            let viewContext = this.viewContext
+            guard moc != viewContext  else {
+                // not merge if two are the same context
+                return
+            }
+            if this.automaticMerge {
+                this.save()
+                // moc.mergeChanges(fromContextDidSave: notification) // just to study bug
+            } else {
 
                 viewContext.perform {
                     // notify observer before merging
@@ -133,8 +129,6 @@ import XCGLogger
                      let updatedRecordsAfterSave = viewContext.updatedRecords
                      let registeredObjectsAfterSave = viewContext.registeredRecords*/
                 }
-            } else {
-                // moc.mergeChanges(fromContextDidSave: notification) // just to study bug
             }
         })
         observers.append(center.addObserver(forName: .NSManagedObjectContextWillSave, object: nil, queue: notificationQueue) { [weak self] notification in
