@@ -119,15 +119,18 @@ import XCGLogger
                      let updatedRecordsAfter = viewContext.updatedRecords
                      let registeredObjectsAfter = viewContext.registeredRecords*/
 
-                    // notify observer after merging
-                    this.delegate?.dataStoreDidMerge(this, context: viewContext, with: moc)
-                    Notification(name: .dataStoreDidMerge, userInfo: notification.userInfo).post(.dataStore)
-
                     // save
                     this.save() // XXX will save viewContext if change
                     /*let insertedRecordsAfterSave = viewContext.insertedRecords
                      let updatedRecordsAfterSave = viewContext.updatedRecords
                      let registeredObjectsAfterSave = viewContext.registeredRecords*/
+
+                    // notify observer after merging
+                    this.delegate?.dataStoreDidMerge(this, context: viewContext, with: moc)
+                    Notification(name: .dataStoreDidMerge, userInfo: notification.userInfo).post(.dataStore)
+                    // notify observer after merging
+                    this.delegate?.dataStoreDidMerge(this, context: viewContext, with: moc)
+                    Notification(name: .dataStoreDidMerge, userInfo: notification.userInfo).post(.dataStore)
                 }
             }
         })
