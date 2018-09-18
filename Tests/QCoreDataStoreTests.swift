@@ -25,6 +25,7 @@ class CoreDataStoreTests: XCTestCase {
     var onMerge: ((_ dataStore: DataStore, _ context: DataStoreContext, _ with: DataStoreContext) -> Void)? = nil
     
     let table = "Entity"
+    let testqueue = DispatchQueue(label: "test.queue")
 
     let waitHandler: XCWaitCompletionHandler = { error in
         if let error = error {
@@ -130,7 +131,7 @@ class CoreDataStoreTests: XCTestCase {
     func testDataStoreSaveNotif() {
         let expectation = self.expectation(description: #function)
         let testQueue = OperationQueue()
-        testQueue.underlyingQueue = DispatchQueue(label: "test.queue")
+        testQueue.underlyingQueue = testqueue
         let obs = dataStore.observe(.dataStoreSaved, queue: testQueue) { notif in
             expectation.fulfill()
         }

@@ -11,7 +11,7 @@ import CoreData
 
 extension NSPersistentStore {
 
-    open static var defaultURL: URL {
+    public static var defaultURL: URL {
         return URL(fileURLWithPath: "/dev/null")
     }
 

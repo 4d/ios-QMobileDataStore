@@ -33,9 +33,9 @@ import XCGLogger
     static var `default` = CoreDataStore()
 
     /// The model name
-    open let model: CoreDataObjectModel
+    public let model: CoreDataObjectModel
     /// The model store type
-    open let storeType: StoreType
+    public let storeType: StoreType
 
     // private not documented, see persistence store description fields
     var isReadOnly = false
