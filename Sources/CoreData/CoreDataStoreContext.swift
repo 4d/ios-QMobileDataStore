@@ -195,7 +195,7 @@ extension NSManagedObjectContext: DataStoreContext {
 
     /// Perform an operation on context queue and wait
     public func perform(wait: Bool, _ block: @escaping () -> Void) {
-        if wait && !DispatchQueue.isManagedObjectContext {
+        if wait {
             self.performAndWait(block)
         } else {
             self.perform(block)
@@ -333,7 +333,6 @@ extension DispatchQueue {
 
     class var isManagedObjectContext: Bool {
         let label = DispatchQueue.currentLabel
-        print("\(label)")
         return label.contains("NSManagedObjectContext")
     }
 }
