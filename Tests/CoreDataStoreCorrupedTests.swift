@@ -33,6 +33,7 @@ class CoreDataStoreCorrupedTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        assert(dataStore.delegate == nil) // launch setup of lazy var
         XCTAssertNotNil(Bundle.dataStoreModelName)
         print("\(dataStore)")
     }

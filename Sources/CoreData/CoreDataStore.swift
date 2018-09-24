@@ -168,7 +168,18 @@ import XCGLogger
     }
 
     // MARK: computed variables
-    fileprivate lazy var persistentContainer: NSPersistentContainer = {
+
+    fileprivate var _persistentContainer: NSPersistentContainer?
+    fileprivate var persistentContainer: NSPersistentContainer {
+        if let persistentContainer = _persistentContainer {
+            return persistentContainer
+        }
+        let value = setupContainer()
+        _persistentContainer = value
+        return value
+    }
+
+    private func setupContainer() -> NSPersistentContainer {
         let modelName = self.model.name()
         guard let managedObjectModel = self.model.model() else {
             return NSPersistentContainer(name: modelName)
@@ -179,9 +190,11 @@ import XCGLogger
 
         container.persistentStoreDescriptions = [description]
         logger.verbose("\(container.persistentStoreDescriptions)")
-
         return container
-    }()
+    }
+    private func unsetupContainer() {
+        _persistentContainer = nil
+    }
 
     fileprivate var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         return persistentContainer.persistentStoreCoordinator
@@ -404,6 +417,7 @@ extension CoreDataStore: DataStore {
                     } catch {
                         result = .failure(DataStoreError(error))
                     }
+                    unsetupContainer()
                     Notification(name: .dataStoreDropped, object: result).post(.dataStore)
                     completionHandler?(result)
                     return
@@ -415,6 +429,8 @@ extension CoreDataStore: DataStore {
                     return
                 }
 
+                self.unsetupContainer()
+
                 // get the store url
                 guard let storeURL = store.url, storeURL.isFileURL else {
                     Notification(name: .dataStoreDropped, object: result, userInfo: ["noFile": true]).post(.dataStore)
@@ -424,10 +440,13 @@ extension CoreDataStore: DataStore {
 
                 do {
                     // self.persistentStoreCoordinator.remove(store)
-                    try self.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: self.storeType.type, options: store.options)
+                    if persistentStoreCoordinator.persistentStores.first?.url != nil {
+                        print("Missing first store URL - could not destroy")
+                        try self.persistentStoreCoordinator.destroyPersistentStore(at: storeURL, ofType: self.storeType.type, options: store.options)
+                    }
+
                     // remove the files
                     try self.drop(storeURL: storeURL)
-
                 } catch {
                     result = .failure(DataStoreError(error))
                 }

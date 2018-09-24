@@ -306,11 +306,7 @@ class CoreDataStoreTests: XCTestCase {
         }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
-    
-    
-    
 
-    
     func testEntityDelete() {
         let expectation = self.expectation(description: #function)
         
@@ -456,10 +452,7 @@ class CoreDataStoreTests: XCTestCase {
             
             let count: Int = try! context.count(for: fetchRequest)
             if let _ = context.create(in: self.table) {
-
                 XCTAssertEqual(try? context.count(for: fetchRequest), count + 1)
-                
-                
             } else {
                 XCTFail("Cannot create entity")
             }
@@ -496,7 +489,7 @@ class CoreDataStoreTests: XCTestCase {
 
     
     // MARK: FetchController
-    func testFetchController() {
+    func _testFetchController() {
         let expectation = self.expectation(description: #function)
 
         guard let tableInfo = dataStore.tableInfo(for: table), let fieldInfo = tableInfo.fields.first else {

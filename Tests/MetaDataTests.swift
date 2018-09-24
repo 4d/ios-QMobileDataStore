@@ -29,7 +29,7 @@ class MetaDataTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-
+        assert(dataStore.delegate == nil) // launch setup of lazy var
         XCTAssertNotNil(Bundle.dataStoreModelName)
 
         let expectation = self.expectation(description: #function)
