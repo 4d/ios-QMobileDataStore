@@ -121,7 +121,7 @@ extension NSManagedObjectContext: DataStoreContext {
         guard let fetchedObjects = try self.fetch(fetchRequest) as? [RecordBase] else {
             return -1
         }
-        for object in fetchedObjects {
+        for object in fetchedObjects where !object.isDeleted {
             self.delete(object)
         }
         return fetchedObjects.count
@@ -195,7 +195,7 @@ extension NSManagedObjectContext: DataStoreContext {
 
     /// Perform an operation on context queue and wait
     public func perform(wait: Bool, _ block: @escaping () -> Void) {
-        if wait {
+        if wait && !DispatchQueue.isManagedObjectContext {
             self.performAndWait(block)
         } else {
             self.perform(block)
@@ -323,5 +323,17 @@ extension DataStoreContextType {
         case .background:
             return .privateQueueConcurrencyType
         }
+    }
+}
+
+extension DispatchQueue {
+    class var currentLabel: String {
+        return String(validatingUTF8: __dispatch_queue_get_label(nil)) ?? ""
+    }
+
+    class var isManagedObjectContext: Bool {
+        let label = DispatchQueue.currentLabel
+        print("\(label)")
+        return label.contains("NSManagedObjectContext")
     }
 }
