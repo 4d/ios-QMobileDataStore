@@ -14,6 +14,10 @@ extension Notification {
         center.post(self)
     }
 
+    public var error: Error? {
+        return userInfo?[NSUnderlyingErrorKey] as? Error
+    }
+
 }
 
 extension NotificationCenter {
