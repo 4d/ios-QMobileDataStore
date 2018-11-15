@@ -56,12 +56,26 @@ public enum DataStoreFieldType: String {
     case objectID
 }
 
+extension DataStoreFieldType {
+
+    public var isSortable: Bool {
+        switch self {
+        case .undefined, .binary, .transformable:
+            return false
+        default:
+            return true
+        }
+    }
+}
+
 extension DataStoreFieldInfo {
     // MARK: NSSortDescriptorConvertible
     public var sortDescriptor: NSSortDescriptor {
+        assert(type.isSortable)
         return NSSortDescriptor(key: self.name, ascending: true)
     }
-    public func sortDescriptor(ascending: Bool) -> NSSortDescriptor {
+    public func sortDescriptor(ascending: Bool = true) -> NSSortDescriptor {
+        assert(type.isSortable)
         return NSSortDescriptor(key: self.name, ascending: ascending)
     }
 }
