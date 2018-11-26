@@ -25,6 +25,12 @@ extension NotificationCenter {
     /// Notification center used by data store. Default is `.default`
     public static var dataStore: NotificationCenter = NotificationCenter.default
 
+    /// Add observer for multiple names.
+    open func addObservers(_ observer: Any, selector aSelector: Selector, names aNames: [NSNotification.Name], object anObject: Any?) {
+        for name in aNames {
+            addObserver(observer, selector: aSelector, name: name, object: anObject)
+        }
+    }
 }
 
 extension Notification {

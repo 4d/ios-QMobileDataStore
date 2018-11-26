@@ -49,6 +49,7 @@ extension FetchRequest {
 public protocol FetchedResultsController {
 
     var fetchRequest: FetchRequest { get }
+
     var delegate: FetchedResultsControllerDelegate? { get set }
 
     var dataStore: DataStore { get }
