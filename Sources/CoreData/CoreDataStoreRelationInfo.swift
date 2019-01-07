@@ -16,6 +16,10 @@ class CoreDataStoreRelationInfo: DataStoreRelationInfo {
         self.relation = relation
     }
 
+    lazy var table: DataStoreTableInfo = {
+        return CoreDataStoreTableInfo(entity: self.relation.entity)
+    }()
+
     lazy var destinationTable: DataStoreTableInfo? = {
         guard let table = self.relation.destinationEntity else {
             return nil

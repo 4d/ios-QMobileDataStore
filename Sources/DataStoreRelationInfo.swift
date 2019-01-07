@@ -9,9 +9,7 @@
 import Foundation
 
 /// A description of the relationships of a record.
-public protocol DataStoreRelationInfo {
-    /// Relation name.
-    var name: String {get}
+public protocol DataStoreRelationInfo: DataStorePropertyInfo {
 
     /// The Table description of the receiver's destination.
     var destinationTable: DataStoreTableInfo? { get }
@@ -29,8 +27,6 @@ public protocol DataStoreRelationInfo {
     var isOrdered: Bool { get }
     /// Returns a Boolean value that indicates whether the relation is optional and can be persisted with nil.
     var isOptional: Bool {get}
-    /// Some additional info that could be added to the relation.
-    var userInfo: [AnyHashable: Any]? {get}
 
 }
 

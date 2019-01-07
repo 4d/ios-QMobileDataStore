@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */; };
 		48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */; };
+		481B0EC621E34E06005B4B4D /* DataStorePropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481B0EC521E34E06005B4B4D /* DataStorePropertyInfo.swift */; };
 		481EDC931F4C7FCB00E97960 /* DataStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */; };
 		481EDC951F4C7FE300E97960 /* DataStoreMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */; };
 		481EDC971F4C7FF900E97960 /* DataStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC961F4C7FF900E97960 /* DataStoreError.swift */; };
@@ -69,6 +70,7 @@
 /* Begin PBXFileReference section */
 		480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreCorrupedTests.swift; sourceTree = "<group>"; };
 		48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSPredicateTests.swift; sourceTree = "<group>"; };
+		481B0EC521E34E06005B4B4D /* DataStorePropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorePropertyInfo.swift; sourceTree = "<group>"; };
 		481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreDelegate.swift; sourceTree = "<group>"; };
 		481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreMetadata.swift; sourceTree = "<group>"; };
 		481EDC961F4C7FF900E97960 /* DataStoreError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreError.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				48D584451E783025006F56B5 /* DataStoreRecord.swift */,
 				482485101E7A7C5400DA5390 /* DataStoreContext.swift */,
 				48A1C4F21F4F37AF0041531F /* DataStoreTableInfo.swift */,
+				481B0EC521E34E06005B4B4D /* DataStorePropertyInfo.swift */,
 				48FA393520592AB600A5E992 /* DataStoreFieldInfo.swift */,
 				48FA393320592A9700A5E992 /* DataStoreRelationInfo.swift */,
 				481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */,
@@ -508,6 +511,7 @@
 				481EDC931F4C7FCB00E97960 /* DataStoreDelegate.swift in Sources */,
 				481EDC971F4C7FF900E97960 /* DataStoreError.swift in Sources */,
 				48FA393820592D4B00A5E992 /* CoreDataStoreRelationInfo.swift in Sources */,
+				481B0EC621E34E06005B4B4D /* DataStorePropertyInfo.swift in Sources */,
 				485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */,
 				485CCDA71E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift in Sources */,
 				48D584491E783025006F56B5 /* DataStore.swift in Sources */,

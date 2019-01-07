@@ -9,19 +9,13 @@
 import Foundation
 
 /// Information about a field.
-public protocol DataStoreFieldInfo: NSSortDescriptorConvertible {
-    /// The field name.
-    var name: String {get}
+public protocol DataStoreFieldInfo: DataStorePropertyInfo, NSSortDescriptorConvertible {
+
     /// The localized name if any.
     var localizedName: String {get}
     /// The type.
     var type: DataStoreFieldType {get}
-    /// If optional, value could be empty or nil
-    var isOptional: Bool {get}
-    /// Custom user information
-    var userInfo: [AnyHashable: Any]? {get}
-    /// The parent table.
-    var table: DataStoreTableInfo {mutating get}
+
     /// Some predicate used to validate the value.
     var validationPredicates: [NSPredicate] { get }
 }

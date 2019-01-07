@@ -40,6 +40,30 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         return Dictionary(self.entity.relationshipsByName.map {  ($0, CoreDataStoreRelationInfo(relation: $1)) })
     }()
 
+    lazy var properties: [DataStorePropertyInfo] = {
+        return self.entity.properties.compactMap { property -> DataStorePropertyInfo? in
+            if let relationship = property as? NSRelationshipDescription {
+                return CoreDataStoreRelationInfo(relation: relationship)
+            } else if let attribute = property as? NSAttributeDescription {
+                return CoreDataStoreFieldInfo(attribute: attribute)
+            }
+            // + could add other type of properties here (core data is fetched one
+            return nil
+        }
+    }()
+
+    lazy var propertiesByName: [String: DataStorePropertyInfo] = {
+        return Dictionary(self.entity.propertiesByName.compactMap { name, property -> (String, DataStorePropertyInfo)? in
+            if let relationship = property as? NSRelationshipDescription {
+                return (name, CoreDataStoreRelationInfo(relation: relationship))
+            } else if let attribute = property as? NSAttributeDescription {
+                return (name, CoreDataStoreFieldInfo(attribute: attribute))
+            }
+            // + could add other type of properties here (core data is fetched one
+            return nil
+        })
+    }()
+
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo] {
         guard let table = table as? CoreDataStoreTableInfo else {
             assertionFailure("Cannot mix table info from different store type") // or we must be able to get entityDescription by name

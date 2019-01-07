@@ -24,6 +24,12 @@ public protocol DataStoreTableInfo {
     var relationships: [DataStoreRelationInfo] { get }
     /// List of relations indexed by name.
     var relationshipsByName: [String: DataStoreRelationInfo] { get }
+
+    /// List of all properties. Fields, relation, others (fetched/calculated)
+    var properties: [DataStorePropertyInfo] { get }
+    /// List of all properties indexed by name.
+    var propertiesByName: [String: DataStorePropertyInfo] { get }
+
     /// Get the relations with passed table.
     /// @param table : the table in relation with the current one.
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo]
