@@ -52,7 +52,6 @@
 		48FA393620592AB600A5E992 /* DataStoreFieldInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393520592AB600A5E992 /* DataStoreFieldInfo.swift */; };
 		48FA393820592D4B00A5E992 /* CoreDataStoreRelationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393720592D4B00A5E992 /* CoreDataStoreRelationInfo.swift */; };
 		48FA393A20592D6B00A5E992 /* CoreDataStoreFieldInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393920592D6B00A5E992 /* CoreDataStoreFieldInfo.swift */; };
-		48FA393C20592D8C00A5E992 /* Dictionary+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393B20592D8C00A5E992 /* Dictionary+QMobile.swift */; };
 		48FA393E20592F4C00A5E992 /* FileManager+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */; };
 		48FB2CF91E93E0F600F4F685 /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */; };
 /* End PBXBuildFile section */
@@ -113,7 +112,6 @@
 		48FA393520592AB600A5E992 /* DataStoreFieldInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreFieldInfo.swift; sourceTree = "<group>"; };
 		48FA393720592D4B00A5E992 /* CoreDataStoreRelationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStoreRelationInfo.swift; sourceTree = "<group>"; };
 		48FA393920592D6B00A5E992 /* CoreDataStoreFieldInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStoreFieldInfo.swift; sourceTree = "<group>"; };
-		48FA393B20592D8C00A5E992 /* Dictionary+QMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+QMobile.swift"; sourceTree = "<group>"; };
 		48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+QMobile.swift"; sourceTree = "<group>"; };
 		48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,7 +190,6 @@
 				485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */,
 				489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */,
 				487F7FE71F56F5D10064AF4B /* Bundle+DataStore.swift */,
-				48FA393B20592D8C00A5E992 /* Dictionary+QMobile.swift */,
 				48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */,
 			);
 			name = Extension;
@@ -499,7 +496,6 @@
 				48FA393620592AB600A5E992 /* DataStoreFieldInfo.swift in Sources */,
 				48D584471E783025006F56B5 /* CoreDataStore.swift in Sources */,
 				482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */,
-				48FA393C20592D8C00A5E992 /* Dictionary+QMobile.swift in Sources */,
 				48A1C4F51F4F37C50041531F /* CoreDataStoreTableInfo.swift in Sources */,
 				48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */,
 				485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */,

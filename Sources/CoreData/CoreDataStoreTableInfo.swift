@@ -30,14 +30,14 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
     }()
 
     lazy var fieldsByName: [String: DataStoreFieldInfo] = {
-        return Dictionary(self.entity.attributesByName.map {  ($0, CoreDataStoreFieldInfo(attribute: $1)) })
+        return Dictionary(uniqueKeysWithValues: self.entity.attributesByName.map {  ($0, CoreDataStoreFieldInfo(attribute: $1)) })
     }()
 
     lazy var relationships: [DataStoreRelationInfo] = {
         return self.entity.relationshipsByName.map { CoreDataStoreRelationInfo(relation: $1) }
     }()
     lazy var relationshipsByName: [String: DataStoreRelationInfo] = {
-        return Dictionary(self.entity.relationshipsByName.map {  ($0, CoreDataStoreRelationInfo(relation: $1)) })
+        return Dictionary(uniqueKeysWithValues: self.entity.relationshipsByName.map {  ($0, CoreDataStoreRelationInfo(relation: $1)) })
     }()
 
     lazy var properties: [DataStorePropertyInfo] = {
@@ -53,7 +53,7 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
     }()
 
     lazy var propertiesByName: [String: DataStorePropertyInfo] = {
-        return Dictionary(self.entity.propertiesByName.compactMap { name, property -> (String, DataStorePropertyInfo)? in
+        return Dictionary(uniqueKeysWithValues: self.entity.propertiesByName.compactMap { name, property -> (String, DataStorePropertyInfo)? in
             if let relationship = property as? NSRelationshipDescription {
                 return (name, CoreDataStoreRelationInfo(relation: relationship))
             } else if let attribute = property as? NSAttributeDescription {
