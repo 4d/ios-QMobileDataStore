@@ -12,10 +12,6 @@ import CoreData
 // some extension for NSManagedObjectContext
 extension NSManagedObjectContext: DataStoreContext {
 
-    public func table(for name: String) -> DataStoreTableInfo? {
-        return CoreDataStoreTableInfo(name: name, context: self)
-    }
-
     private func exists(table: String) -> Bool {
         // XXX cache it??, have a list somewhere?
         let description = NSEntityDescription.entity(forEntityName: table, in: self)
