@@ -155,6 +155,7 @@ import XCGLogger
             //notification.userInfo["invalidateAll"]
             this.delegate?.objectsDidChange(dataStore: this, context: moc)
         })
+        //swiftlint:enable discarded_notification_center_observer
     }
 
     deinit {
