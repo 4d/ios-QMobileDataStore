@@ -17,11 +17,11 @@ extension NSManagedObject: DataStoreRecord {}
 
 public extension NSManagedObjectContext {
 
-    public static var `default`: NSManagedObjectContext {
+    static var `default`: NSManagedObjectContext {
         return CoreDataStore.default.viewContext
     }
 
-    public static func newBackgroundContext() -> NSManagedObjectContext {
+    static func newBackgroundContext() -> NSManagedObjectContext {
         return CoreDataStore.default.newBackgroundContext()
     }
 
