@@ -14,7 +14,7 @@ public protocol DataStorePropertyInfo {
     var name: String {get}
 
     /// Some additional info that could be added to the property.
-    var userInfo: [AnyHashable: Any]? {get}
+    var userInfo: [AnyHashable: Any]? {get set}
 
     /// The parent table.
     var table: DataStoreTableInfo {mutating get}

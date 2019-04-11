@@ -34,7 +34,7 @@ public protocol DataStoreTableInfo {
     /// @param table : the table in relation with the current one.
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo]
     /// Custom user information
-    var userInfo: [AnyHashable: Any]? { get }
+    var userInfo: [AnyHashable: Any]? { get set }
 }
 
 extension DataStoreContext {

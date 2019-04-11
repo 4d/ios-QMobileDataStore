@@ -21,7 +21,12 @@ class CoreDataStoreFieldInfo: DataStoreFieldInfo {
         return self.attribute.name
     }
     var userInfo: [AnyHashable: Any]? {
-        return self.attribute.userInfo
+        get {
+            return self.attribute.userInfo
+        }
+        set {
+            self.attribute.userInfo = newValue
+        }
     }
 
     var type: DataStoreFieldType {

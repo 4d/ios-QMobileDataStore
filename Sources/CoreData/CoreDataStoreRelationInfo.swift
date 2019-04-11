@@ -60,7 +60,12 @@ class CoreDataStoreRelationInfo: DataStoreRelationInfo {
         return self.relation.name
     }
     var userInfo: [AnyHashable: Any]? {
-        return self.relation.userInfo
+        get {
+            return self.relation.userInfo
+        }
+        set {
+            self.relation.userInfo = newValue
+        }
     }
 
 }

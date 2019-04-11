@@ -20,3 +20,18 @@ public extension Notification.Name {
     static let dataStoreWillMerge = Notification.Name("dataStore.willMerge")
     static let dataStoreDidMerge = Notification.Name("dataStore.didMerge")
 }
+
+extension DataStore {
+
+    static var loaded: Notification.Name {
+        return Notification.Name .dataStoreLoaded
+    }
+    /*static let dropped = Notification.Name("dataStore.dropped")
+    static let saved = Notification.Name("dataStore.saved")
+
+    static let willPerformAction = Notification.Name("dataStore.willPerformAction")
+    static let didPerformAction = Notification.Name("dataStore.didPerformAction")
+
+    static let willMerge = Notification.Name("dataStore.willMerge")
+    static let didMerge = Notification.Name("dataStore.didMerge")*/
+}

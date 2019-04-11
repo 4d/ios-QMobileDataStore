@@ -23,7 +23,12 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         self.entity = des
     }
     var userInfo: [AnyHashable: Any]? {
-        return self.entity.userInfo
+        get {
+            return self.entity.userInfo
+        }
+        set {
+            self.entity.userInfo = newValue
+        }
     }
     lazy var fields: [DataStoreFieldInfo] = {
         return self.entity.attributesByName.values.map { CoreDataStoreFieldInfo(attribute: $0) }
