@@ -11,6 +11,12 @@ import Result
 /// A store responsible to store record
 public protocol DataStore {
 
+    // MARK: Result
+    /// Result of data store operation
+    typealias CompletionResult = Result<Void, DataStoreError>
+    /// Closure result of data store operation
+    typealias CompletionHandler = (CompletionResult) -> Void
+
     // MARK: Main
 
     /// load data store
@@ -74,12 +80,6 @@ public protocol DataStore {
     // MARK: Structure
     var tablesInfo: [DataStoreTableInfo] {get}
     func tableInfo(for name: String) -> DataStoreTableInfo?
-
-    // MARK: Result
-    /// Result of data store operation
-    typealias CompletionResult = Result<Void, DataStoreError>
-    /// Closure result of data store operation
-    typealias CompletionHandler = (CompletionResult) -> Void
 
     /// Closure to save data store.
     /// @throw DataStoreError

@@ -127,7 +127,7 @@ internal class CoreDataFetchedResultsController: NSObject, FetchedResultsControl
         let context = self.fetchedResultsController.managedObjectContext
 
         if let objects = try? context.fetch(request) as? [NSDictionary] {
-            for object in objects ?? [] {
+            for object in objects {
                 result.append(contentsOf: object.allValues)
             }
         }
@@ -236,6 +236,8 @@ extension NSFetchedResultsChangeType {
             return .delete
         case .move:
             return .move
+        @unknown default:
+            fatalError("unknown \(self)")
         }
     }
 }

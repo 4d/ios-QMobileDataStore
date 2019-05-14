@@ -89,6 +89,8 @@ extension NSAttributeType {
             return .string
         case .URIAttributeType:
             return .string
+        @unknown default:
+            fatalError("unknown \(self)")
         }
     }
 }

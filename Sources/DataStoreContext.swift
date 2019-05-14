@@ -100,6 +100,7 @@ public protocol DataStoreContext: class {
     /// - returns: a new fetch request
     func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]?) -> FetchRequest
 
+    typealias CompletionHandler = (Result<Void, DataStoreError>) -> Void // DataStore.CompletionHandler
 }
 
 extension DataStoreContext {
@@ -122,7 +123,7 @@ extension DataStoreContext {
 
     /// Commit data store context modifications.
     /// @param completionHandler : callback to receive result
-    public func commit(completionHandler: DataStore.CompletionHandler) {
+    public func commit(completionHandler: CompletionHandler) {
         do {
             try self.commit()
             completionHandler(.success(()))
