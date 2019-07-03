@@ -114,18 +114,12 @@ public class Record: NSObject {
     }
 
     // Hashable,
-    #if swift(>=4.2)
     public override var hash: Int {
         return store.hashValue
     }
-    #else
-    public override var hashValue: Int {
-        return store.hashValue
-    }
-    #endif
 
     // Equatable
-    public static func == (lhs: Record, rhs: Record) -> Bool {
+    public static func == (lhs: Record, rhs: Record) -> Bool { // swiftlint:disable:nsobject_prefer_isequal
         return lhs.store == rhs.store
     }
 

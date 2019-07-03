@@ -74,8 +74,7 @@ import XCGLogger
 
     fileprivate func initObservers(center: NotificationCenter = NotificationCenter.default) {
         let notificationQueue: OperationQueue = .main
-        // here false positive for discarded_notification_center_observer
-        //swiftlint:disable discarded_notification_center_observer
+
         observers.append(center.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: notificationQueue) { [weak self] notification in
             guard let this = self else {
                 return
@@ -155,7 +154,6 @@ import XCGLogger
             //notification.userInfo["invalidateAll"]
             this.delegate?.objectsDidChange(dataStore: this, context: moc)
         })
-        //swiftlint:enable discarded_notification_center_observer
     }
 
     deinit {
