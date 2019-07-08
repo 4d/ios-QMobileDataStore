@@ -119,7 +119,7 @@ public class Record: NSObject {
     }
 
     // Equatable
-    public static func == (lhs: Record, rhs: Record) -> Bool { // swiftlint:disable:nsobject_prefer_isequal
+    public static func == (lhs: Record, rhs: Record) -> Bool { // swiftlint:disable:this nsobject_prefer_isequal
         return lhs.store == rhs.store
     }
 
