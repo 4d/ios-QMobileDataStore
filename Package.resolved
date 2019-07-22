@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Prephirences",
+        "repositoryURL": "https://github.com/Eubb/Prephirences.git",
+        "state": {
+          "branch": null,
+          "revision": "2ddd058050b22dc64f4b88a137aabb31fa3cc552",
+          "version": "5.0.1"
+        }
+      },
+      {
+        "package": "Result",
+        "repositoryURL": "https://github.com/antitypical/Result.git",
+        "state": {
+          "branch": null,
+          "revision": "2ca499ba456795616fbc471561ff1d963e6ae160",
+          "version": "4.1.0"
+        }
+      },
+      {
+        "package": "XCGLogger",
+        "repositoryURL": "https://github.com/DaveWoodCom/XCGLogger.git",
+        "state": {
+          "branch": null,
+          "revision": "f0daefd2a472f0c8d3d12a4b0d45594195a6c74d",
+          "version": "7.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
