@@ -7,6 +7,7 @@
 //
 
 import Result
+import Foundation
 
 /// A store responsible to store record
 public protocol DataStore {
