@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "Prephirences",
-        "repositoryURL": "https://github.com/Eubb/Prephirences.git",
+        "repositoryURL": "https://github.com/phimage/Prephirences.git",
         "state": {
-          "branch": null,
+          "branch": "HEAD",
           "revision": "2ddd058050b22dc64f4b88a137aabb31fa3cc552",
-          "version": "5.0.1"
+          "version": null
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/antitypical/Result.git",
         "state": {
           "branch": null,
-          "revision": "2ca499ba456795616fbc471561ff1d963e6ae160",
-          "version": "4.1.0"
+          "revision": "12920a5c2595926efab9274d6003e29f503dbb66",
+          "version": "5.0.0"
         }
       },
       {

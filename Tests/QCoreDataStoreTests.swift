@@ -79,6 +79,7 @@ class CoreDataStoreTests: XCTestCase {
     // MARK: test structure
     func testTablesInfo() {
         let tablesInfo = dataStore.tablesInfo
+
         XCTAssertFalse(tablesInfo.isEmpty)
         XCTAssertTrue(tablesInfo.map{$0.name}.contains(table))
         
@@ -109,6 +110,23 @@ class CoreDataStoreTests: XCTestCase {
 
         let relations = tableInfo.relationships
         for _ in relations {
+        }
+    }
+    
+    func testRelationshipForTable() {
+        guard let tableInfo = dataStore.tableInfo(for: table) else {
+            XCTFail("No table \(table) in table info")
+            return
+        }
+        
+        let relationships = tableInfo.relationshipsByName
+        XCTAssertFalse(relationships.isEmpty)
+        XCTAssertEqual(relationships.count, 1)
+        
+        for relation in relationships {
+            if let destination = relation.value.destinationTable {
+                XCTAssertEqual(destination.name, "Entity1")
+            }
         }
     }
 
@@ -558,7 +576,6 @@ class CoreDataStoreTests: XCTestCase {
         }
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
-
 }
 
 extension CoreDataStoreTests: DataStoreDelegate {

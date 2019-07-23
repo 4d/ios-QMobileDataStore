@@ -43,7 +43,6 @@
 		48D584491E783025006F56B5 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584441E783025006F56B5 /* DataStore.swift */; };
 		48D5844A1E783025006F56B5 /* DataStoreRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584451E783025006F56B5 /* DataStoreRecord.swift */; };
 		48D584521E78304A006F56B5 /* QCoreDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D5844C1E78303C006F56B5 /* QCoreDataStoreTests.swift */; };
-		48D584531E78304C006F56B5 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */; };
 		48D584891E784921006F56B5 /* FetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D584881E784921006F56B5 /* FetchRequest.swift */; };
 		48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */; };
 		48F4D39B1F442E39007C7CB8 /* ContextTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F4D39A1F442E39007C7CB8 /* ContextTypeTests.swift */; };
@@ -54,6 +53,8 @@
 		48FA393A20592D6B00A5E992 /* CoreDataStoreFieldInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393920592D6B00A5E992 /* CoreDataStoreFieldInfo.swift */; };
 		48FA393E20592F4C00A5E992 /* FileManager+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */; };
 		48FB2CF91E93E0F600F4F685 /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */; };
+		C5EFDC1322E715BE0094A0B4 /* IndexPath+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */; };
+		C5EFDC1622E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1422E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,7 +104,6 @@
 		48D584441E783025006F56B5 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		48D584451E783025006F56B5 /* DataStoreRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreRecord.swift; sourceTree = "<group>"; };
 		48D5844C1E78303C006F56B5 /* QCoreDataStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QCoreDataStoreTests.swift; sourceTree = "<group>"; };
-		48D5844E1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
 		48D584881E784921006F56B5 /* FetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchRequest.swift; sourceTree = "<group>"; };
 		48D5848A1E78494A006F56B5 /* CoreDataFetchRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataFetchRequest.swift; sourceTree = "<group>"; };
 		48F4D39A1F442E39007C7CB8 /* ContextTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextTypeTests.swift; sourceTree = "<group>"; };
@@ -114,6 +114,8 @@
 		48FA393920592D6B00A5E992 /* CoreDataStoreFieldInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStoreFieldInfo.swift; sourceTree = "<group>"; };
 		48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+QMobile.swift"; sourceTree = "<group>"; };
 		48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModel.swift; sourceTree = "<group>"; };
+		C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexPath+Row.swift"; sourceTree = "<group>"; };
+		C5EFDC1522E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +193,7 @@
 				489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */,
 				487F7FE71F56F5D10064AF4B /* Bundle+DataStore.swift */,
 				48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */,
+				C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -281,10 +284,10 @@
 		48D584511E783043006F56B5 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				C5EFDC1422E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld */,
 				48D5844C1E78303C006F56B5 /* QCoreDataStoreTests.swift */,
 				480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */,
 				48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */,
-				48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */,
 				48358DA91F50051C001AB755 /* QMobileDataStoreTestsModel.strings */,
 				48F4D39A1F442E39007C7CB8 /* ContextTypeTests.swift */,
 				48F4D39C1F443AAE007C7CB8 /* MetaDataTests.swift */,
@@ -319,6 +322,20 @@
 			name = "swiftlint autocorrect";
 			passBuildSettingsInEnvironment = 1;
 			productName = swiftLint;
+		};
+		C5EFDC0E22E713EA0094A0B4 /* carthage update */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = update;
+			buildConfigurationList = C5EFDC0F22E713EA0094A0B4 /* Build configuration list for PBXLegacyTarget "carthage update" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/local/bin/carthage;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = "carthage update";
+			passBuildSettingsInEnvironment = 1;
+			productName = "carthage update";
 		};
 /* End PBXLegacyTarget section */
 
@@ -388,6 +405,11 @@
 						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
+					C5EFDC0E22E713EA0094A0B4 = {
+						CreatedOnToolsVersion = 10.2.1;
+						DevelopmentTeam = WNU679LQ4C;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 48D5841F1E782F6C006F56B5 /* Build configuration list for PBXProject "QMobileDataStore" */;
@@ -406,6 +428,7 @@
 				48D584241E782F6C006F56B5 /* QMobileDataStore */,
 				48D5842D1E782F6C006F56B5 /* QMobileDataStoreTests */,
 				485CCDA91E793F5400CDB2B3 /* swiftlint autocorrect */,
+				C5EFDC0E22E713EA0094A0B4 /* carthage update */,
 			);
 		};
 /* End PBXProject section */
@@ -442,7 +465,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		48A62CCB1E9E6637002A76C2 /* carthage */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -497,6 +520,7 @@
 				48FA393620592AB600A5E992 /* DataStoreFieldInfo.swift in Sources */,
 				48D584471E783025006F56B5 /* CoreDataStore.swift in Sources */,
 				482485111E7A7C5400DA5390 /* DataStoreContext.swift in Sources */,
+				C5EFDC1322E715BE0094A0B4 /* IndexPath+Row.swift in Sources */,
 				48A1C4F51F4F37C50041531F /* CoreDataStoreTableInfo.swift in Sources */,
 				48D5848B1E78494A006F56B5 /* CoreDataFetchRequest.swift in Sources */,
 				485F013F1E7C2865007D5FEE /* CoreDataStoreContext.swift in Sources */,
@@ -522,7 +546,7 @@
 				48F4D39D1F443AAE007C7CB8 /* MetaDataTests.swift in Sources */,
 				480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */,
 				48D584521E78304A006F56B5 /* QCoreDataStoreTests.swift in Sources */,
-				48D584531E78304C006F56B5 /* QMobileDataStoreTests.xcdatamodeld in Sources */,
+				C5EFDC1622E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld in Sources */,
 				48F4D39B1F442E39007C7CB8 /* ContextTypeTests.swift in Sources */,
 				48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */,
 			);
@@ -781,6 +805,46 @@
 			};
 			name = Release;
 		};
+		C5EFDC1022E713EA0094A0B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = WNU679LQ4C;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C5EFDC1122E713EA0094A0B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = WNU679LQ4C;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -820,15 +884,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		C5EFDC0F22E713EA0094A0B4 /* Build configuration list for PBXLegacyTarget "carthage update" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5EFDC1022E713EA0094A0B4 /* Debug */,
+				C5EFDC1122E713EA0094A0B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		48D5844D1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodeld */ = {
+		C5EFDC1422E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				48D5844E1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodel */,
+				C5EFDC1522E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodel */,
 			);
-			currentVersion = 48D5844E1E78303C006F56B5 /* QMobileDataStoreTests.xcdatamodel */;
+			currentVersion = C5EFDC1522E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodel */;
 			path = QMobileDataStoreTests.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
