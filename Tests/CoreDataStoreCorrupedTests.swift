@@ -18,8 +18,7 @@ import CoreData
 class CoreDataStoreCorrupedTests: XCTestCase {
 
     lazy var dataStore: DataStore = {
-        Bundle.dataStore = Bundle(for: CoreDataStoreCorrupedTests.self)
-        return DataStoreFactory.dataStore
+        return DataStoreFactoryTest.dataStore
     }()
     let timeout: TimeInterval = 10
     

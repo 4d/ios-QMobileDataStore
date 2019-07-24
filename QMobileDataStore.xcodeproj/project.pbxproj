@@ -53,6 +53,7 @@
 		48FA393A20592D6B00A5E992 /* CoreDataStoreFieldInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393920592D6B00A5E992 /* CoreDataStoreFieldInfo.swift */; };
 		48FA393E20592F4C00A5E992 /* FileManager+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */; };
 		48FB2CF91E93E0F600F4F685 /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */; };
+		48FDA65822E83C0A0073A4FF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FDA65522E83B8B0073A4FF /* Utils.swift */; };
 		C5EFDC1322E715BE0094A0B4 /* IndexPath+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */; };
 		C5EFDC1622E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1422E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld */; };
 /* End PBXBuildFile section */
@@ -114,6 +115,7 @@
 		48FA393920592D6B00A5E992 /* CoreDataStoreFieldInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStoreFieldInfo.swift; sourceTree = "<group>"; };
 		48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+QMobile.swift"; sourceTree = "<group>"; };
 		48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModel.swift; sourceTree = "<group>"; };
+		48FDA65522E83B8B0073A4FF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexPath+Row.swift"; sourceTree = "<group>"; };
 		C5EFDC1522E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -291,6 +293,7 @@
 				48358DA91F50051C001AB755 /* QMobileDataStoreTestsModel.strings */,
 				48F4D39A1F442E39007C7CB8 /* ContextTypeTests.swift */,
 				48F4D39C1F443AAE007C7CB8 /* MetaDataTests.swift */,
+				48FDA65522E83B8B0073A4FF /* Utils.swift */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				48F4D39D1F443AAE007C7CB8 /* MetaDataTests.swift in Sources */,
 				480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */,
 				48D584521E78304A006F56B5 /* QCoreDataStoreTests.swift in Sources */,
+				48FDA65822E83C0A0073A4FF /* Utils.swift in Sources */,
 				C5EFDC1622E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld in Sources */,
 				48F4D39B1F442E39007C7CB8 /* ContextTypeTests.swift in Sources */,
 				48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */,

@@ -13,8 +13,7 @@ class ContextTypeTests: XCTestCase {
     
     let timeout: TimeInterval = 10
     lazy var dataStore: DataStore = {
-        Bundle.dataStore = Bundle(for: ContextTypeTests.self)
-        return DataStoreFactory.dataStore
+        return DataStoreFactoryTest.dataStore
     }()
     
     let waitHandler: XCWaitCompletionHandler = { error in

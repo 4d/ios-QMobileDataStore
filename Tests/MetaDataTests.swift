@@ -12,8 +12,7 @@ import XCTest
 class MetaDataTests: XCTestCase {
 
     lazy var dataStore: DataStore = {
-        Bundle.dataStore = Bundle(for: MetaDataTests.self)
-        return DataStoreFactory.dataStore
+        return DataStoreFactoryTest.dataStore
     }()
     let timeout: TimeInterval = 10
     

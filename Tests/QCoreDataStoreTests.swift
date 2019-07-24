@@ -17,14 +17,20 @@ import CoreData
 class CoreDataStoreTests: XCTestCase {
 
     lazy var dataStore: DataStore = {
-        Bundle.dataStore = Bundle(for: ContextTypeTests.self)
-        return DataStoreFactory.dataStore
+        return DataStoreFactoryTest.dataStore
     }()
     let timeout: TimeInterval = 15
 
     var onMerge: ((_ dataStore: DataStore, _ context: DataStoreContext, _ with: DataStoreContext) -> Void)? = nil
-    
-    let table = "Entity"
+
+    var table: String {
+        let expected = "Entity"
+        if dataStore.tableInfo(for: expected) == nil { // if not in model return the first one
+            return dataStore.tablesInfo.first?.name ?? expected
+        } else {
+            return expected
+        }
+    }
     let testqueue = DispatchQueue(label: "test.queue")
 
     let waitHandler: XCWaitCompletionHandler = { error in
@@ -85,7 +91,9 @@ class CoreDataStoreTests: XCTestCase {
         
         for tableInfo in tablesInfo {
             XCTAssertFalse(tableInfo.name.isEmpty)
-            XCTAssertNotEqual(tableInfo.localizedName, tableInfo.name)
+            if !ProcessInfo.isSwiftRuntime {
+                XCTAssertNotEqual(tableInfo.localizedName, tableInfo.name)
+            }
         }
     }
 
@@ -98,15 +106,18 @@ class CoreDataStoreTests: XCTestCase {
         XCTAssertFalse(fields.isEmpty)
         XCTAssertEqual(fields.count, 11)
 
-        var hasLocalizedField = false
-        for field in fields {
-            XCTAssertFalse(field.name.isEmpty)
-            XCTAssertFalse(field.type == .undefined)
-            if field.name != field.localizedName {
-                hasLocalizedField = true
+
+        if !DataStoreFactoryTest.inMemoryModel  {
+            var hasLocalizedField = false
+            for field in fields {
+                XCTAssertFalse(field.name.isEmpty)
+                XCTAssertFalse(field.type == .undefined)
+                if field.name != field.localizedName {
+                    hasLocalizedField = true
+                }
             }
+            XCTAssertTrue(hasLocalizedField, "One field must be localized, see strings file")
         }
-        XCTAssertTrue(hasLocalizedField, "One field must be localized, see strings file")
 
         let relations = tableInfo.relationships
         for _ in relations {
