@@ -63,7 +63,7 @@ import XCGLogger
     /// - parameter storeType: the store type (default: sql).
     ///
     /// - returns: The new `QMobileCoreDataStore` instance.
-    internal init(model: CoreDataObjectModel = CoreDataObjectModel.named(Bundle.dataStore[Bundle.dataStoreKey] as? String ?? "Structures", Bundle.dataStore), storeType: StoreType = .sql) {
+    internal init(model: CoreDataObjectModel = .default, storeType: StoreType = .sql) {
         self.model = model
         self.storeType = storeType
 

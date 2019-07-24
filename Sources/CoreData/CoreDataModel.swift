@@ -9,11 +9,15 @@
 import Foundation
 import CoreData
 
-enum CoreDataObjectModel {
+public enum CoreDataObjectModel {
+
+    /// a default core data store
+    public static var `default`: CoreDataObjectModel = .named(Bundle.dataStore[Bundle.dataStoreKey] as? String ?? "Structures", Bundle.dataStore)
 
     case named(String, Bundle)
     case merged([Bundle]?)
     case url(URL)
+    case callback(() -> (NSManagedObjectModel, String))
 
     func model() -> NSManagedObjectModel? {
         switch self {
@@ -28,6 +32,8 @@ enum CoreDataObjectModel {
             return nil
         case .url(let url):
             return NSManagedObjectModel(contentsOf: url)
+        case .callback(let builder):
+            return builder().0
         }
     }
 
@@ -39,6 +45,8 @@ enum CoreDataObjectModel {
             return name
         case .url(let url):
             return url.path
+        case .callback(let builder):
+            return builder().1
         }
     }
 }
