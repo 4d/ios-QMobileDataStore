@@ -15,32 +15,9 @@ import Foundation
 import Result
 import CoreData
 
+import MomXML
+import SWXMLHash
 
-infix operator ~: MultiplicationPrecedence
-
-@discardableResult
-public func ~ <U: AnyObject>(object: U, block: (U) -> Void) -> U {
-    block(object)
-    return object
-}
-@objc class TestEntity: NSManagedObject {
-    @NSManaged public var attribute: Int16
-    @NSManaged public var attribute1: Int32
-    @NSManaged public var attribute2: Int64
-    @NSManaged public var attribute3: NSDecimalNumber?
-    @NSManaged public var attribute4: Double
-    @NSManaged public var attribute5: Float
-    @NSManaged public var attribute6: String?
-    @NSManaged public var attribute7: Bool
-    @NSManaged public var attribute8: Date?
-    @NSManaged public var attribute9: Data?
-    @NSManaged public var attribute10: NSObject?
-    @NSManaged public var firstEntity: TestEntity1?
-}
-@objc class TestEntity1: NSManagedObject {
-    @NSManaged public var attribute: Bool
-    @NSManaged public var attribute1: String?
-}
 
 let modelString = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -57,30 +34,42 @@ let modelString = """
 <attribute name="attribute8" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
 <attribute name="attribute9" optional="YES" attributeType="Binary" syncable="YES"/>
 <attribute name="attribute10" optional="YES" attributeType="Transformable" syncable="YES"/>
-<relationship name="firstEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Entity1" inverseName="secondEntity" inverseEntity="Entity1" syncable="YES"/>
+<relationship name="entity0relation1" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Entity1" inverseName="entity1relation1" inverseEntity="Entity1" syncable="YES"/>
+<relationship name="entity0relation2" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Entity2" inverseName="entity2relation1" inverseEntity="Entity2" syncable="YES"/>
 </entity>
 <entity name="Entity1" representedClassName="Entity1" syncable="YES" codeGenerationType="class">
 <attribute name="attribute" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
 <attribute name="attribute1" attributeType="String" syncable="YES"/>
-<relationship name="secondEntity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Entity" inverseName="firstEntity" inverseEntity="Entity" syncable="YES"/>
+<relationship name="entity1relation1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Entity" inverseName="entity0relation1" inverseEntity="Entity" syncable="YES"/>
 </entity>
-<entity name="Entity2" representedClassName="Entity2" syncable="YES" codeGenerationType="class"/>
+<entity name="Entity2" representedClassName="Entity2" syncable="YES" codeGenerationType="class">
+<relationship name="entity2relation1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Entity" inverseName="entity0relation2" inverseEntity="Entity" syncable="YES"/>
+</entity>
 <entity name="Entity3" representedClassName="Entity3" syncable="YES" codeGenerationType="class"/>
 <entity name="Entity4" representedClassName="Entity4" syncable="YES" codeGenerationType="class"/>
 <elements>
-<element name="Entity" positionX="-726.07421875" positionY="-107.4765625" width="128" height="223"/>
+<element name="Entity" positionX="-1205.18359375" positionY="-128.09765625" width="128" height="238"/>
 <element name="Entity1" positionX="-458.74609375" positionY="-156.75390625" width="128" height="88"/>
-<element name="Entity2" positionX="-450.78515625" positionY="15.828125" width="128" height="43"/>
-<element name="Entity3" positionX="-444.76171875" positionY="109.26953125" width="128" height="45"/>
+<element name="Entity2" positionX="-403.99609375" positionY="15.84375" width="128" height="58"/>
+<element name="Entity3" positionX="-444.76171875" positionY="109.26953125" width="128" height="43"/>
 <element name="Entity4" positionX="-442.9140625" positionY="229.890625" width="128" height="45"/>
 </elements>
 </model>
 """
 
 extension NSManagedObjectModel {
-    static let testModel = NSManagedObjectModel() // TODO #107928 decode modelString
+
+    static var coreDataModel: NSManagedObjectModel {
+        let xml = SWXMLHash.parse(modelString)
+        guard let parsedMom = MomXML(xml: xml) else {
+            return NSManagedObjectModel()
+        }
+        return parsedMom.model.coreData
+    }
+
 }
 extension ProcessInfo {
+    // true if swift test
     static var isSwiftRuntime: Bool {
         guard let envVar = ProcessInfo.processInfo.environment["_"] else { return false }
         return envVar == "/usr/bin/swift"
@@ -89,6 +78,7 @@ extension ProcessInfo {
 
 public class DataStoreFactoryTest {
 
+    // Use a decoded model from xml string. By default true with swift test, false in xcode
     static var inMemoryModel: Bool {
         return ProcessInfo.isSwiftRuntime
     }
@@ -96,7 +86,7 @@ public class DataStoreFactoryTest {
     static var dataStore: DataStore {
         if DataStoreFactoryTest.inMemoryModel {
             CoreDataObjectModel.default = CoreDataObjectModel.callback{
-                return (NSManagedObjectModel.testModel, "testModel")
+                return(NSManagedObjectModel.coreDataModel, "testModel")
             }
         }
 

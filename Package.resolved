@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "MomXML",
+        "repositoryURL": "https://github.com/phimage/MomXML.git",
+        "state": {
+          "branch": "HEAD",
+          "revision": "96c14662086236f0400db3beb406223d30f3f392",
+          "version": null
+        }
+      },
+      {
         "package": "Prephirences",
         "repositoryURL": "https://github.com/phimage/Prephirences.git",
         "state": {
@@ -15,8 +24,17 @@
         "repositoryURL": "https://github.com/antitypical/Result.git",
         "state": {
           "branch": null,
-          "revision": "12920a5c2595926efab9274d6003e29f503dbb66",
-          "version": "5.0.0"
+          "revision": "2ca499ba456795616fbc471561ff1d963e6ae160",
+          "version": "4.1.0"
+        }
+      },
+      {
+        "package": "SWXMLHash",
+        "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
+        "state": {
+          "branch": null,
+          "revision": "f43166a8e18fdd0857f29e303b1bb79a5428bca0",
+          "version": "4.9.0"
         }
       },
       {

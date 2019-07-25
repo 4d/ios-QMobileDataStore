@@ -56,6 +56,8 @@
 		48FDA65822E83C0A0073A4FF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FDA65522E83B8B0073A4FF /* Utils.swift */; };
 		C5EFDC1322E715BE0094A0B4 /* IndexPath+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */; };
 		C5EFDC1622E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1422E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld */; };
+		C5EFDC1922E8532E0094A0B4 /* MomXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5EFDC1722E853220094A0B4 /* MomXML.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		C5EFDC1B22E85F6B0094A0B4 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5EFDC1A22E85F6B0094A0B4 /* SWXMLHash.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +120,8 @@
 		48FDA65522E83B8B0073A4FF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexPath+Row.swift"; sourceTree = "<group>"; };
 		C5EFDC1522E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
+		C5EFDC1722E853220094A0B4 /* MomXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MomXML.framework; path = Carthage/Build/iOS/MomXML.framework; sourceTree = "<group>"; };
+		C5EFDC1A22E85F6B0094A0B4 /* SWXMLHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SWXMLHash.framework; path = Carthage/Build/iOS/SWXMLHash.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,10 +141,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				48D5842F1E782F6C006F56B5 /* QMobileDataStore.framework in Frameworks */,
+				C5EFDC1B22E85F6B0094A0B4 /* SWXMLHash.framework in Frameworks */,
 				4852719B1E9381A200BABB16 /* ObjcExceptionBridging.framework in Frameworks */,
 				4852719C1E9381A200BABB16 /* Prephirences.framework in Frameworks */,
 				4852719E1E9381A200BABB16 /* Result.framework in Frameworks */,
 				4852719F1E9381A200BABB16 /* XCGLogger.framework in Frameworks */,
+				C5EFDC1922E8532E0094A0B4 /* MomXML.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +156,8 @@
 		0FBCD3429775D68ED98A6852 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5EFDC1A22E85F6B0094A0B4 /* SWXMLHash.framework */,
+				C5EFDC1722E853220094A0B4 /* MomXML.framework */,
 				485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */,
 				485271931E9380F000BABB16 /* Prephirences.framework */,
 				485271951E9380F000BABB16 /* Result.framework */,
@@ -480,13 +488,15 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Prephirences.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MomXML.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SWXMLHash.framework",
 			);
 			name = carthage;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		48F4D3991F442DF3007C7CB8 /* swiftlint autocorrect */ = {
 			isa = PBXShellScriptBuildPhase;

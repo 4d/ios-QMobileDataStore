@@ -13,6 +13,8 @@ import Prephirences
 import Result
 import CoreData
 
+import MomXML
+
 
 class CoreDataStoreTests: XCTestCase {
 
@@ -124,21 +126,83 @@ class CoreDataStoreTests: XCTestCase {
         }
     }
     
-    func testRelationshipForTable() {
+    func testRelationshipTypeForTable() {
         guard let tableInfo = dataStore.tableInfo(for: table) else {
             XCTFail("No table \(table) in table info")
             return
         }
-        
+
         let relationships = tableInfo.relationshipsByName
         XCTAssertFalse(relationships.isEmpty)
-        XCTAssertEqual(relationships.count, 1)
-        
+        XCTAssertEqual(relationships.count, 2)
+
         for relation in relationships {
-            if let destination = relation.value.destinationTable {
-                XCTAssertEqual(destination.name, "Entity1")
+
+            if (relation.key == "entity0relation1") {
+                XCTAssertFalse(relation.value.isToMany)
+            } else {
+                XCTAssertTrue(relation.value.isToMany)
             }
         }
+    }
+
+    func testRelationshipDeleteRuleForTable() {
+        guard let tableInfo = dataStore.tableInfo(for: table) else {
+            XCTFail("No table \(table) in table info")
+            return
+        }
+
+        let relationships = tableInfo.relationshipsByName
+        XCTAssertFalse(relationships.isEmpty)
+        XCTAssertEqual(relationships.count, 2)
+
+        for relation in relationships {
+
+            if (relation.key == "entity0relation1") {
+                XCTAssertEqual(relation.value.deleteRule, .cascade)
+            } else {
+                XCTAssertEqual(relation.value.deleteRule, .nullify)
+            }
+        }
+    }
+
+    func testDeleteRuleBehavior() {
+        guard !DataStoreFactoryTest.inMemoryModel else { return } // cannot cast with in memory model
+        let expectation = self.expectation(description: #function)
+
+        let _ = dataStore.perform(contextType) { context in
+
+            let entity1TableName = "Entity1"
+            
+            guard let recordEntityTest = context.create(in: self.table) else {
+                XCTFail("Cannot create entity from table \(self.table)")
+                return
+            }
+           let recordEntity = recordEntityTest.store
+    
+            guard let recordEntity1 = context.create(in: entity1TableName)?.store else {
+                XCTFail("Cannot create entity from \(entity1TableName)")
+                return
+            }
+
+            recordEntity.setValue(recordEntity1, forKey: "entity0relation1")
+          
+            try? context.commit()
+
+            XCTAssertNotNil(recordEntity.value(forKey: "entity0relation1"))
+            XCTAssertTrue((try? context.has(in: self.table, matching : recordEntity.predicate)) ?? false, "\(recordEntity.objectID)")
+            XCTAssertTrue((try? context.has(in: entity1TableName, matching : recordEntity1.predicate)) ?? false, "\(recordEntity1.objectID)")
+
+            context.delete(record: Record(store: recordEntity1))
+            try? context.commit()
+            
+            XCTAssertTrue((try? context.has(in: self.table, matching : recordEntity.predicate)) ?? false, "\(recordEntity.objectID)")
+            XCTAssertFalse((try? context.has(in: entity1TableName, matching : recordEntity1.predicate)) ?? false, "\(recordEntity1.objectID)")
+            XCTAssertNil(recordEntity.value(forKey: "entity0relation1"))
+
+            expectation.fulfill()
+        }
+        self.waitForExpectations(timeout: timeout, handler: waitHandler)
     }
 
     // MARK: DataStore
@@ -195,10 +259,12 @@ class CoreDataStoreTests: XCTestCase {
         let _ = dataStore.perform(contextType) { context in
       
             if let record = context.create(in: self.table) {
-                do {
-                    try record.validateForInsert()
-                } catch {
-                    XCTFail("Entity not valid to insert \(error) in data store")
+                if !DataStoreFactoryTest.inMemoryModel {
+                    do {
+                        try record.validateForInsert()
+                    } catch {
+                        XCTFail("Entity not valid to insert \(error) in data store")
+                    }
                 }
                 let _ = record["attribute"]
                 
@@ -282,6 +348,7 @@ class CoreDataStoreTests: XCTestCase {
     
     
     func testEntityCreateMandatoryFieldTable() {
+        guard !DataStoreFactoryTest.inMemoryModel else { return } // cannot cast with in memory model
         let expectation = self.expectation(description: #function)
         
         let _ = dataStore.perform(contextType) { context in
