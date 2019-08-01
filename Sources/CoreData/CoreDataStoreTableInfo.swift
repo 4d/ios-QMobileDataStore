@@ -94,3 +94,9 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
     }
 
 }
+
+extension NSManagedObject {
+    var dataStoreTableInfo: DataStoreTableInfo {
+        return CoreDataStoreTableInfo(entity: self.entity)
+    }
+}
