@@ -12,7 +12,7 @@ import XCTest
 @testable import QMobileDataStore
 
 import Prephirences
-import Result
+
 import CoreData
 
 class CoreDataStoreCorrupedTests: XCTestCase {

@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 import Prephirences
-import Result
+
 import XCGLogger
 
 // MARK: CoreData store

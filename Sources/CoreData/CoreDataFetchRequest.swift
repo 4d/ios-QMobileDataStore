@@ -8,7 +8,6 @@
 
 import Foundation
 import CoreData
-import Result
 
 class CoreDataFetchRequest: FetchRequest {
 

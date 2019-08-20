@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// A context for data task
 public protocol DataStoreContext: class {

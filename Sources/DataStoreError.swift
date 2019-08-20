@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// An error from data store
 public struct DataStoreError: Error {
@@ -21,7 +20,7 @@ public struct DataStoreError: Error {
 
 }
 
-extension DataStoreError: ErrorConvertible {
+extension DataStoreError {
 
     public static func error(from error: Error) -> DataStoreError {
         if let error = error as? DataStoreError {

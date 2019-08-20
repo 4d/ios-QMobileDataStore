@@ -9,8 +9,6 @@
 import Foundation
 import CoreData
 
-import Result
-
 public typealias RecordBase = NSManagedObject
 
 extension NSManagedObject: DataStoreRecord {}

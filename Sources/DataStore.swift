@@ -6,7 +6,6 @@
 //  Copyright © 2017 Eric Marchand. All rights reserved.
 //
 
-import Result
 import Foundation
 
 /// A store responsible to store record

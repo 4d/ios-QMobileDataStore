@@ -10,7 +10,7 @@ import XCTest
 @testable import QMobileDataStore
 
 import Prephirences
-import Result
+
 import CoreData
 
 import MomXML

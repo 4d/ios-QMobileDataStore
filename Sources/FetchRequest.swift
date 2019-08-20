@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 /// A fetch request associated to a table name and created by the data store.
 public protocol FetchRequest {
