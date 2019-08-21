@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/phimage/MomXML.git",
         "state": {
           "branch": "HEAD",
-          "revision": "96c14662086236f0400db3beb406223d30f3f392",
+          "revision": "f5b77798de0c9003f43e67bcd2406ccf37df3b4c",
           "version": null
         }
       },
@@ -17,15 +17,6 @@
           "branch": "HEAD",
           "revision": "2ddd058050b22dc64f4b88a137aabb31fa3cc552",
           "version": null
-        }
-      },
-      {
-        "package": "Result",
-        "repositoryURL": "https://github.com/antitypical/Result.git",
-        "state": {
-          "branch": null,
-          "revision": "2ca499ba456795616fbc471561ff1d963e6ae160",
-          "version": "4.1.0"
         }
       },
       {

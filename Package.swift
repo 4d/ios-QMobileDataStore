@@ -17,9 +17,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/DaveWoodCom/XCGLogger.git" , from: "7.0.0"),
-        .package(url: "https://github.com/antitypical/Result.git" , from: "4.1.0"),
         .package(url: "https://github.com/phimage/MomXML.git" , .revision("HEAD")),
         .package(url: "https://github.com/phimage/Prephirences.git" , .revision("HEAD"))
 
@@ -31,7 +29,6 @@ let package = Package(
             name: "QMobileDataStore",
             dependencies: [
                 "XCGLogger",
-                "Result",
                 "MomXML",
                 "Prephirences"
             ],
