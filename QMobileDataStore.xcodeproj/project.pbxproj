@@ -18,11 +18,9 @@
 		483867B01E8A4D2E00E44F49 /* DataStoreFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483867AF1E8A4D2E00E44F49 /* DataStoreFactory.swift */; };
 		485271971E93810600BABB16 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */; };
 		485271981E93810600BABB16 /* Prephirences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271931E9380F000BABB16 /* Prephirences.framework */; };
-		485271991E93810600BABB16 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271951E9380F000BABB16 /* Result.framework */; };
 		4852719A1E93810600BABB16 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271961E9380F000BABB16 /* XCGLogger.framework */; };
 		4852719B1E9381A200BABB16 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */; };
 		4852719C1E9381A200BABB16 /* Prephirences.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271931E9380F000BABB16 /* Prephirences.framework */; };
-		4852719E1E9381A200BABB16 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271951E9380F000BABB16 /* Result.framework */; };
 		4852719F1E9381A200BABB16 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 485271961E9380F000BABB16 /* XCGLogger.framework */; };
 		485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */; };
 		485CCDA71E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */; };
@@ -131,7 +129,6 @@
 			files = (
 				485271971E93810600BABB16 /* ObjcExceptionBridging.framework in Frameworks */,
 				485271981E93810600BABB16 /* Prephirences.framework in Frameworks */,
-				485271991E93810600BABB16 /* Result.framework in Frameworks */,
 				4852719A1E93810600BABB16 /* XCGLogger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,7 +141,6 @@
 				C5EFDC1B22E85F6B0094A0B4 /* SWXMLHash.framework in Frameworks */,
 				4852719B1E9381A200BABB16 /* ObjcExceptionBridging.framework in Frameworks */,
 				4852719C1E9381A200BABB16 /* Prephirences.framework in Frameworks */,
-				4852719E1E9381A200BABB16 /* Result.framework in Frameworks */,
 				4852719F1E9381A200BABB16 /* XCGLogger.framework in Frameworks */,
 				C5EFDC1922E8532E0094A0B4 /* MomXML.framework in Frameworks */,
 			);
@@ -486,7 +482,6 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Prephirences.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/MomXML.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SWXMLHash.framework",
