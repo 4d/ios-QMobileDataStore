@@ -6,25 +6,17 @@ import PackageDescription
 let package = Package(
     name: "QMobileDataStore",
     platforms: [
-        .macOS(.v10_14),
-        .iOS(.v9)
+        .iOS(.v12)
     ],
     products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
-        .library(
-            name: "QMobileDataStore",
-            targets: ["QMobileDataStore"]),
+        .library(  name: "QMobileDataStore",  targets: ["QMobileDataStore"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/DaveWoodCom/XCGLogger.git" , from: "7.0.0"),
-        .package(url: "https://github.com/phimage/MomXML.git" , .revision("HEAD")),
-        .package(url: "https://github.com/phimage/Prephirences.git" , .revision("HEAD"))
-
+        .package(url: "https://github.com/DaveWoodCom/XCGLogger.git", from: "7.0.0"),
+        .package(url: "https://github.com/phimage/MomXML.git", .revision("HEAD")),
+        .package(url: "https://github.com/phimage/Prephirences.git", .revision("HEAD"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "QMobileDataStore",
             dependencies: [
