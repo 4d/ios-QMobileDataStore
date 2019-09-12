@@ -6,6 +6,7 @@ import PackageDescription
 let package = Package(
     name: "QMobileDataStore",
     platforms: [
+        .macOS(.v10_14),
         .iOS(.v12)
     ],
     products: [
