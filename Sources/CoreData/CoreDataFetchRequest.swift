@@ -281,7 +281,7 @@ extension CoreDataStore {
         return CoreDataFetchRequest(fetchRequest)
     }
 
-    func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?, context: DataStoreContext? = nil) -> FetchedResultsController {
+    public func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?, context: DataStoreContext? = nil) -> FetchedResultsController {
         let request = CoreDataFetchRequest(fetchRequest).fetchRequest
         return CoreDataFetchedResultsController(dataStore: self, sectionNameKeyPath: sectionNameKeyPath, context: context, fetchRequest: request)
     }

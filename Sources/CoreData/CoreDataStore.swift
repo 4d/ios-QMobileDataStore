@@ -14,10 +14,10 @@ import Prephirences
 import XCGLogger
 
 // MARK: CoreData store
-@objc internal class CoreDataStore: NSObject {
+@objc public class CoreDataStore: NSObject {
 
-    @objc enum StoreType: Int {
-        case inMemory, sql
+    public enum StoreType {
+        case inMemory, sql(URL?)
 
         var type: String {
             switch self {
@@ -27,6 +27,8 @@ import XCGLogger
                 return NSSQLiteStoreType
             }
         }
+
+        public static let sqlDefault: StoreType = .sql(nil)
     }
 
     /// a default core data store
@@ -63,7 +65,7 @@ import XCGLogger
     /// - parameter storeType: the store type (default: sql).
     ///
     /// - returns: The new `QMobileCoreDataStore` instance.
-    internal init(model: CoreDataObjectModel = .default, storeType: StoreType = .sql) {
+    public init(model: CoreDataObjectModel = .default, storeType: StoreType = .sqlDefault) {
         self.model = model
         self.storeType = storeType
 
@@ -241,8 +243,8 @@ import XCGLogger
         switch self.storeType {
         case .inMemory:
             return nil
-        case .sql:
-            return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
+        case .sql(let url):
+            return url ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
         }
     }
 
@@ -287,12 +289,12 @@ struct CoreDataStoreMetaData: DataStoreMetadata {
 extension CoreDataStore: DataStore {
 
     // MARK: Structures
-    var tablesInfo: [DataStoreTableInfo] {
+    public var tablesInfo: [DataStoreTableInfo] {
         let entities = persistentContainer.managedObjectModel.entities
         return entities.filter { $0.name != nil }.map { CoreDataStoreTableInfo(entity: $0) }
     }
 
-    func tableInfo(for name: String) -> DataStoreTableInfo? {
+    public func tableInfo(for name: String) -> DataStoreTableInfo? {
         let entities = persistentContainer.managedObjectModel.entities
         for entity in entities where entity.name == name {
             return CoreDataStoreTableInfo(entity: entity)
@@ -301,7 +303,7 @@ extension CoreDataStore: DataStore {
     }
 
     // MARK: Metadata
-    var metadata: DataStoreMetadata? {
+    public var metadata: DataStoreMetadata? {
         guard let persistentStore = self.persistentStore else {
             return nil
         }
@@ -473,7 +475,7 @@ extension CoreDataStore {
         return self.perform(type, wait: wait, blockName: nil, block)
     }
 
-    func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext) -> Void) -> Bool {
+    public func perform(_ type: DataStoreContextType, wait: Bool = false, blockName: String?, _ block: @escaping (_ context: DataStoreContext) -> Void) -> Bool {
         if !isLoaded {
             logger.error("Perform action on store but not loaded yet. Type: \(type) \(blockName ?? "")")
             // XXX here could do better by waiting to data store loading. For instance by registering the task on data store load event.
