@@ -13,6 +13,9 @@ import Prephirences
 
 import XCGLogger
 
+private let sqlExtension = "sqlite"
+private let sqlExtensions = ["-shm", "-wal"]
+
 // MARK: CoreData store
 @objc public class CoreDataStore: NSObject {
 
@@ -38,6 +41,8 @@ import XCGLogger
     public let model: CoreDataObjectModel
     /// The model store type
     public let storeType: StoreType
+
+    let fileManager: FileManager = .default
 
     // private not documented, see persistence store description fields
     var isReadOnly = false
@@ -244,19 +249,35 @@ import XCGLogger
         case .inMemory:
             return nil
         case .sql(let url):
-            return url ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
+            return url ?? fileManager.urls(for: .documentDirectory, in: .userDomainMask).last
         }
     }
 
     var storeURL: URL? {
-        var storeURL = self.storeDirectoryURL
-
-        if let storeDirectoryURL = storeURL {
-            try? FileManager.default.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
+        guard let storeDirectoryURL = self.storeDirectoryURL else {
+            return nil
         }
+        let modelName = self.model.name()
+        let storeURL = storeDirectoryURL.appendingPathComponent(modelName).appendingPathExtension(sqlExtension)
+        try? fileManager.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
 
-        storeURL?.appendPathComponent(self.model.name())
-        storeURL?.appendPathExtension("sqlite")
+        if !fileManager.fileExists(at: storeURL), let dbURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension) {
+            do {
+                try fileManager.copyItem(at: dbURL, to: storeDirectoryURL.appendingPathComponent(dbURL.lastPathComponent))
+                do {
+                    for suffix in sqlExtensions {
+                        if let dbSuffixedURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension + suffix) {
+                            try fileManager.copyItem(at: dbSuffixedURL, to: storeDirectoryURL.appendingPathComponent(dbSuffixedURL.lastPathComponent))
+                        }
+                    }
+                } catch {
+                    logger.error("Failed to import one of the database files: \(error)")
+                    try? drop(storeURL: storeURL)
+                }
+            } catch {
+                logger.error("Failed to import database file \(error)")
+            }
+        }
 
         return storeURL
     }
@@ -265,7 +286,7 @@ import XCGLogger
         guard let url = self.storeURL else {
             return false
         }
-        return url.isFileURL && FileManager.default.fileExists(atPath: url.path)
+        return url.isFileURL && fileManager.fileExists(atPath: url.path)
     }
 }
 
@@ -459,10 +480,11 @@ extension CoreDataStore: DataStore {
 
     // remove sqlite files
     func drop(storeURL: URL) throws {
-        let fileManager = FileManager.default
         try fileManager.removeItemIfExists(at: storeURL)
-        try fileManager.removeItemIfExists(atPath: "\(storeURL.absoluteString)-shm")
-        try fileManager.removeItemIfExists(atPath: "\(storeURL.absoluteString)-wal")
+        let name = storeURL.lastPathComponent
+        for suffix in sqlExtensions {
+            try fileManager.removeItemIfExists(at: storeURL.deletingLastPathComponent().appendingPathComponent("\(name)\(suffix)"))
+        }
     }
 
 }
