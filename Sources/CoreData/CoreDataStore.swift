@@ -249,7 +249,7 @@ private let sqlExtensions = ["-shm", "-wal"]
         case .inMemory:
             return nil
         case .sql(let url):
-            return url ?? fileManager.urls(for: .documentDirectory, in: .userDomainMask).last
+            return url ?? NSPersistentContainer.defaultDirectoryURL()
         }
     }
 
