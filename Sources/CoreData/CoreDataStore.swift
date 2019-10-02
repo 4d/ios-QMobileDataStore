@@ -46,7 +46,11 @@ private let sqlExtensions = ["-shm", "-wal"]
 
     // private not documented, see persistence store description fields
     var isReadOnly = false
+    #if os(macOS)
+    var shouldAddStoreAsynchronously = false
+    #else
     var shouldAddStoreAsynchronously = true
+    #endif
     var shouldMigrateStoreAutomatically = true
     var shouldInferMappingModelAutomatically = true
 
