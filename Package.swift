@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/DaveWoodCom/XCGLogger.git", from: "7.0.0"),
         .package(url: "https://github.com/phimage/MomXML.git", .revision("HEAD")),
-        .package(url: "https://github.com/phimage/Prephirences.git", .revision("5.1.0"))
+        .package(url: "https://github.com/phimage/Prephirences.git", from: "5.1.0")
     ],
     targets: [
         .target(
