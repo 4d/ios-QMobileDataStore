@@ -48,8 +48,14 @@ private let sqlExtensions = ["-shm", "-wal"]
     var isReadOnly = false
     #if os(macOS)
     var shouldAddStoreAsynchronously = false
+    let sqlitePragmas: [String: String] = [
+        // "synchronous": "NORMAL",
+        "journal_mode": "OFF",
+        "temp_store": "MEMORY"
+    ]
     #else
     var shouldAddStoreAsynchronously = true
+    let sqlitePragmas: [String: String] = [:]
     #endif
     var shouldMigrateStoreAutomatically = true
     var shouldInferMappingModelAutomatically = true
@@ -244,7 +250,9 @@ private let sqlExtensions = ["-shm", "-wal"]
         description.shouldAddStoreAsynchronously = self.shouldAddStoreAsynchronously
         description.shouldInferMappingModelAutomatically = self.shouldInferMappingModelAutomatically
         description.shouldMigrateStoreAutomatically = self.shouldMigrateStoreAutomatically
-
+        if !sqlitePragmas.isEmpty {
+            description.setOption(sqlitePragmas as NSDictionary, forKey: NSSQLitePragmasOption)
+        }
         return description
     }
 
