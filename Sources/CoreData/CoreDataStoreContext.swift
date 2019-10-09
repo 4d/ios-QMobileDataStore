@@ -9,6 +9,12 @@
 import Foundation
 import CoreData
 
+#if os(macOS)
+let useRecordCache = true
+#else
+let useRecordCache = false
+#endif
+
 // some extension for NSManagedObjectContext
 extension NSManagedObjectContext: DataStoreContext {
 
@@ -26,6 +32,19 @@ extension NSManagedObjectContext: DataStoreContext {
     }
 
     public func getOrCreate(in table: String, matching predicate: NSPredicate) throws -> Record? {
+        if useRecordCache,
+            let primaryKeyValue = (predicate as? NSComparisonPredicate)?.rightExpression {
+            let cache = RecordCache.cache(for: table)
+            if let cached = cache.cached(primaryKeyValue) {
+                return cached
+            } else {
+                let toCache = create(in: table)
+                if let toCache = toCache {
+                    cache.cache(primaryKeyValue, object: toCache)
+                }
+                return toCache
+            }
+        }
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: table)
         request.predicate = predicate
         request.resultType = .managedObjectResultType
@@ -330,5 +349,33 @@ extension DispatchQueue {
     class var isManagedObjectContext: Bool {
         let label = DispatchQueue.currentLabel
         return label.contains("NSManagedObjectContext")
+    }
+}
+
+// MARK: - cache used to speed up batch import
+private class RecordCache {
+
+    static var caches: [String: RecordCache] = [:]
+    static func cache(for tableName: String) -> RecordCache {
+        if let cache = caches[tableName] {
+            return cache
+        }
+        let cache = RecordCache(name: tableName)
+        caches[tableName] = cache
+        return cache
+    }
+
+    fileprivate var cache: NSCache<NSExpression, Record>
+
+    init(name: String) {
+        cache = NSCache<NSExpression, Record>()
+        cache.name = name
+    }
+
+    func cached(_ expression: NSExpression) -> Record? {
+        return cache.object(forKey: expression)
+    }
+    func cache(_ expression: NSExpression, object: Record) {
+        cache.setObject(object, forKey: expression)
     }
 }
