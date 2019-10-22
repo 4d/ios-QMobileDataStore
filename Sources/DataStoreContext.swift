@@ -16,7 +16,7 @@ public protocol DataStoreContext: class {
 
     /// Create a new record if there is no record that match the predicate, otherwise return the 
     /// first one that match.
-    func getOrCreate(in table: String, matching predicate: NSPredicate) throws -> Record?
+    func getOrCreate(in table: String, matching predicate: NSPredicate, created: inout Bool) throws -> Record?
 
     /// Create and updates values
     func insert(in table: String, values: [String: Any]) -> Record?

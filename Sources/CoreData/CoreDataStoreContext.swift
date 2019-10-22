@@ -31,7 +31,7 @@ extension NSManagedObjectContext: DataStoreContext {
         return nil
     }
 
-    public func getOrCreate(in table: String, matching predicate: NSPredicate) throws -> Record? {
+    public func getOrCreate(in table: String, matching predicate: NSPredicate, created: inout Bool) throws -> Record? {
         if useRecordCache,
             let primaryKeyValue = (predicate as? NSComparisonPredicate)?.rightExpression {
             let cache = RecordCache.cache(for: table)
@@ -51,11 +51,14 @@ extension NSManagedObjectContext: DataStoreContext {
         request.fetchLimit = 1
 
         guard let fetchedObjects = try self.fetch(request) as? [RecordBase] else {
+            created = true
             return create(in: table)
         }
         guard let first = fetchedObjects.first else {
+             created = true
             return create(in: table)
         }
+        created = false
         assert(fetchedObjects.count == 1, "There is more thant one records in table \(table) matching predicate \(predicate)")
 
         return Record(store: first)

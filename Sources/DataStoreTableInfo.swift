@@ -47,8 +47,8 @@ extension DataStoreContext {
     }
 
     /// Create a new record if there is no record that match the predicate, otherwise return the first one that match.
-    public func getOrCreate(in table: DataStoreTableInfo, matching predicate: NSPredicate) throws -> Record? {
-        return try getOrCreate(in: table.name, matching: predicate)
+    public func getOrCreate(in table: DataStoreTableInfo, matching predicate: NSPredicate, created: inout Bool) throws -> Record? {
+        return try getOrCreate(in: table.name, matching: predicate, created: &created )
     }
 
     /// Create and updates values
