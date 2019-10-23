@@ -13,7 +13,7 @@ class CoreDataStoreFieldInfo: DataStoreFieldInfo {
 
     let attribute: NSAttributeDescription
 
-    init( attribute: NSAttributeDescription) {
+    init(attribute: NSAttributeDescription) {
         self.attribute = attribute
     }
 
