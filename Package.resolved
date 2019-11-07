@@ -14,9 +14,9 @@
         "package": "Prephirences",
         "repositoryURL": "https://github.com/phimage/Prephirences.git",
         "state": {
-          "branch": "HEAD",
-          "revision": "2ddd058050b22dc64f4b88a137aabb31fa3cc552",
-          "version": null
+          "branch": null,
+          "revision": "81b4792293972ec7541a941333e584ccc7976198",
+          "version": "5.1.0"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
         "state": {
           "branch": null,
-          "revision": "f43166a8e18fdd0857f29e303b1bb79a5428bca0",
-          "version": "4.9.0"
+          "revision": "a4931e5c3bafbedeb1601d3bb76bbe835c6d475a",
+          "version": "5.0.1"
         }
       },
       {
