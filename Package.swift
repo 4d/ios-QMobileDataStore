@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -7,7 +7,7 @@ let package = Package(
     name: "QMobileDataStore",
     platforms: [
         .macOS(.v10_14),
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         .library(  name: "QMobileDataStore",  targets: ["QMobileDataStore"]),
@@ -22,13 +22,12 @@ let package = Package(
             name: "QMobileDataStore",
             dependencies: [
                 "XCGLogger",
-                "MomXML",
                 "Prephirences"
             ],
             path: "Sources"),
         .testTarget(
             name: "QMobileDataStoreTests",
-            dependencies: ["QMobileDataStore"],
+            dependencies: ["QMobileDataStore", "MomXML"],
             path: "Tests")
     ]
 )
