@@ -8,9 +8,15 @@
 
 import Foundation
 
+// XXX Record could be a class if core data model class generation allow a root class
 protocol DataStoreRecord: NSObjectProtocol, Hashable {}
 
-// XXX Record could be a class if core data model class generation allow a root class
+public struct PendingRecord {
+   /* enum PendingError: Error {
+
+    }*/
+    public static var pendingRecords = Set<Record>()
+}
 
 /// A Record, parent class of all business object.
 public class Record: NSObject {
@@ -19,6 +25,20 @@ public class Record: NSObject {
     @nonobjc public static var reservedSwiftVars: [String] =  ["objectID", "description", "shortDescription", "isDeleted", "isUpdated", "isInserted", "hasChanges", "hasPersistentChangedValues", "entity", "isFault"]
 
     public var store: RecordBase // DataStoreRecord
+
+    /// Store record created by relation.
+    public static var pendingRecords = Set<Record>()
+    public var pending: Bool = false {
+        didSet {
+            if oldValue != pending { // has change
+                if pending {
+                    PendingRecord.pendingRecords.insert(self)
+                } else {
+                    PendingRecord.pendingRecords.remove(self)
+                }
+            }
+        }
+    }
 
     init(store: RecordBase) {
         self.store = store
