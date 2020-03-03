@@ -28,13 +28,15 @@ public class Record: NSObject {
 
     /// Store record created by relation.
     public static var pendingRecords = Set<Record>()
-    public var pending: Bool = false {
+    public var pending: Bool? {
         didSet {
-            if oldValue != pending { // has change
+            if oldValue != pending, let pending = pending { // has change
                 if pending {
                     PendingRecord.pendingRecords.insert(self)
                 } else {
-                    PendingRecord.pendingRecords.remove(self)
+                    if oldValue != nil {
+                        PendingRecord.pendingRecords.remove(self)
+                    }
                 }
             }
         }
