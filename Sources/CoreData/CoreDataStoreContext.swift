@@ -36,8 +36,10 @@ extension NSManagedObjectContext: DataStoreContext {
             let primaryKeyValue = (predicate as? NSComparisonPredicate)?.rightExpression {
             let cache = RecordCache.cache(for: table)
             if let cached = cache.cached(primaryKeyValue) {
+                created = false
                 return cached
             } else {
+                created = true
                 let toCache = create(in: table)
                 if let toCache = toCache {
                     cache.cache(primaryKeyValue, object: toCache)
