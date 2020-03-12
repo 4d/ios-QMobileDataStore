@@ -27,7 +27,6 @@ public class Record: NSObject {
     public var store: RecordBase // DataStoreRecord
 
     /// Store record created by relation.
-    public static var pendingRecords = Set<Record>()
     public var pending: Bool? {
         didSet {
             if oldValue != pending, let pending = pending { // has change
