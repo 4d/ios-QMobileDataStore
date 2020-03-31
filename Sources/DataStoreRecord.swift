@@ -8,15 +8,33 @@
 
 import Foundation
 
+public struct PendingRecord {
+
+    static var pendingRecords = Set<Record>()
+
+    static func manage(record: Record, oldValue: Bool?, newValue: Bool?) {
+        if oldValue != newValue { // has change
+            if let pending = newValue, pending {
+                pendingRecords.insert(record)
+            } else {
+                if oldValue != nil {
+                    pendingRecords.remove(record)
+                }
+            }
+        }
+    }
+
+    public static func consume() -> [Record] {
+        let pendingRecords = Array(PendingRecord.pendingRecords)
+        PendingRecord.pendingRecords.removeAll()
+        PendingRecordBase.info.removeAll()
+        return pendingRecords
+    }
+
+}
+
 // XXX Record could be a class if core data model class generation allow a root class
 protocol DataStoreRecord: NSObjectProtocol, Hashable {}
-
-public struct PendingRecord {
-   /* enum PendingError: Error {
-
-    }*/
-    public static var pendingRecords = Set<Record>()
-}
 
 /// A Record, parent class of all business object.
 public class Record: NSObject {
@@ -28,16 +46,13 @@ public class Record: NSObject {
 
     /// Store record created by relation.
     public var pending: Bool? {
-        didSet {
-            if oldValue != pending, let pending = pending { // has change
-                if pending {
-                    PendingRecord.pendingRecords.insert(self)
-                } else {
-                    if oldValue != nil {
-                        PendingRecord.pendingRecords.remove(self)
-                    }
-                }
-            }
+        get {
+            return store.pending
+        }
+        set {
+            let oldValue = store.pending
+            store.pending = newValue
+            PendingRecord.manage(record: self, oldValue: oldValue, newValue: newValue)
         }
     }
 
@@ -197,8 +212,11 @@ public class Record: NSObject {
         store.setValue(value, forKeyPath: keyPath)
     }
 
-}
+    public override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? Record else {
+            return false
+        }
 
-/*func == (lhs: Record, rhs: Record) -> Bool {
-    return lhs.store == rhs.store
-}*/
+        return self.store.objectID == other.store.objectID
+    }
+}
