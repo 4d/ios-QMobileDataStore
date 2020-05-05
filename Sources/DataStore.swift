@@ -87,6 +87,45 @@ public protocol DataStore {
 
 }
 
+// MARK: events
+extension DataStore {
+
+    /// Observe notification from data store
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public static func observe(_ name: Notification.Name, queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return NotificationCenter.dataStore.addObserver(forName: name, object: nil, queue: queue, using: using)
+    }
+
+    /// Unobserve notification from data store
+    public static func unobserve(_ observer: NSObjectProtocol) {
+        NotificationCenter.dataStore.removeObserver(observer)
+    }
+
+    /// Unobserve notification from data store
+    public static func unobserve(_ observers: [NSObjectProtocol]) {
+        for observer in observers {
+            unobserve(observer)
+        }
+    }
+
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public static func onLoad(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return observe(.dataStoreLoaded, queue: queue, using: using)
+    }
+
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public static func onDrop(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return observe(.dataStoreDropped, queue: queue, using: using)
+    }
+
+    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
+    public static func onSave(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
+        return observe(.dataStoreSaved, queue: queue, using: using)
+    }
+
+}
+
+// MARK: some shortcut
 extension DataStore {
 
     /// Perform a data store task by passing a context to a callback `block`.
@@ -106,45 +145,6 @@ extension DataStore {
     public func fetchedResultsController(fetchRequest: FetchRequest, sectionNameKeyPath: String?) -> FetchedResultsController {
         return self.fetchedResultsController(fetchRequest: fetchRequest, sectionNameKeyPath: sectionNameKeyPath, context: nil)
     }
-
-    /// Observe notification from data store
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public func observe(_ name: Notification.Name, queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        // XXX not compatible if multiple data store...could filter on current dataStore
-        return NotificationCenter.dataStore.addObserver(forName: name, object: nil, queue: queue, using: using)
-    }
-
-    /// Unobserve notification from data store
-    public func unobserve(_ observer: NSObjectProtocol) {
-        NotificationCenter.dataStore.removeObserver(observer)
-    }
-
-    /// Unobserve notification from data store
-    public func unobserve(_ observers: [NSObjectProtocol]) {
-        for observer in observers {
-           unobserve(observer)
-        }
-    }
-
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public func onLoad(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return observe(.dataStoreLoaded, queue: queue, using: using)
-    }
-
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public func onDrop(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return observe(.dataStoreDropped, queue: queue, using: using)
-    }
-
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public func onSave(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return observe(.dataStoreSaved, queue: queue, using: using)
-    }
-
-}
-
-// MARK: some shortcut
-extension DataStore {
 
     /// Create a fetch request for specific `tableName`
     /// - parameters tableName: the table name to request.`tableName`

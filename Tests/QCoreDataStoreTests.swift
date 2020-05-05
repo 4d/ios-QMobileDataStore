@@ -225,7 +225,7 @@ class CoreDataStoreTests: XCTestCase {
         let expectation = self.expectation(description: #function)
         let testQueue = OperationQueue()
         testQueue.underlyingQueue = testqueue
-        let obs = dataStore.observe(.dataStoreSaved, queue: testQueue) { notif in
+        let obs = DataStore.observe(.dataStoreSaved, queue: testQueue) { notif in
             expectation.fulfill()
         }
 

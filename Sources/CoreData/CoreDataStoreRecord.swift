@@ -11,23 +11,7 @@ import CoreData
 
 public typealias RecordBase = NSManagedObject
 
-extension NSManagedObject: DataStoreRecord {
-
-    public var pending: Bool? {
-         get {
-            return PendingRecordBase.info[self.objectID] // not defined
-         }
-         set {
-            PendingRecordBase.info[self.objectID] = newValue
-         }
-     }
-}
-
-public struct PendingRecordBase {
-
-    static var info: [NSManagedObjectID: Bool] = [:]
-
-}
+extension NSManagedObject: DataStoreRecord {}
 
 public extension NSManagedObjectContext {
 
