@@ -87,44 +87,6 @@ public protocol DataStore {
 
 }
 
-// MARK: events
-extension DataStore {
-
-    /// Observe notification from data store
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public static func observe(_ name: Notification.Name, queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return NotificationCenter.dataStore.addObserver(forName: name, object: nil, queue: queue, using: using)
-    }
-
-    /// Unobserve notification from data store
-    public static func unobserve(_ observer: NSObjectProtocol) {
-        NotificationCenter.dataStore.removeObserver(observer)
-    }
-
-    /// Unobserve notification from data store
-    public static func unobserve(_ observers: [NSObjectProtocol]) {
-        for observer in observers {
-            unobserve(observer)
-        }
-    }
-
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public static func onLoad(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return observe(.dataStoreLoaded, queue: queue, using: using)
-    }
-
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public static func onDrop(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return observe(.dataStoreDropped, queue: queue, using: using)
-    }
-
-    /// When registering for a notification, the opaque observer that is returned should be stored so it can be removed later using `unobserve` method.
-    public static func onSave(queue: OperationQueue? = nil, using: @escaping (Notification) -> Void) -> NSObjectProtocol {
-        return observe(.dataStoreSaved, queue: queue, using: using)
-    }
-
-}
-
 // MARK: some shortcut
 extension DataStore {
 
