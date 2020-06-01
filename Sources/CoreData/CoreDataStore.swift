@@ -265,21 +265,16 @@ private let sqlExtensions = ["-shm", "-wal"]
         }
     }
 
-    var storeURL: URL? {
-        guard let storeDirectoryURL = self.storeDirectoryURL else {
-            return nil
-        }
+    fileprivate func copyEmbeddedDatabase(to storeURL: URL) {
         let modelName = self.model.name()
-        let storeURL = storeDirectoryURL.appendingPathComponent(modelName).appendingPathExtension(sqlExtension)
-        try? fileManager.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
-
-        if !fileManager.fileExists(at: storeURL), let dbURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension) {
+        if let dbURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension) {
             do {
-                try fileManager.copyItem(at: dbURL, to: storeDirectoryURL.appendingPathComponent(dbURL.lastPathComponent))
+                try fileManager.copyItem(at: dbURL, to: storeURL)
                 do {
+                    let parentDir = storeURL.deletingLastPathComponent()
                     for suffix in sqlExtensions {
                         if let dbSuffixedURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension + suffix) {
-                            try fileManager.copyItem(at: dbSuffixedURL, to: storeDirectoryURL.appendingPathComponent(dbSuffixedURL.lastPathComponent))
+                            try fileManager.copyItem(at: dbSuffixedURL, to: parentDir.appendingPathComponent(dbSuffixedURL.lastPathComponent))
                         }
                     }
                 } catch {
@@ -289,6 +284,19 @@ private let sqlExtensions = ["-shm", "-wal"]
             } catch {
                 logger.error("Failed to import database file \(error)")
             }
+        }
+    }
+
+    var storeURL: URL? {
+        guard let storeDirectoryURL = self.storeDirectoryURL else {
+            return nil
+        }
+        try? fileManager.createDirectory(at: storeDirectoryURL, withIntermediateDirectories: true)
+
+        let modelName = self.model.name()
+        let storeURL = storeDirectoryURL.appendingPathComponent(modelName).appendingPathExtension(sqlExtension)
+        if !fileManager.fileExists(at: storeURL) {
+            copyEmbeddedDatabase(to: storeURL)
         }
 
         return storeURL
