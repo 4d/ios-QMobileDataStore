@@ -47,11 +47,11 @@ public class Record: NSObject {
     /// Store record created by relation.
     public var pending: Bool? {
         get {
-            return store.pending
+            return store.getPending()
         }
         set {
-            let oldValue = store.pending
-            store.pending = newValue
+            let oldValue = store.getPending()
+            store.setPending(newValue)
             PendingRecord.manage(record: self, oldValue: oldValue, newValue: newValue)
         }
     }
