@@ -8,31 +8,6 @@
 
 import Foundation
 
-public struct PendingRecord {
-
-    static var pendingRecords = Set<Record>()
-
-    static func manage(record: Record, oldValue: Bool?, newValue: Bool?) {
-        if oldValue != newValue { // has change
-            if let pending = newValue, pending {
-                pendingRecords.insert(record)
-            } else {
-                if oldValue != nil {
-                    pendingRecords.remove(record)
-                }
-            }
-        }
-    }
-
-    public static func consume() -> [Record] {
-        let pendingRecords = Array(PendingRecord.pendingRecords)
-        PendingRecord.pendingRecords.removeAll()
-        PendingRecordBase.info.removeAll()
-        return pendingRecords
-    }
-
-}
-
 // XXX Record could be a class if core data model class generation allow a root class
 protocol DataStoreRecord: NSObjectProtocol, Hashable {}
 
@@ -50,9 +25,7 @@ public class Record: NSObject {
             return store.getPending()
         }
         set {
-            let oldValue = store.getPending()
             store.setPending(newValue)
-            PendingRecord.manage(record: self, oldValue: oldValue, newValue: newValue)
         }
     }
 

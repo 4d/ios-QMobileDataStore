@@ -11,45 +11,68 @@ import CoreData
 
 public typealias RecordBase = NSManagedObject
 
+//let kPendingKey = "qmobile_pending"
 extension NSManagedObject: DataStoreRecord {
+
     public func getPending() -> Bool? {
-        return PendingRecordBase.info[self.objectID]
+        /*if self.hasKey(kPendingKey) {
+         return self.value(forKey: kPendingKey) as? Bool
+         }*/
+        guard let context = self.managedObjectContext else {
+            logger.debug("No context when pending")
+            return nil
+        }
+        return context._pendingRecords.info[self.objectID]
     }
+
     public func setPending(_ newValue: Bool?) {
-        PendingRecordBase.info[self.objectID] = newValue
+        /* if self.hasKey(kPendingKey) {
+         setValue(newValue, forKey: kPendingKey)
+         } else {*/
+        guard let context = self.managedObjectContext else {
+            logger.debug("No context when setting pending")
+            return
+        }
+        let pendingRecords = context._pendingRecords
+        let objectID = self.objectID
+        let oldValue = pendingRecords.info[objectID]
+        pendingRecords.info[objectID] = newValue
+        /* }*/
+
+        // didSet
+        pendingRecords.manage(record: self, oldValue: oldValue, newValue: newValue)
     }
 }
 
-public struct PendingRecordBase {
+class PendingRecord: NSObject { // create objc class explicitly and avoid singleton
 
-    static var info: [NSManagedObjectID: Bool] = [:]
+    var info: [NSManagedObjectID: Bool] = [:]
+    var pendingRecords = NSMutableSet()
 
-}
-
-public extension NSManagedObjectContext {
-
-    static var `default`: NSManagedObjectContext {
-        return CoreDataStore.default.viewContext
+    func manage(record: NSManagedObject, oldValue: Bool?, newValue: Bool?) {
+        if oldValue != newValue { // has change
+            if let pending = newValue, pending {
+                /*if pendingRecords.count%100 == 0 {
+                 print("🎾 will insert \(record) into list of size \(pendingRecords.count)")
+                 }*/
+                pendingRecords.add(record)
+            } else {
+                if oldValue != nil {
+                    /*if pendingRecords.count%100 == 0 {
+                     print("🌶 will remove \(record) from list of size \(pendingRecords.count)")
+                     }*/
+                    pendingRecords.remove(record)
+                }
+            }
+        }
     }
 
-    static func newBackgroundContext() -> NSManagedObjectContext {
-        return CoreDataStore.default.newBackgroundContext()
+    func consume() -> [Record] {
+        let pendingRecords = Array(self.pendingRecords)
+        self.pendingRecords.removeAllObjects()
+        logger.debug("Record to not persists: \(pendingRecords.count)")
+        return pendingRecords.compactMap { $0 as? NSManagedObject }.map { Record(store: $0) }
     }
-
-    /*fileprivate struct Key {
-     static let coreDataStore = UnsafeRawPointer(bitPattern: Selector(("coreDataStore")).hashValue)
-     }
-     internal (set) var coreDataStore: CoreDataStore? {
-     get {
-     if let obj = objc_getAssociatedObject(self, Key.coreDataStore) as? CoreDataStore {
-     return obj
-     }
-     return nil
-     }
-     set {
-     objc_setAssociatedObject(self, Key.coreDataStore, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-     }
-     }*/
 
 }
 

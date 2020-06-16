@@ -80,6 +80,7 @@ public protocol DataStoreContext: class {
     var insertedRecords: [Record] { get }
     var updatedRecords: [Record] { get }
     var deletedRecords: [Record] { get }
+    var pendingRecords: [Record] { get }
     // Object in the context
     var registeredRecords: [Record] { get }
 

@@ -325,6 +325,57 @@ extension NSManagedObjectContext: DataStoreContext {
 
 }
 
+private struct AssociatedKeys {
+  static var pendingRecords = "PendingRecord"
+}
+extension NSManagedObjectContext {
+
+    public var pendingRecords: [Record] {
+        return _pendingRecords.consume()
+    }
+
+    var _pendingRecords: PendingRecord {
+        get {
+            var value = objc_getAssociatedObject(self, &AssociatedKeys.pendingRecords) as? PendingRecord
+            if value == nil {
+                value = PendingRecord()
+                self._pendingRecords = value!
+            }
+            return value!
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.pendingRecords, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+}
+
+public extension NSManagedObjectContext {
+
+    static var `default`: NSManagedObjectContext {
+        return CoreDataStore.default.viewContext
+    }
+
+    static func newBackgroundContext() -> NSManagedObjectContext {
+        return CoreDataStore.default.newBackgroundContext()
+    }
+
+    /*fileprivate struct Key {
+     static let coreDataStore = UnsafeRawPointer(bitPattern: Selector(("coreDataStore")).hashValue)
+     }
+     internal (set) var coreDataStore: CoreDataStore? {
+     get {
+     if let obj = objc_getAssociatedObject(self, Key.coreDataStore) as? CoreDataStore {
+     return obj
+     }
+     return nil
+     }
+     set {
+     objc_setAssociatedObject(self, Key.coreDataStore, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+     }
+     }*/
+
+}
+
 extension DataStoreChangeType {
 
     var coreData: String {
