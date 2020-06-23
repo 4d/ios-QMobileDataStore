@@ -53,8 +53,9 @@ class CoreDataFetchRequest: FetchRequest {
         }
     }
 
-    public var fetchLimit: Int {   get {
-        return fetchRequest.fetchLimit
+    public var fetchLimit: Int {
+        get {
+            return fetchRequest.fetchLimit
         }
         set {
             fetchRequest.fetchLimit = newValue
