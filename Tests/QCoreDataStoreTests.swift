@@ -225,18 +225,18 @@ class CoreDataStoreTests: XCTestCase {
         let expectation = self.expectation(description: #function)
         let testQueue = OperationQueue()
         testQueue.underlyingQueue = testqueue
-        let obs = DataStore.observe(.dataStoreSaved, queue: testQueue) { notif in
+        let obs = DataStoreFactory.observe(.dataStoreSaved, queue: testQueue) { notif in
             expectation.fulfill()
         }
 
-        dataStore.save { [unowned self] result in
+        dataStore.save { result in
             switch result {
             case .success:
                 print("success ok. wait for event")
             case .failure(let error):
                 XCTFail("\(error)")
             }
-            self.dataStore.unobserve(obs)
+            DataStoreFactory.unobserve(obs)
         }
         
         self.waitForExpectations(timeout: timeout, handler: waitHandler)
