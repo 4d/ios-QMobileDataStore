@@ -22,6 +22,9 @@ public protocol FetchRequest {
     /// The fetch limit of the fetch request
     var fetchLimit: Int { get set }
 
+    var fieldsToFetch: [String]? { get set }
+    var relationshipsToFetch: [String]? { get set }
+
 }
 
 extension FetchRequest {

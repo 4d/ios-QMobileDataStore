@@ -62,6 +62,29 @@ class CoreDataFetchRequest: FetchRequest {
         }
     }
 
+    public var fieldsToFetch: [String]? {
+        get {
+            return fetchRequest.propertiesToFetch?.map { prop in
+                if let property = prop as? NSPropertyDescription {
+                    return property.name
+                }
+                return "\(prop)" // always string ? (juste cast?)
+            }
+        }
+        set {
+            fetchRequest.propertiesToFetch = newValue
+        }
+    }
+
+    public var relationshipsToFetch: [String]? {
+        get {
+            return fetchRequest.relationshipKeyPathsForPrefetching
+        }
+        set {
+            fetchRequest.relationshipKeyPathsForPrefetching = newValue
+        }
+    }
+
 }
 
 enum RecordChange {

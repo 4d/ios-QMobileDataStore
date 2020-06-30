@@ -99,6 +99,7 @@ public protocol DataStoreContext: class {
 
     /// - returns: a new fetch request
     func fetchRequest(tableName: String, sortDescriptors: [NSSortDescriptor]?) -> FetchRequest
+    // TODO OPTI fetch request with field and relation to fetch
 
     typealias CompletionHandler = (Result<Void, DataStoreError>) -> Void // DataStore.CompletionHandler
 }
