@@ -29,7 +29,7 @@ public class Record: NSObject {
         }
     }
 
-    init(store: RecordBase) {
+    public init(store: RecordBase) {
         self.store = store
     }
 
