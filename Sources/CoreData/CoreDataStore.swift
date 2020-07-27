@@ -268,21 +268,23 @@ private let sqlExtensions = ["-shm", "-wal"]
     fileprivate func copyEmbeddedDatabase(to storeURL: URL) {
         let modelName = self.model.name()
         if let dbURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension) {
-            do {
-                try fileManager.copyItem(at: dbURL, to: storeURL)
+            if fileManager.fileExists(at: dbURL) {
                 do {
-                    let parentDir = storeURL.deletingLastPathComponent()
-                    for suffix in sqlExtensions {
-                        if let dbSuffixedURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension + suffix) {
-                            try fileManager.copyItem(at: dbSuffixedURL, to: parentDir.appendingPathComponent(dbSuffixedURL.lastPathComponent))
+                    try fileManager.copyItem(at: dbURL, to: storeURL)
+                    do {
+                        let parentDir = storeURL.deletingLastPathComponent()
+                        for suffix in sqlExtensions {
+                            if let dbSuffixedURL = Bundle.main.url(forResource: modelName, withExtension: sqlExtension + suffix) {
+                                try fileManager.copyItem(at: dbSuffixedURL, to: parentDir.appendingPathComponent(dbSuffixedURL.lastPathComponent))
+                            }
                         }
+                    } catch {
+                        logger.error("Failed to import one of the database files: \(error)")
+                        try? drop(storeURL: storeURL)
                     }
                 } catch {
-                    logger.error("Failed to import one of the database files: \(error)")
-                    try? drop(storeURL: storeURL)
+                    logger.error("Failed to import database file \(error)")
                 }
-            } catch {
-                logger.error("Failed to import database file \(error)")
             }
         }
     }
