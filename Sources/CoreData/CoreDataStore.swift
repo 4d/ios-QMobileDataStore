@@ -186,7 +186,7 @@ private let sqlExtensions = ["-shm", "-wal"]
     // MARK: computed variables
 
     fileprivate var _persistentContainer: NSPersistentContainer?
-    fileprivate var persistentContainer: NSPersistentContainer {
+    public var persistentContainer: NSPersistentContainer {
         if let persistentContainer = _persistentContainer {
             return persistentContainer
         }
