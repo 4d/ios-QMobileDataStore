@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "QMobileDataStore",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v10_15),
         .iOS(.v14)
