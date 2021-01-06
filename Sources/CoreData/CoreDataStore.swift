@@ -377,6 +377,8 @@ extension CoreDataStore: DataStore {
                     } else {
                         if let message = CocoaError.Code.message(for: code) {
                             logger.error(message)
+                        } else {
+                            logger.error("Data store error \(error)")
                         }
 
                         if self.dropIfMigrationFailed {
