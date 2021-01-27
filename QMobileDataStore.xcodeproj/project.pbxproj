@@ -52,6 +52,7 @@
 		48FA393E20592F4C00A5E992 /* FileManager+QMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */; };
 		48FB2CF91E93E0F600F4F685 /* CoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */; };
 		48FDA65822E83C0A0073A4FF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FDA65522E83B8B0073A4FF /* Utils.swift */; };
+		C42D030A25C0D15700B1743A /* DataStore+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42D030925C0D15700B1743A /* DataStore+Combine.swift */; };
 		C5EFDC1322E715BE0094A0B4 /* IndexPath+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */; };
 		C5EFDC1622E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C5EFDC1422E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodeld */; };
 		C5EFDC1922E8532E0094A0B4 /* MomXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5EFDC1722E853220094A0B4 /* MomXML.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -116,6 +117,7 @@
 		48FA393D20592F4C00A5E992 /* FileManager+QMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+QMobile.swift"; sourceTree = "<group>"; };
 		48FB2CF81E93E0F600F4F685 /* CoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataModel.swift; sourceTree = "<group>"; };
 		48FDA65522E83B8B0073A4FF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		C42D030925C0D15700B1743A /* DataStore+Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataStore+Combine.swift"; sourceTree = "<group>"; };
 		C5EFDC1222E715BE0094A0B4 /* IndexPath+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexPath+Row.swift"; sourceTree = "<group>"; };
 		C5EFDC1522E736B00094A0B4 /* QMobileDataStoreTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QMobileDataStoreTests.xcdatamodel; sourceTree = "<group>"; };
 		C5EFDC1722E853220094A0B4 /* MomXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MomXML.framework; path = Carthage/Build/iOS/MomXML.framework; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			children = (
 				483867AF1E8A4D2E00E44F49 /* DataStoreFactory.swift */,
 				48D584441E783025006F56B5 /* DataStore.swift */,
+				C42D030925C0D15700B1743A /* DataStore+Combine.swift */,
 				48D584451E783025006F56B5 /* DataStoreRecord.swift */,
 				482485101E7A7C5400DA5390 /* DataStoreContext.swift */,
 				48A1C4F21F4F37AF0041531F /* DataStoreTableInfo.swift */,
@@ -519,6 +522,7 @@
 				48FA393A20592D6B00A5E992 /* CoreDataStoreFieldInfo.swift in Sources */,
 				481EDC951F4C7FE300E97960 /* DataStoreMetadata.swift in Sources */,
 				48CB23531F4DA57A0041CE6A /* DataStoreError+CoreData.swift in Sources */,
+				C42D030A25C0D15700B1743A /* DataStore+Combine.swift in Sources */,
 				48D584891E784921006F56B5 /* FetchRequest.swift in Sources */,
 				486A7C8D1E8BF8F700F646AF /* CoreDataStoreRecord.swift in Sources */,
 				48D584481E783025006F56B5 /* Log.swift in Sources */,
