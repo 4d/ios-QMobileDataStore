@@ -140,7 +140,7 @@ public class Record: NSObject {
     public override func value(forKey key: String) -> Any? {
         if Record.reservedSwiftVars.contains(key) {
             if hasKey("\(key)_") {
-                return store.value(forKey: "\(key)_")   //" XXX Same rules in api, have to place for this rules is bad
+                return store.value(forKey: "\(key)_")   // " XXX Same rules in api, have to place for this rules is bad
             } else {
                 return store.value(forKey: key)
             }
@@ -159,7 +159,7 @@ public class Record: NSObject {
     }
 
     public override func setValue(_ value: Any?, forKey key: String) {
-        //if Record.reservedSwiftVars.contains(key) {
+        // if Record.reservedSwiftVars.contains(key) {
          //   store.setValue(value, forKey: "\(key)_") // XXX Same rules in api, have to place for this rules is bad
        // } else {
             store.setValue(value, forKey: key)

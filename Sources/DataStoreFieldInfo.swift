@@ -20,7 +20,7 @@ public protocol DataStoreFieldInfo: DataStorePropertyInfo, NSSortDescriptorConve
     var validationPredicates: [NSPredicate] { get }
 }
 
-//let knameTransformer = "nameTransformer"
+// let knameTransformer = "nameTransformer"
 
 extension DataStoreFieldInfo {
     /// The field is mandatory if the value must not be empty(ie. not optional)

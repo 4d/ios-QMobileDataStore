@@ -126,7 +126,7 @@ extension NSManagedObjectContext: DataStoreContext {
             return false
         }
 
-        //let changes = [NSUpdatedObjectsKey: result]
+        // let changes = [NSUpdatedObjectsKey: result]
        // NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
 
         return !result.isEmpty // something has been updated

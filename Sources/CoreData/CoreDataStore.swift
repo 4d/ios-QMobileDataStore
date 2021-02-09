@@ -168,7 +168,7 @@ private let sqlExtensions = ["-shm", "-wal"]
                 // not merge if two are the same context
                 return
             }
-            //notification.userInfo["invalidateAll"]
+            // notification.userInfo["invalidateAll"]
             this.delegate?.objectsDidChange(dataStore: this, context: moc)
         })
     }

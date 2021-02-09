@@ -17,7 +17,7 @@ public protocol FetchRequest {
     // MARK: parameters
     /// The predicate of the fetch request.
     var predicate: NSPredicate? { get set }
-    ///The sort descriptors of the fetch request.
+    /// The sort descriptors of the fetch request.
     var sortDescriptors: [NSSortDescriptor]? { get set }
     /// The fetch limit of the fetch request
     var fetchLimit: Int { get set }

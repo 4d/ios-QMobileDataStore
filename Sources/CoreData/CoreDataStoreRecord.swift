@@ -11,7 +11,7 @@ import CoreData
 
 public typealias RecordBase = NSManagedObject
 
-//let kPendingKey = "qmobile_pending"
+// let kPendingKey = "qmobile_pending"
 extension NSManagedObject: DataStoreRecord {
 
     public func getPending() -> Bool? {
