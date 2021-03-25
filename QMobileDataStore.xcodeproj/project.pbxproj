@@ -81,7 +81,6 @@
 		483867AF1E8A4D2E00E44F49 /* DataStoreFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreFactory.swift; sourceTree = "<group>"; };
 		485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
 		485271931E9380F000BABB16 /* Prephirences.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Prephirences.framework; path = Carthage/Build/iOS/Prephirences.framework; sourceTree = "<group>"; };
-		485271951E9380F000BABB16 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		485271961E9380F000BABB16 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSPredicateConvertible.swift; sourceTree = "<group>"; };
 		485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSSortDescriptorConvertible.swift; sourceTree = "<group>"; };
@@ -158,7 +157,6 @@
 				C5EFDC1722E853220094A0B4 /* MomXML.framework */,
 				485271921E9380F000BABB16 /* ObjcExceptionBridging.framework */,
 				485271931E9380F000BABB16 /* Prephirences.framework */,
-				485271951E9380F000BABB16 /* Result.framework */,
 				485271961E9380F000BABB16 /* XCGLogger.framework */,
 			);
 			name = Frameworks;
