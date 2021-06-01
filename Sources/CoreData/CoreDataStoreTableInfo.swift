@@ -93,6 +93,14 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         return name
     }
 
+    var label: String? {
+        return self.entity.managedObjectModel.localizationDictionary?["Entity/\(name)"]
+    }
+
+    var shortLabel: String? {
+        return self.entity.managedObjectModel.localizationDictionary?["Entity/\(name)@short"]
+    }
+
 }
 
 extension NSManagedObject {

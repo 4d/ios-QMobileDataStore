@@ -14,6 +14,10 @@ public protocol DataStoreTableInfo {
     var name: String {get}
     /// The localized name if any.
     var localizedName: String {get}
+    /// The localized label if any.
+    var label: String? {get}
+    /// The localized short label if any.
+    var shortLabel: String? {get}
     /// Is table abstract ie. could not instanciante a concrete type.
     var isAbstract: Bool {get}
     /// List of fields.
@@ -35,6 +39,17 @@ public protocol DataStoreTableInfo {
     func relationships(for table: DataStoreTableInfo) -> [DataStoreRelationInfo]
     /// Custom user information
     var userInfo: [AnyHashable: Any]? { get set }
+}
+
+extension DataStoreTableInfo {
+    public var preferredLongLabel: String {
+        return self.label ?? self.shortLabel ?? self.name
+    }
+
+    /// Return short label if any, then long label and finally name
+    public var preferredShortLabel: String {
+        return self.shortLabel ?? self.label ?? self.name
+    }
 }
 
 extension DataStoreContext {
@@ -80,4 +95,5 @@ extension DataStoreContext {
     public func count(in table: DataStoreTableInfo) throws -> Int {
         return try count(in: table.name)
     }
+
 }

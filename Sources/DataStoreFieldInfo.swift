@@ -16,6 +16,11 @@ public protocol DataStoreFieldInfo: DataStorePropertyInfo, NSSortDescriptorConve
     /// The type.
     var type: DataStoreFieldType {get}
 
+    /// The localized label if any.
+    var label: String? {get}
+    /// The localized short label if any.
+    var shortLabel: String? {get}
+
     /// Some predicate used to validate the value.
     var validationPredicates: [NSPredicate] { get }
 }
@@ -31,6 +36,15 @@ extension DataStoreFieldInfo {
     /*public var nameTransformer: String? {
      return self.userInfo?[knameTransformer] as? String
      }*/
+
+    public var preferredLongLabel: String {
+        return self.label ?? self.shortLabel ?? self.name
+    }
+
+    /// Return short label if any, then long label and finally name
+    public var preferredShortLabel: String {
+        return self.shortLabel ?? self.label ?? self.name
+    }
 }
 
 /// List of available field type.

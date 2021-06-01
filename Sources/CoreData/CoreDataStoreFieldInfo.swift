@@ -54,6 +54,16 @@ class CoreDataStoreFieldInfo: DataStoreFieldInfo {
         }
         return name
     }
+
+    var label: String? {
+        guard let tablename = self.attribute.entity.name else { return nil }
+        return self.attribute.entity.managedObjectModel.localizationDictionary?["Property/\(name)/Entity/\(tablename)"]
+    }
+
+    var shortLabel: String? {
+        guard let tablename = self.attribute.entity.name else { return nil }
+        return self.attribute.entity.managedObjectModel.localizationDictionary?["Property/\(name)/Entity/\(tablename)@short"]
+    }
 }
 
 extension NSAttributeType {

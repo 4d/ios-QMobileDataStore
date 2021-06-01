@@ -22,7 +22,7 @@ extension NSSortDescriptor: NSSortDescriptorConvertible {
     }
 
     public func sortDescriptor(ascending: Bool) -> NSSortDescriptor {
-        return NSSortDescriptor(key: self.key, ascending: ascending, comparator: comparator)
+        return NSSortDescriptor(key: self.key, ascending: ascending)
     }
 
 }

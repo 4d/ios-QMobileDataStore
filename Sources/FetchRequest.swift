@@ -99,7 +99,7 @@ extension FetchedResultsController {
 }
 
 /// A delegate for `FetchedResultsController`, which receive information on controller modification
-public protocol FetchedResultsControllerDelegate: class {
+public protocol FetchedResultsControllerDelegate: AnyObject {
     /// content
     func controllerWillChangeContent(_ controller: FetchedResultsController)
     func controller(_ controller: FetchedResultsController, didChangeRecord aRecord: Record, at indexPath: IndexPath?, for type: FetchedResultsChangeType, newIndexPath: IndexPath?)

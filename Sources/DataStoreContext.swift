@@ -9,7 +9,7 @@
 import Foundation
 
 /// A context for data task
-public protocol DataStoreContext: class {
+public protocol DataStoreContext: AnyObject {
 
     /// Create a new record and add it to data store.
     func create(in table: String) -> Record?
