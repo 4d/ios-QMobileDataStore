@@ -24,6 +24,8 @@ public protocol DataStoreTableInfo {
     var fields: [DataStoreFieldInfo] {get}
     /// List of fields indexed by name.
     var fieldsByName: [String: DataStoreFieldInfo] { get }
+    /// Get specific field info for field name
+    func fieldInfo(for name: String) -> DataStoreFieldInfo?
     /// List of relations.
     var relationships: [DataStoreRelationInfo] { get }
     /// List of relations indexed by name.

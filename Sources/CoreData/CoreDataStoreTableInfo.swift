@@ -38,6 +38,13 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
         return Dictionary(uniqueKeysWithValues: self.entity.attributesByName.map {  ($0, CoreDataStoreFieldInfo(attribute: $1)) })
     }()
 
+    func fieldInfo(for name: String) -> DataStoreFieldInfo? {
+        guard let attribute = self.entity.attributesByName[name] else {
+            return nil
+        }
+        return CoreDataStoreFieldInfo(attribute: attribute)
+    }
+
     lazy var relationships: [DataStoreRelationInfo] = {
         return self.entity.relationshipsByName.map { CoreDataStoreRelationInfo(relation: $1) }
     }()
