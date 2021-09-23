@@ -9,7 +9,7 @@
 import Foundation
 
 /// A delegate for `DataStore` to receive some event.
-public protocol DataStoreDelegate: class {
+public protocol DataStoreDelegate: AnyObject {
 
     /// The data store will be saved.
     func dataStoreWillSave(_ dataStore: DataStore, context: DataStoreContext)
