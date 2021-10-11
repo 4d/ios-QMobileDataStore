@@ -51,6 +51,12 @@ class CoreDataStoreTableInfo: DataStoreTableInfo {
     lazy var relationshipsByName: [String: DataStoreRelationInfo] = {
         return Dictionary(uniqueKeysWithValues: self.entity.relationshipsByName.map {  ($0, CoreDataStoreRelationInfo(relation: $1)) })
     }()
+    func relationInfo(for name: String) -> DataStoreRelationInfo? {
+        guard let relation = self.entity.relationshipsByName[name] else {
+            return nil
+        }
+        return CoreDataStoreRelationInfo(relation: relation)
+    }
 
     lazy var properties: [DataStorePropertyInfo] = {
         return self.entity.properties.compactMap { property -> DataStorePropertyInfo? in

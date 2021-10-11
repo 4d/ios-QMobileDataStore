@@ -30,6 +30,8 @@ public protocol DataStoreTableInfo {
     var relationships: [DataStoreRelationInfo] { get }
     /// List of relations indexed by name.
     var relationshipsByName: [String: DataStoreRelationInfo] { get }
+    /// Get specific relation info for relation name
+    func relationInfo(for name: String) -> DataStoreRelationInfo?
 
     /// List of all properties. Fields, relation, others (fetched/calculated)
     var properties: [DataStorePropertyInfo] { get }

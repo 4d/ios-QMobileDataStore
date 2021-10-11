@@ -88,6 +88,13 @@ extension DataStoreFieldInfo {
         }
         return NSSortDescriptor(key: self.name, ascending: ascending)
     }
+    public func sortDescriptor(name: String, ascending: Bool = true) -> NSSortDescriptor {
+        assert(type.isSortable)
+        if case .string = self.type {
+            return NSSortDescriptor(key: name, ascending: ascending, selector: #selector(NSString.caseInsensitiveCompare(_:)))
+        }
+        return NSSortDescriptor(key: name, ascending: ascending)
+    }
 }
 
 extension DataStoreFieldInfo {
