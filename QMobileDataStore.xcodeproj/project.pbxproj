@@ -353,9 +353,9 @@
 			buildConfigurationList = 48D584391E782F6C006F56B5 /* Build configuration list for PBXNativeTarget "QMobileDataStore" */;
 			buildPhases = (
 				48F4D3991F442DF3007C7CB8 /* swiftlint autocorrect */,
+				48D584221E782F6C006F56B5 /* Headers */,
 				48D584201E782F6C006F56B5 /* Sources */,
 				48D584211E782F6C006F56B5 /* Frameworks */,
-				48D584221E782F6C006F56B5 /* Headers */,
 				48D584231E782F6C006F56B5 /* Resources */,
 				485CCDA81E793EDD00CDB2B3 /* swiftlint */,
 			);
