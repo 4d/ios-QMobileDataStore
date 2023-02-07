@@ -1,0 +1,26 @@
+name: Carthage
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Carthage update
+      run: ./update3rd.sh
+    - name: Get project name
+      run: |
+        NAME=${GITHUB_REPOSITORY#*/} # remove organization part
+        NAME= ${NAME#*-} # remove prefix- part
+        echo "NAME=$NAME" >> $GITHUB_ENV
+    - name: Build for device
+      run: xcodebuild -scheme "${{ env.NAME }}" -project "${{ env.NAME }}.xcodeproj" -destination "generic/platform=iOS" -sdk "iphoneos" ENABLE_TESTABILITY=YES | xcpretty
+    - name: Build for simulator
+      run: xcodebuild -scheme "${{ env.NAME }}" -project "${{ env.NAME }}.xcodeproj" -destination "generic/platform=iOS" -sdk "iphonesimulator" ENABLE_TESTABILITY=YES | xcpretty

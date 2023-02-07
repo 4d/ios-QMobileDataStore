@@ -478,6 +478,7 @@
 		};
 		48A62CCB1E9E6637002A76C2 /* carthage */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
