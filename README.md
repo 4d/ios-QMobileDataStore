@@ -1,8 +1,8 @@
 # QMobileDataStore
 
-[Development #88591](https://project.wakanda.org/issues/88591)
+Main class is `DataStore`. 
 
-Main class is `DataStore`
+An instance could be retrieved from the `DataStoreFactory`
 
 a data store could be
 - loaded
