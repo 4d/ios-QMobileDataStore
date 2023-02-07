@@ -18,7 +18,7 @@ jobs:
     - name: Get project name
       run: |
         NAME=${GITHUB_REPOSITORY#*/} # remove organization part
-        NAME= ${NAME#*-} # remove prefix- part
+        NAME=${NAME#*-} # remove prefix- part
         echo "NAME=$NAME" >> $GITHUB_ENV
     - name: Build for device
       run: xcodebuild -scheme "${{ env.NAME }}" -project "${{ env.NAME }}.xcodeproj" -destination "generic/platform=iOS" -sdk "iphoneos" ENABLE_TESTABILITY=YES | xcpretty
