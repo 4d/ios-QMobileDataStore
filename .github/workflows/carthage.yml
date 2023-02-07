@@ -3,8 +3,18 @@ name: Carthage
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - '**.swift'
+      - '.github/workflows/carthage.yml'
+      - '**.xcodeproj/**'
+      - '**.xcworkspace/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ]    
+    paths:
+      - '**.swift'
+      - '.github/workflows/carthage.yml'
+      - '**.xcodeproj/**'
+      - '**.xcworkspace/**'
 
 jobs:
   build:
@@ -24,3 +34,9 @@ jobs:
       run: xcodebuild -scheme "${{ env.NAME }}" -project "${{ env.NAME }}.xcodeproj" -destination "generic/platform=iOS" -sdk "iphoneos" ENABLE_TESTABILITY=YES | xcpretty
     - name: Build for simulator
       run: xcodebuild -scheme "${{ env.NAME }}" -project "${{ env.NAME }}.xcodeproj" -destination "generic/platform=iOS" -sdk "iphonesimulator" ENABLE_TESTABILITY=YES | xcpretty
+    - name: Test
+      run: 
+        devices=$(xcrun xctrace list devices 2>&1)
+        name=$(echo $devices | grep -oE 'iPhone.*?[^\(]+' | head -1  | awk '{$1=$1;print}' | sed -e "s/ Simulator$//")
+        os=$(echo $devices | grep "$name" | head -1 | sed -E 's/.*\((.*)\) \(.*\)/\1/g')
+        xcodebuild -scheme "${{ env.NAME }}" -project "${{ env.NAME }}.xcodeproj" -destination "OS=$os,name=$device" -sdk "iphonesimulator" ENABLE_TESTABILITY=YES test | xcpretty
