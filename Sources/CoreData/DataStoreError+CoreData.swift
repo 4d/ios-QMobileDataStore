@@ -39,7 +39,7 @@ extension CocoaError.Code {
 
     /// Return for code a message from cocoa doc
     // https://developer.apple.com/reference/coredata/1535452-validation_error_codes?language=swift
-    static func message(for code: Int) -> String? {
+    static func message(for code: Int) -> String? { // swiftlint:disable:this cyclomatic_complexity
         switch code {
         case NSFileReadUnknownError /*256*/: return "Could not read data store file"
         case NSManagedObjectValidationError: return "generic validation error"

@@ -334,7 +334,7 @@ extension NSManagedObjectContext {
         return _pendingRecords.consume()
     }
 
-    var _pendingRecords: PendingRecord {
+    var _pendingRecords: PendingRecord { // swiftlint:disable:this identifier_name
         get {
             var value = objc_getAssociatedObject(self, &AssociatedKeys.pendingRecords) as? PendingRecord
             if value == nil {
