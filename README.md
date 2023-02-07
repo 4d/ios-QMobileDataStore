@@ -35,3 +35,13 @@ myRecord["<fieldName>"] // or myRecord.fieldName
 ```
 
 This `DataStore` definition is implemented by `CoreDataStore`
+
+## Dependencies
+
+- [CoreData](https://developer.apple.com/documentation/coredata): to persist the data
+- [XCGLogger](https://github.com/DaveWoodCom/XCGLogger): to log
+- [Prephirences](https://github.com/DaveWoodCom/XCGLogger): to subscript [Bundle](https://developer.apple.com/documentation/foundation/bundle) values
+
+### for testing only
+
+- [MomXML](https://github.com/phimage/MomXML) to manipulate or create coredata model
