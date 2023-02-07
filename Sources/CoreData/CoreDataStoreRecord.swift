@@ -80,7 +80,7 @@ class PendingRecord: NSObject { // create objc class explicitly and avoid single
 extension RecordBase {
 
     /// Access record attribute value using string key
-    open subscript(key: String) -> Any? {
+    public subscript(key: String) -> Any? {
         get {
             return self.value(forKey: key)
         }
@@ -93,11 +93,11 @@ extension RecordBase {
         }
     }
 
-    open var tableInfo: DataStoreTableInfo {
+    public var tableInfo: DataStoreTableInfo {
         return CoreDataStoreTableInfo(entity: self.entity)
     }
 
-    open func hasKey(_ key: String) -> Bool {
+    public func hasKey(_ key: String) -> Bool {
         return self.entity.propertiesByName[key] != nil // CLEAN optimize how to known if record KVC compliant to key
     }
 
@@ -112,10 +112,10 @@ extension RecordBase {
         return nil
     }
 
-    open var predicate: NSPredicate {
+    public var predicate: NSPredicate {
         return NSPredicate(format: "SELF = %@", objectID)
     }
-    open var predicateForBatch: NSPredicate {
+    public var predicateForBatch: NSPredicate {
         return NSPredicate(format: "objectID = %@", objectID)
     }
 

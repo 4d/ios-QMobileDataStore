@@ -15,7 +15,7 @@ extension NSPersistentStore {
         return URL(fileURLWithPath: "/dev/null")
     }
 
-    open var isTransient: Bool {
+    public var isTransient: Bool {
         guard let url =  self.url else {
             return false // or true??
         }
