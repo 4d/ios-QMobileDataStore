@@ -25,10 +25,12 @@ let package = Package(
                 "XCGLogger",
                 "Prephirences"
             ],
-            path: "Sources"),
+            path: "Sources",
+            resources: [.process("Localizable.strings")]),
         .testTarget(
             name: "QMobileDataStoreTests",
             dependencies: ["QMobileDataStore", "MomXML"],
-            path: "Tests")
+            path: "Tests",
+            exclude: ["Info.plist"])
     ]
 )
