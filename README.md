@@ -8,6 +8,10 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Carthage](https://github.com/4d/ios-QMobileDataStore/actions/workflows/carthage.yml/badge.svg)](https://github.com/4d/ios-QMobileDataStore/actions/workflows/carthage.yml)
 
+This iOS framework belong to [iOS SDK](https://github.com/4d/ios-sdk) and it contains all stuff to initialize and populate the [CoreData](https://developer.apple.com/documentation/coredata) database.
+
+## How it workds 
+
 Main class is `DataStore`. 
 
 An instance could be retrieved from the `DataStoreFactory`
