@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import Prephirences
 
 #if os(macOS)
 let useRecordCache = true
@@ -136,6 +137,20 @@ extension NSManagedObjectContext: DataStoreContext {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: table)
         fetchRequest.predicate = predicate
 
+        if Prephirences.DataStore.bachDelete {
+            let request = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            // If we want a list of deleted objects.
+            request.resultType = .resultTypeObjectIDs
+            guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? [NSManagedObjectID] else {
+                return -1
+            }
+            let changes = [NSDeletedObjectsKey: result]
+
+            if let parent = self.parent {
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [parent])
+            }
+            return result.count
+        }
         // Use simple fetch to get all object. Batch delete is more optimized but test doesn't work
         fetchRequest.includesPropertyValues = false
         guard let fetchedObjects = try self.fetch(fetchRequest) as? [RecordBase] else {
@@ -145,33 +160,6 @@ extension NSManagedObjectContext: DataStoreContext {
             self.delete(object)
         }
         return fetchedObjects.count
-
-        /*let request = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        // If we want a list of deleted objects.
-        request.resultType = .resultTypeObjectIDs
-        guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? [NSManagedObjectID] else {
-            return -1
-        }
-        let changes = [NSDeletedObjectsKey: result]
-        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
-
-        return result.count*/
-
-        // If we want status
-        /*
-        request.resultType = .resultTypeStatusOnly
-        guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? Bool else {
-            return false
-        }
-        return result
-         */
-
-        // If we want a count, or check that one element has been removed
-        /*request.resultType = .resultTypeCount
-        guard let batchResult = try self.execute(request) as? NSBatchDeleteResult, let result = batchResult.result as? Int else {
-            return false
-        }
-        return result != 0 // something has been deleted*/
     }
 
     public func delete(record: Record) {

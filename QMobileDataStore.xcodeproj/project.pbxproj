@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		480612191EAFA23700DEC2F2 /* CoreDataStoreCorrupedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */; };
 		48112D571E9FCF2600A3A88C /* NSPredicateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */; };
+		4813677A2AE29F050031C5EE /* DataStore+Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481367792AE29F050031C5EE /* DataStore+Preferences.swift */; };
 		481B0EC621E34E06005B4B4D /* DataStorePropertyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481B0EC521E34E06005B4B4D /* DataStorePropertyInfo.swift */; };
 		481EDC931F4C7FCB00E97960 /* DataStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */; };
 		481EDC951F4C7FE300E97960 /* DataStoreMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		480612171EAF9F1100DEC2F2 /* CoreDataStoreCorrupedTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStoreCorrupedTests.swift; sourceTree = "<group>"; };
 		48112D551E9FCE7400A3A88C /* NSPredicateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSPredicateTests.swift; sourceTree = "<group>"; };
+		481367792AE29F050031C5EE /* DataStore+Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataStore+Preferences.swift"; sourceTree = "<group>"; };
 		481B0EC521E34E06005B4B4D /* DataStorePropertyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorePropertyInfo.swift; sourceTree = "<group>"; };
 		481EDC921F4C7FCB00E97960 /* DataStoreDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreDelegate.swift; sourceTree = "<group>"; };
 		481EDC941F4C7FE300E97960 /* DataStoreMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreMetadata.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		485CCDA31E78562A00CDB2B3 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				481367792AE29F050031C5EE /* DataStore+Preferences.swift */,
 				485CCDA41E78563900CDB2B3 /* NSPredicateConvertible.swift */,
 				485CCDA61E78566D00CDB2B3 /* NSSortDescriptorConvertible.swift */,
 				489C15D51F3A1A0F004844F3 /* Notification+QMobile.swift */,
@@ -544,6 +547,7 @@
 				486A7C8B1E8BF89D00F646AF /* NSPersistentStore+Transient.swift in Sources */,
 				481EDC931F4C7FCB00E97960 /* DataStoreDelegate.swift in Sources */,
 				481EDC971F4C7FF900E97960 /* DataStoreError.swift in Sources */,
+				4813677A2AE29F050031C5EE /* DataStore+Preferences.swift in Sources */,
 				48FA393820592D4B00A5E992 /* CoreDataStoreRelationInfo.swift in Sources */,
 				481B0EC621E34E06005B4B4D /* DataStorePropertyInfo.swift in Sources */,
 				485CCDA51E78563900CDB2B3 /* NSPredicateConvertible.swift in Sources */,
@@ -747,7 +751,7 @@
 				);
 				INFOPLIST_FILE = Xcode/iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -776,7 +780,7 @@
 				);
 				INFOPLIST_FILE = Xcode/iOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
